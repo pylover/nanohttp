@@ -17,9 +17,9 @@ class Controller(object):
 
     def load_app(self):
         self._hook('app_load')
-        return self.handle_request
+        return self._handle_request
 
-    def handle_request(self, environ, start_response):
+    def _handle_request(self, environ, start_response):
         with Context(environ):
             # start_response("200 OK", [('Content-Type', 'text/plain; charset=utf-8')])
 
@@ -77,19 +77,19 @@ class Controller(object):
             path = self.default_action if remaining_paths[0] == '' else remaining_paths[0]
             remaining_paths = remaining_paths[1:]
 
-        func = getattr(self, path, None)
-        if func is None \
-                or not hasattr(func, 'http_methods') \
-                or (hasattr(func, '__code__') and func.__code__.co_argcount - 1 != len(remaining_paths)):
+        handler = getattr(self, path, None)
+        if handler is None \
+                or not hasattr(handler, 'http_methods') \
+                or (hasattr(handler, '__code__') and handler.__code__.co_argcount - 1 != len(remaining_paths)):
             raise HttpNotFound()
 
-        if 'any' not in func.http_methods and context.method not in func.http_methods:
+        if 'any' not in handler.http_methods and context.method not in handler.http_methods:
             raise HttpMethodNotAllowed()
 
-        if hasattr(func, 'http_encoding'):
-            context.response_encoding = func.http_encoding
+        if hasattr(handler, 'http_encoding'):
+            context.response_encoding = handler.http_encoding
 
-        return func(*remaining_paths)
+        return handler(*remaining_paths)
 
 
 if __name__ == '__main__':
@@ -102,4 +102,4 @@ if __name__ == '__main__':
     httpd.serve_forever()
 
     # # Alternative: serve one request, then exit
-    # httpd.handle_request()
+    # httpd._handle_request()
