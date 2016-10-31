@@ -1,4 +1,6 @@
 
+import re
+
 from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp import Controller, action, HttpForbidden
 
@@ -58,10 +60,10 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/users/10/11/11', status=404)
 
     def test_exception(self):
-        self.assert_get('/bad', resp='.*Exception.*', status=500)
+        self.assert_get('/bad', resp=re.compile('.*Exception.*'), status=500)
 
     def test_nested(self):
-        self.assert_get('/links', 'Links')
+        self.assert_get('/links', 'Links index')
         self.assert_get('/links/add/mylink', 'Adding link: mylink')
         self.assert_get('/links/promos/', 'Promotions index')
         self.assert_get('/links/promos/select/1', 'Selection promotion: 1')

@@ -1,5 +1,6 @@
 import sys
 import unittest
+import re
 
 import httplib2
 from wsgi_intercept.interceptor import Httplib2Interceptor
@@ -45,6 +46,10 @@ class WsgiAppTestCase(unittest.TestCase):
     def assert_get(self, uri, resp=None, status=200):
         response, content = self.client.get(uri)
         self.assertEqual(response.status, status)
+
         if resp is not None:
-            self.assertRegex(content.decode(), resp)
+            if isinstance(resp, str):
+                self.assertEqual(content.decode(), resp)
+            else:
+                self.assertRegex(content.decode(), resp)
         return response, content

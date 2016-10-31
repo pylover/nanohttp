@@ -2,6 +2,7 @@
 import threading
 import wsgiref.util
 import wsgiref.headers
+from urllib.parse import parse_qs
 
 from nanohttp.proxy import ObjectProxy
 from nanohttp.helpers import lazy_attribute
@@ -48,6 +49,14 @@ class Context(dict):
     @lazy_attribute
     def request_encoding(self):
         raise NotImplementedError
+
+    @lazy_attribute
+    def query_string(self):
+        return {k: v[0] if len(v) == 1 else v for k, v in parse_qs(
+            self.environ['QUERY_STRING'],
+            keep_blank_values=True,
+            strict_parsing=False
+        ).items()}
 
 
 context = ObjectProxy(Context.get_current)
