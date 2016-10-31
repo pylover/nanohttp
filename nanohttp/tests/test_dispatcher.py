@@ -1,55 +1,49 @@
 
-import io
 import unittest
 
+from nanohttp.tests.helpers import WsgiTester
 from nanohttp import Controller, action
 
 
-class DispatcherTestCase(unittest.TestCase):
+class WsgiAppTestCase(unittest.TestCase):
 
-    @staticmethod
-    def serve_app(app, url, method='get', environ=None):
-        response = io.BytesIO()
-        env = {
-            'PATH_INFO': url,
-            'REQUEST_METHOD': method.upper()
-        }
-        if environ:
-            env.update(environ)
+    class Root(Controller):
+        pass
 
-        def start_response(status, headers):
-            response.write(b'%s\n' % status.encode())
-            for k, v in headers:
-                response.write(b'%s:%s\n' % (k.encode(), v.encode()))
+    def setUp(self):
+        self.client = WsgiTester(self.Root().load_app)
+        self.client.__enter__()
 
-        for i in app(env, start_response):
-            response.write(i.encode())
+    def tearDown(self):
+        self.client.__exit__(None, None, None)
 
-        return response.getvalue().decode()
+    def assert_get(self, uri, resp=None, status=200):
+        response, content = self.client.get(uri)
+        self.assertEqual(response.status, status)
+        if resp is not None:
+            self.assertEqual(content.decode(), resp)
+        return response, content
+
+
+class DispatcherTestCase(WsgiAppTestCase):
+
+    class Root(Controller):
+        @action()
+        def users(self, user_id, attr=None):
+            yield 'User: %s\n' % user_id
+            yield 'Attr: %s\n' % attr
+
+        @action()
+        def index(self, *args, **kw):
+            yield 'Index'
 
     def test_root(self):
-        class Root(Controller):
-
-            @action()
-            def index(self):
-                return 'Index'
-
-        resp = self.serve_app(Root().wsgi_app, '/')
-        self.assertEqual(resp, '200 OK\nIndex')
-
+        self.assert_get('/', 'Index')
 
     def test_arguments(self):
-
-        class Root(Controller):
-
-            @action()
-            def users(self, user_id, attr=None):
-                yield 'User: %s\n' % user_id
-                yield 'Attr: %s\n' % attr
-
-        self.assertEqual(self.serve_app(Root().wsgi_app, '/users/10/jobs'), '200 OK\nUser: 10\nAttr: jobs\n')
-        self.assertEqual(self.serve_app(Root().wsgi_app, '/users/10/'), '200 OK\nUser: 10\nAttr: \n')
-        self.assertEqual(self.serve_app(Root().wsgi_app, '/users/10/11/11'), '404 Not Found\n')
+        self.assert_get('/users/10/jobs', 'User: 10\nAttr: jobs\n')
+        self.assert_get('/users/10/', 'User: 10\nAttr: \n')
+        self.assert_get('/users/10/11/11', status=404)
 
 
 

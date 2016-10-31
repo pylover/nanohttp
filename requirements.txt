@@ -1,0 +1,4 @@
+wsgi_intercept
+nose
+coverage
+httplib2

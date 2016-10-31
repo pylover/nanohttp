@@ -1,5 +1,5 @@
 class HttpStatus(Exception):
-    status_code = 500
+    status_code = None
     status_text = None
 
     def __init__(self, message=None):
@@ -8,6 +8,9 @@ class HttpStatus(Exception):
     @property
     def status(self):
         return '%s %s' % (self.status_code, self.status_text)
+
+    def render(self):
+        yield self.status.encode()
 
 
 class HttpBadRequest(HttpStatus):
@@ -43,3 +46,8 @@ class HttpGone(HttpStatus):
 class HttpMethodNotAllowed(HttpStatus):
     status_code = 405
     status_text = 'Method not allowed'
+
+
+class InternalServerError(HttpStatus):
+    status_code = 500
+    status_text = 'Internal server error'
