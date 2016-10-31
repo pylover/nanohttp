@@ -1,11 +1,15 @@
 
 import sys
+import traceback
 
 from nanohttp import HttpStatus, context, HttpNotFound, HttpMethodNotAllowed, InternalServerError
 from nanohttp.context import Context
 
 
 class Controller(object):
+    http_methods = 'any'
+    http_encoding = 'utf8'
+    default_action = 'index'
 
     def _hook(self, name, *args, **kwargs):
         if hasattr(self, name):
@@ -40,6 +44,7 @@ class Controller(object):
                 e = InternalServerError(sys.exc_info())
                 status = e.status
                 resp_generator = iter(e.render() if error_page is None else error_page)
+                traceback.print_exc()
 
             finally:
                 start_response(status, context.headers.items())
@@ -58,18 +63,24 @@ class Controller(object):
                 self._hook('end_request')
 
 
-    def __call__(self, path, *remaining_paths):
+    def __call__(self, *remaining_paths):
         """
         Dispatcher
         :param path:
         :param remaining_paths:
         :return:
         """
-        path = path or 'index'
+
+        if not len(remaining_paths):
+            path = self.default_action
+        else:
+            path = self.default_action if remaining_paths[0] == '' else remaining_paths[0]
+            remaining_paths = remaining_paths[1:]
+
         func = getattr(self, path, None)
         if func is None \
                 or not hasattr(func, 'http_methods') \
-                or func.__code__.co_argcount != len(remaining_paths) + 1:
+                or (hasattr(func, '__code__') and func.__code__.co_argcount - 1 != len(remaining_paths)):
             raise HttpNotFound()
 
         if 'any' not in func.http_methods and context.method not in func.http_methods:
