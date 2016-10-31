@@ -11,6 +11,7 @@ thread_local = threading.local()
 
 
 class Context(dict):
+    response_encoding = 'utf8'
 
     def __init__(self, environ):
         super(Context, self).__init__()
@@ -46,10 +47,6 @@ class Context(dict):
 
     @lazy_attribute
     def request_encoding(self):
-        raise NotImplementedError
-
-    @lazy_attribute
-    def response_encoding(self):
         raise NotImplementedError
 
 

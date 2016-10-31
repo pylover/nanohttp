@@ -1,4 +1,5 @@
 
+import sys
 
 from nanohttp import HttpStatus, context, HttpNotFound, HttpMethodNotAllowed, InternalServerError
 from nanohttp.context import Context
@@ -6,9 +7,9 @@ from nanohttp.context import Context
 
 class Controller(object):
 
-    def _hook(self, name):
+    def _hook(self, name, *args, **kwargs):
         if hasattr(self, name):
-            return getattr(self, name)()
+            return getattr(self, name)(*args, **kwargs)
 
     def load_app(self):
         self._hook('app_load')
@@ -36,7 +37,7 @@ class Controller(object):
                 # FIXME: Handle exception !
                 # Giving a chance to get better output on error.
                 error_page = self._hook('request_error', ex)
-                e = InternalServerError(ex)
+                e = InternalServerError(sys.exc_info())
                 status = e.status
                 resp_generator = iter(e.render() if error_page is None else error_page)
 
@@ -44,14 +45,15 @@ class Controller(object):
                 start_response(status, context.headers.items())
                 self._hook('start_response')
 
-            def result():
+            def result(encoding):
                 if buffer is not None:
-                    yield buffer
+                    yield buffer.encode(encoding)
 
-                yield from resp_generator
+                for chunk in resp_generator:
+                    yield chunk.encode(encoding)
 
             try:
-                return result()
+                return result(context.response_encoding)
             finally:
                 self._hook('end_request')
 
@@ -73,8 +75,10 @@ class Controller(object):
         if 'any' not in func.http_methods and context.method not in func.http_methods:
             raise HttpMethodNotAllowed()
 
-        for chunk in func(*remaining_paths):
-            yield chunk.encode(func.http_encoding)
+        if hasattr(func, 'http_encoding'):
+            context.response_encoding = func.http_encoding
+
+        return func(*remaining_paths)
 
 
 if __name__ == '__main__':

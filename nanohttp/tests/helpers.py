@@ -1,6 +1,10 @@
+import sys
+import unittest
 
 import httplib2
 from wsgi_intercept.interceptor import Httplib2Interceptor
+
+from nanohttp import Controller
 
 
 class WsgiTester(httplib2.Http):
@@ -24,3 +28,23 @@ class WsgiTester(httplib2.Http):
 
     def post(self, uri, **kw):
         return self._do_request(uri, 'post', **kw)
+
+
+class WsgiAppTestCase(unittest.TestCase):
+
+    class Root(Controller):
+        pass
+
+    def setUp(self):
+        self.client = WsgiTester(self.Root().load_app)
+        self.client.__enter__()
+
+    def tearDown(self):
+        self.client.__exit__(*sys.exc_info())
+
+    def assert_get(self, uri, resp=None, status=200):
+        response, content = self.client.get(uri)
+        self.assertEqual(response.status, status)
+        if resp is not None:
+            self.assertRegex(content.decode(), resp)
+        return response, content

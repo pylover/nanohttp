@@ -1,28 +1,6 @@
 
-import unittest
-
-from nanohttp.tests.helpers import WsgiTester
-from nanohttp import Controller, action
-
-
-class WsgiAppTestCase(unittest.TestCase):
-
-    class Root(Controller):
-        pass
-
-    def setUp(self):
-        self.client = WsgiTester(self.Root().load_app)
-        self.client.__enter__()
-
-    def tearDown(self):
-        self.client.__exit__(None, None, None)
-
-    def assert_get(self, uri, resp=None, status=200):
-        response, content = self.client.get(uri)
-        self.assertEqual(response.status, status)
-        if resp is not None:
-            self.assertEqual(content.decode(), resp)
-        return response, content
+from nanohttp.tests.helpers import WsgiAppTestCase
+from nanohttp import Controller, action, HttpForbidden
 
 
 class DispatcherTestCase(WsgiAppTestCase):
@@ -37,6 +15,14 @@ class DispatcherTestCase(WsgiAppTestCase):
         def index(self, *args, **kw):
             yield 'Index'
 
+        @action()
+        def not_forbidden(self):
+            raise HttpForbidden()
+
+        @action()
+        def bad(self):
+            raise Exception
+
     def test_root(self):
         self.assert_get('/', 'Index')
 
@@ -45,5 +31,5 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/users/10/', 'User: 10\nAttr: \n')
         self.assert_get('/users/10/11/11', status=404)
 
-
-
+    def test_exception(self):
+        self.assert_get('/bad', resp='.*Exception.*', status=500)

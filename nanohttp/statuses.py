@@ -10,7 +10,7 @@ class HttpStatus(Exception):
         return '%s %s' % (self.status_code, self.status_text)
 
     def render(self):
-        yield self.status.encode()
+        yield self.status
 
 
 class HttpBadRequest(HttpStatus):
@@ -51,3 +51,13 @@ class HttpMethodNotAllowed(HttpStatus):
 class InternalServerError(HttpStatus):
     status_code = 500
     status_text = 'Internal server error'
+
+    def __init__(self, exc_info):
+        self.exc_info = exc_info
+
+    def render(self):
+        from traceback import format_tb
+        e_type, e_value, tb = self.exc_info
+        yield 'Traceback (most recent call last):'
+        yield from format_tb(tb)
+        yield '%s: %s' % (e_type.__name__, e_value)
