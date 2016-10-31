@@ -43,7 +43,7 @@ class WsgiAppTestCase(unittest.TestCase):
     def tearDown(self):
         self.client.__exit__(*sys.exc_info())
 
-    def assert_get(self, uri, resp=None, status=200):
+    def assert_get(self, uri, resp=None, status=200, content_type=None):
         response, content = self.client.get(uri)
         self.assertEqual(response.status, status)
 
@@ -52,4 +52,8 @@ class WsgiAppTestCase(unittest.TestCase):
                 self.assertEqual(content.decode(), resp)
             else:
                 self.assertRegex(content.decode(), resp)
+
+        if content_type:
+            self.assertEqual(response['content-type'], content_type)
+
         return response, content

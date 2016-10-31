@@ -26,6 +26,14 @@ class Context(dict):
     def __exit__(self, exc_type, exc_val, exc_tb):
         del thread_local.nanohttp_context
 
+    @property
+    def response_content_type(self):
+        return self.headers.get('Content-Type')
+
+    @response_content_type.setter
+    def response_content_type(self, v):
+        self.headers['Content-Type'] = v
+
     @classmethod
     def get_current(cls):
         return thread_local.nanohttp_context

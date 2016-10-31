@@ -92,6 +92,9 @@ class Controller(object):
         if hasattr(handler, 'http_encoding'):
             context.response_encoding = handler.http_encoding
 
+        if hasattr(handler, 'content_type'):
+            context.response_content_type = handler.content_type
+
         return handler(*remaining_paths)
 
 
