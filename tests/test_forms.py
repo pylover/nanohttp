@@ -35,8 +35,3 @@ class FormTestCase(WsgiAppTestCase):
             files={'c': join(STUFF_DIR, 'cat.jpg')},
             expected_response=re.compile("a: 1, b: \[2, 3\], c: FieldStorage\('c', 'cat\.jpg.*")
         )
-
-    def test_empty_bodt(self):
-        self.assert_post(
-            '/'
-        )

@@ -118,7 +118,7 @@ class Context(dict):
     def __init__(self, environ):
         super(Context, self).__init__()
         self.environ = environ
-        self.headers = wsgiref.headers.Headers()  # TODO: rename it to response_header
+        self.response_headers = wsgiref.headers.Headers()
 
     def __enter__(self):
         thread_local.nanohttp_context = self
@@ -129,11 +129,11 @@ class Context(dict):
 
     @property
     def response_content_type(self):
-        return self.headers.get('Content-Type')
+        return self.response_headers.get('Content-Type')
 
     @response_content_type.setter
     def response_content_type(self, v):
-        self.headers['Content-Type'] = v
+        self.response_headers['Content-Type'] = v
 
     @classmethod
     def get_current(cls):
@@ -202,16 +202,15 @@ class Context(dict):
 
 class ContextProxy(Context):
 
-    def __new__(cls, *args, **kwargs):
-        class Proxy(object):
+    # noinspection PyMissingConstructor
+    def __init__(self):
+        pass
 
-            def __getattr__(self, key):
-                return getattr(cls.get_current(), key)
+    def __getattr__(self, key):
+        return getattr(Context.get_current(), key)
 
-            def __setattr__(self, key, value):
-                setattr(cls.get_current(), key, value)
-
-        return Proxy()
+    def __setattr__(self, key, value):
+        setattr(Context.get_current(), key, value)
 
 
 def action(*a, methods='any', encoding='utf8', content_type=None):
@@ -277,7 +276,7 @@ class Controller(object):
             traceback.print_exc()
 
         finally:
-            start_response(status, ctx.headers.items())
+            start_response(status, ctx.response_headers.items())
             self._hook('begin_response')
 
         def _response():
@@ -353,13 +352,13 @@ class Static(Controller):
         if isdir(physical_path) or pardir in relpath(physical_path, self.directory):
             raise HttpForbidden()
 
-        context.headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
+        context.response_headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
 
         try:
             f = open(physical_path, mode='rb')
             stat = os.fstat(f.fileno())
-            context.headers.add_header('Content-Length', str(stat[6]))
-            context.headers.add_header('Last-Modified', time.strftime(self.datetime_format, time.gmtime(stat.st_mtime)))
+            context.response_headers.add_header('Content-Length', str(stat[6]))
+            context.response_headers.add_header('Last-Modified', time.strftime(self.datetime_format, time.gmtime(stat.st_mtime)))
 
             with f:
                 while True:
@@ -439,7 +438,6 @@ DEFAULT_APP = 'nanohttp:Demo'
 
 thread_local = threading.local()
 context = ContextProxy()
-
 
 
 __all__ = [
