@@ -1,4 +1,4 @@
-from nanohttp import Controller, action
+from nanohttp import Controller, action, text, html
 from tests.helpers import WsgiAppTestCase
 
 
@@ -6,15 +6,15 @@ class HttpHeadersTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
-        @action()
+        @text()
         def index(self):
             return 'Index'
 
-        @action(content_type=None)
+        @action()
         def no_content_type(self):
             return 'No Content Type'
 
-        @action(content_type='text/html')
+        @html()
         def html(self):
             return 'Html'
 

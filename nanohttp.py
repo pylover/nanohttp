@@ -211,7 +211,7 @@ class ContextProxy(Context):
         return Proxy()
 
 
-def action(methods='any', encoding='utf8', content_type='text/plain'):
+def action(methods='any', encoding='utf8', content_type=None):
     def _decorator(func):
         func.http_methods = methods.split(',') if isinstance(methods, str) else methods
 
@@ -227,7 +227,7 @@ def action(methods='any', encoding='utf8', content_type='text/plain'):
 
 
 html = functools.partial(action, content_type='text/html')
-text = functools.partial(action, content_type='text/text')
+text = functools.partial(action, content_type='text/plain')
 json = functools.partial(action, content_type='application/json')
 
 
