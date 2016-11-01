@@ -11,9 +11,19 @@ class FormTestCase(WsgiAppTestCase):
         def index(self):
             return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.form.items(), key=lambda x: x[0]))
 
-    def test_simple_url_encoded(self):
+    def test_simple_query_string(self):
         self.assert_post('/?a=1&b=&c=2', "a: 1, b: , c: 2")
         self.assert_post('/?a=1&b=2&b=3', "a: 1, b: ['2', '3']")
+
+    def test_url_encoded(self):
+        self.assert_post(
+            '/',
+            fields={
+                'a': 1,
+                'b': [2, 3],
+            },
+            resp='a: 1, b: [2, 3]'
+        )
 
     def test_multipart(self):
         self.assert_post(
