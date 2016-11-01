@@ -180,6 +180,9 @@ class Context(dict):
             keep_blank_values=True
         )
 
+        if storage.list is None:
+            return None
+
         def get_value(f):
             # noinspection PyProtectedMember
             return f.value if isinstance(f,  cgi.MiniFieldStorage) \
