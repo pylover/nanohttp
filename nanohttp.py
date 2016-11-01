@@ -134,7 +134,7 @@ class LazyAttribute(object):
         >>> class A:
         ...     def __init__(self):
         ...         self.counter = 0
-        ...     @attribute
+        ...     @LazyAttribute
         ...     def count(self):
         ...         self.counter += 1
         ...         return self.counter
@@ -222,6 +222,7 @@ class Context(dict):
         )
 
         def get_value(f):
+            # noinspection PyProtectedMember
             return f.value if isinstance(f,  cgi.MiniFieldStorage) \
                               or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
 
@@ -344,7 +345,7 @@ class Controller(object):
         return handler(*remaining_paths)
 
 
-def quickstart(controller=None, port=8080):
+def quickstart(controller=None, host='localhost',  port=8080):
     from wsgiref.simple_server import make_server
 
     if controller is None:
@@ -353,19 +354,36 @@ def quickstart(controller=None, port=8080):
     else:
         app = controller.load_app()
 
-    httpd = make_server('', port, app)
-    print("Serving HTTP on port %d..." % port)
-    httpd.serve_forever()
+    httpd = make_server(host, port, app)
+    try:
+        print("Serving http://%s:%d" % (host or 'localhost', port))
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print('CTRL+C Detected !')
+
+
+class Demo(Controller):
+
+    @action()
+    def index(self):
+        yield from ('%s: %s\n' % i for i in context.environ.items())
 
 
 def main():
     import argparse
-    from os.path import basename
+    import importlib.util
+    from os.path import basename, join
 
     parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
-    parser.add_argument('-c', '--config-file', default='nanohttp.yaml', help='Default: nanohttp.yaml')
-    parser.add_argument('-b', '--bind', default='localhost:8080', metavar='[HOST:]PORT', help='Bind Address.')
-    parser.add_argument('-V', '--version', action='store_true', help='Show the version.')
+    parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE, help='Default: %s' % DEFAULT_CONFIG_FILE)
+    parser.add_argument('-b', '--bind', default=DEFAULT_ADDRESS, metavar='{HOST:}PORT', help='Bind Address. default: '
+                                                                                             '%s' % DEFAULT_ADDRESS)
+    parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
+                                                               'contains the controller class. default is: `.`')
+    parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
+    parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{:CLASS}',
+                        help='The python module and controller class to launch. default: '
+                             '`%s`, And the default value for `:CLASS` is `:Root` if omitted.' % DEFAULT_APP)
 
     args = parser.parse_args()
 
@@ -373,9 +391,25 @@ def main():
         print(__version__)
         return 0
 
-    print(args)
+    host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
+    module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
+    spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    # noinspection PyBroadException
+    try:
+        quickstart(getattr(module, class_name)(), host=host, port=int(port))
+    except:
+        traceback.print_exc()
+        return 1
+    else:
+        return 0
 
 
+DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
+DEFAULT_ADDRESS = '8080'
+DEFAULT_APP = 'nanohttp:Demo'
 
 thread_local = threading.local()
 context = ObjectProxy(Context.get_current)
