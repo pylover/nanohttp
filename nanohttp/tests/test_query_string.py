@@ -18,6 +18,5 @@ class QueryStringTestCase(WsgiAppTestCase):
         self.assert_get('/?a=1&b=&c=2', "a: 1, b: , c: 2")
         self.assert_get('/?a=1&b=2', "a: 1, b: 2")
         self.assert_get('/?a=1&b=2&b=3', "a: 1, b: ['2', '3']")
-
-
+        self.assert_get('/', query_string=dict(a=1, b=2), resp="a: 1, b: 2")
 

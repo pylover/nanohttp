@@ -1,4 +1,5 @@
 
+import cgi
 import threading
 import wsgiref.util
 import wsgiref.headers
@@ -65,6 +66,31 @@ class Context(dict):
             keep_blank_values=True,
             strict_parsing=False
         ).items()}
+
+    @lazy_attribute
+    def form(self):
+        result = {}
+
+        storage = cgi.FieldStorage(
+            fp=self.environ['wsgi.input'],
+            environ=self.environ,
+            keep_blank_values=True
+        )
+
+        def get_value(f):
+            return f.value if isinstance(f,  cgi.MiniFieldStorage) \
+                              or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
+
+        for k in storage:
+
+            v = storage[k]
+
+            if isinstance(v, list):
+                result[k] = [get_value(i) for i in v]
+            else:
+                result[k] = get_value(v)
+
+        return result
 
 
 context = ObjectProxy(Context.get_current)
