@@ -9,6 +9,7 @@ Features
 - Very simple, less-code & fast
 - Using object dispatcher instead of regex route dispatcher.
 - Url-Encoded & Multipart form parsing.
+- No `request` or `response` objects are available, everything is combined in `nanohttp.context`.
 
 Roadmap
 -------
@@ -78,7 +79,7 @@ Are you need a ``WSGI`` application?
 
 ..  code-block:: python
     
-    wsgi_app = Root().load_app()
+    app = Root().load_app()
     # Pass the ``app`` to every ``WSGI`` server you want.
 
 Command Line Interface

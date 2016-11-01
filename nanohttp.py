@@ -266,8 +266,6 @@ class Controller(object):
             resp_generator = iter(ex.render())
 
         except Exception as ex:
-            # FIXME: Handle exception !
-            # Giving a chance to get better output on error.
             error_page = self._hook('request_error', ex)
             e = InternalServerError(sys.exc_info())
             status = e.status

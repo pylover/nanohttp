@@ -30,8 +30,8 @@ setup(
     },
     license='WTFPL',
     classifiers=[
-        # TODO: Classifiers
         'Environment :: Console',
+        'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Development Status :: 4 - Beta',
@@ -39,5 +39,10 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
         ]
     )
