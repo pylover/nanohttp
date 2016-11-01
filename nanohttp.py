@@ -223,7 +223,7 @@ def action(*a, methods='any', encoding='utf8', content_type=None):
 
         return func
 
-    return _decorator
+    return _decorator(a[0]) if len(a) == 1 and callable(a[0]) else _decorator
 
 
 html = functools.partial(action, content_type='text/html')

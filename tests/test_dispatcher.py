@@ -13,7 +13,7 @@ class DispatcherTestCase(WsgiAppTestCase):
 
             class Promotions(Controller):
 
-                @action()
+                @action
                 def index(self):
                     yield 'Promotions index'
 

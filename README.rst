@@ -50,12 +50,16 @@ Quick Start
     class Root(Controller):
         static = Static(abspath(dirname(__file__)))
     
-        @html()
+        @html
         def index(self):
             yield '<img src="/static/cat.jpg" />'
             yield '<ul>'
             yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
             yield '</ul>'
+    
+        @html(methods=['post', 'put'])
+        def contact(self):
+            yield '<h1>Thanks: %s</h1>' % context.form['name']
 
 
 ..  code-block:: bash
