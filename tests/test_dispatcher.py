@@ -1,8 +1,7 @@
-
 import re
 
-from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp import Controller, action, HttpForbidden
+from tests.helpers import WsgiAppTestCase
 
 
 class DispatcherTestCase(WsgiAppTestCase):

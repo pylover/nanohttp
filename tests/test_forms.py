@@ -1,8 +1,8 @@
-from os.path import join
 import re
+from os.path import join
 
-from nanohttp.tests.helpers import WsgiAppTestCase, STUFF_DIR
 from nanohttp import Controller, action, context
+from tests.helpers import WsgiAppTestCase, STUFF_DIR
 
 
 class FormTestCase(WsgiAppTestCase):

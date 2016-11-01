@@ -1,7 +1,5 @@
-
-
-from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp import Controller, action, context
+from tests.helpers import WsgiAppTestCase
 
 
 class QueryStringTestCase(WsgiAppTestCase):
