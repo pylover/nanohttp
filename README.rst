@@ -90,13 +90,13 @@ Command Line Interface
     $ nanohttp -h
 
     usage: nanohttp [-h] [-c CONFIG_FILE] [-b {HOST:}PORT] [-d DIRECTORY] [-V]
-                    [MODULE{:CLASS}]
-    
+                    [MODULE{.py}{:CLASS}]
+
     positional arguments:
-      MODULE{:CLASS}        The python module and controller class to launch.
+      MODULE{.py}{:CLASS}   The python module and controller class to launch.
                             default: `nanohttp:Demo`, And the default value for
                             `:CLASS` is `:Root` if omitted.
-    
+
     optional arguments:
       -h, --help            show this help message and exit
       -c CONFIG_FILE, --config-file CONFIG_FILE

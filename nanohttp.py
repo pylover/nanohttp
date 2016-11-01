@@ -404,7 +404,7 @@ def main():
     parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
                                                                'contains the controller class. default is: `.`')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
-    parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{:CLASS}',
+    parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{.py}{:CLASS}',
                         help='The python module and controller class to launch. default: '
                              '`%s`, And the default value for `:CLASS` is `:Root` if omitted.' % DEFAULT_APP)
 
@@ -416,6 +416,7 @@ def main():
 
     host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
     module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
+    module_name = module_name.rstrip('.py')
     spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
