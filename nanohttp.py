@@ -1,10 +1,14 @@
 
+import time
+import os
 import sys
 import traceback
 import cgi
 import threading
 import wsgiref.util
 import wsgiref.headers
+from os.path import isdir, join, relpath, pardir, basename
+from mimetypes import guess_type
 from urllib.parse import parse_qs
 
 
@@ -27,43 +31,39 @@ class HttpStatus(Exception):
 
 
 class HttpBadRequest(HttpStatus):
-    status_code = 400
-    status_text = 'Bad request'
+    status_code, status_text, info = 400, 'Bad Request', 'Bad request syntax or unsupported method'
 
 
 class HttpUnauthorized(HttpStatus):
-    status_code = 401
-    status_text = 'You need to be authenticated'
+    status_code, status_text, info = 401, 'Unauthorized', 'No permission -- see authorization schemes'
 
 
 class HttpForbidden(HttpStatus):
-    status_code = 403
-    status_text = 'Access denied'
+    status_code, status_text, info = 403, 'Forbidden', 'Request forbidden -- authorization will not help'
 
 
 class HttpNotFound(HttpStatus):
-    status_code = 404
-    status_text = 'Not Found'
+    status_code, status_text, info = 404, 'Not Found', 'Nothing matches the given URI'
 
 
 class HttpMethodNotAllowed(HttpStatus):
-    status_code = 405
-    status_text = 'Method not allowed'
+    status_code, status_text, info = 405, 'Method Not Allowed', 'Specified method is invalid for this resource'
 
 
 class HttpConflict(HttpStatus):
-    status_code = 409
-    status_text = 'Conflict'
+    status_code, status_text, info = 409, 'Conflict', 'Request conflict'
 
 
 class HttpGone(HttpStatus):
-    status_code = 410
-    status_text = 'Access to resource is no longer available. Please contact us to find the reason.'
+    status_code, status_text, info = 410, 'Gone', 'URI no longer exists and has been permanently removed'
+
+
+class HttpMovedPermanently(HttpStatus):
+    status_code, status_text, info = 301, 'Moved Permanently', 'Object moved permanently -- see URI list'
 
 
 class InternalServerError(HttpStatus):
-    status_code = 500
-    status_text = 'Internal server error'
+    status_code, status_text, info = 500, 'Internal Server Error', 'Server got itself in trouble'
 
     def __init__(self, exc_info):
         self.exc_info = exc_info
@@ -76,53 +76,8 @@ class InternalServerError(HttpStatus):
         yield '%s: %s' % (e_type.__name__, e_value)
 
 
-class ObjectIsNotInitializedError(Exception):
+class ContextIsNotInitializedError(Exception):
     pass
-
-
-class ObjectProxy(object):
-    """
-    A simple object proxy to let deferred object's initialize later (for example: just after import):
-    This class encapsulates some tricky codes to resolve the proxied object members using the
-    `__getattribute__` and '__getattr__'. SO TAKE CARE about modifying the code, to prevent
-    infinite loops and stack-overflow situations.
-
-    Module: fancy_module
-
-        deferred_object = None  # Will be initialized later.
-        def init():
-            global deferred_object
-            deferred_object = AnyValue()
-        proxy = ObjectProxy(lambda: deferred_object)
-
-    In another module:
-
-        from fancy_module import proxy, init
-        def my_very_own_function():
-            try:
-                return proxy.any_attr_or_method()
-            except: ObjectIsNotInitializedError:
-                init()
-                return my_very_own_function()
-
-    """
-
-    def __init__(self, resolver):
-        object.__setattr__(self, '_resolver', resolver)
-
-    @property
-    def proxied_object(self):
-        o = object.__getattribute__(self, '_resolver')()
-        # if still is none, raise the exception
-        if o is None:
-            raise ObjectIsNotInitializedError("Configuration manager object is not initialized yet.")
-        return o
-
-    def __getattr__(self, key):
-        return getattr(object.__getattribute__(self, 'proxied_object'), key)
-
-    def __setattr__(self, key, value):
-        setattr(object.__getattribute__(self, 'proxied_object'), key, value)
 
 
 class LazyAttribute(object):
@@ -157,12 +112,12 @@ class LazyAttribute(object):
 
 
 class Context(dict):
-    response_encoding = 'utf8'
+    response_encoding = None
 
     def __init__(self, environ):
         super(Context, self).__init__()
         self.environ = environ
-        self.headers = wsgiref.headers.Headers()
+        self.headers = wsgiref.headers.Headers()  # TODO: rename it to response_header
 
     def __enter__(self):
         thread_local.nanohttp_context = self
@@ -181,7 +136,10 @@ class Context(dict):
 
     @classmethod
     def get_current(cls):
-        return thread_local.nanohttp_context
+        try:
+            return thread_local.nanohttp_context
+        except AttributeError:
+            raise ContextIsNotInitializedError("Context is not initialized yet.")
 
     @LazyAttribute
     def method(self):
@@ -238,12 +196,26 @@ class Context(dict):
         return result
 
 
+class ContextProxy(Context):
+
+    def __new__(cls, *args, **kwargs):
+        class Proxy(object):
+
+            def __getattr__(self, key):
+                return getattr(cls.get_current(), key)
+
+            def __setattr__(self, key, value):
+                setattr(cls.get_current(), key, value)
+
+        return Proxy()
+
+
 def action(methods='any', encoding='utf8', content_type='text/plain'):
     def _decorator(func):
         func.http_methods = methods.split(',') if isinstance(methods, str) else methods
 
-        if encoding.replace('-', '').lower() != 'utf8':
-            func.http_encoding = encoding
+        if encoding:
+            func.response_encoding = encoding
 
         if content_type:
             func.content_type = content_type
@@ -255,7 +227,7 @@ def action(methods='any', encoding='utf8', content_type='text/plain'):
 
 class Controller(object):
     http_methods = 'any'
-    http_encoding = 'utf8'
+    response_encoding = 'utf8'
     default_action = 'index'
 
     def _hook(self, name, *args, **kwargs):
@@ -276,13 +248,12 @@ class Controller(object):
 
         try:
             self._hook('begin_request')
-            # for chunk in self(*context.path[1:].split('/')):
-            #     yield chunk
             resp_generator = iter(self(*ctx.path[1:].split('/')))
             buffer = next(resp_generator)
 
         except HttpStatus as ex:
             status = ex.status
+            ctx.response_encoding = 'utf8'
             resp_generator = iter(ex.render())
 
         except Exception as ex:
@@ -291,6 +262,7 @@ class Controller(object):
             error_page = self._hook('request_error', ex)
             e = InternalServerError(sys.exc_info())
             status = e.status
+            ctx.response_encoding = 'utf8'
             resp_generator = iter(e.render() if error_page is None else error_page)
             traceback.print_exc()
 
@@ -300,18 +272,27 @@ class Controller(object):
 
         def _response():
             try:
-                if buffer is not None:
-                    yield buffer.encode(ctx.response_encoding)
 
-                for chunk in resp_generator:
-                    yield chunk.encode(ctx.response_encoding)
+                if ctx.response_encoding:
+
+                    if buffer is not None:
+                        yield buffer.encode(ctx.response_encoding)
+
+                    for chunk in resp_generator:
+                        yield chunk.encode(ctx.response_encoding)
+
+                else:
+                    if buffer is not None:
+                        yield buffer
+
+                    for chunk in resp_generator:
+                        yield chunk
 
             finally:
                 self._hook('end_response')
                 context.__exit__(*sys.exc_info())
 
         return _response()
-
 
     def __call__(self, *remaining_paths):
         """
@@ -336,13 +317,49 @@ class Controller(object):
         if 'any' not in handler.http_methods and context.method not in handler.http_methods:
             raise HttpMethodNotAllowed()
 
-        if hasattr(handler, 'http_encoding'):
-            context.response_encoding = handler.http_encoding
+        if hasattr(handler, 'response_encoding'):
+            context.response_encoding = handler.response_encoding
 
         if hasattr(handler, 'content_type'):
             context.response_content_type = handler.content_type
 
         return handler(*remaining_paths)
+
+
+class Static(Controller):
+    response_encoding = None
+    chunk_size = 0x4000
+    datetime_format = '%a, %m %b %Y %H:%M:%S GMT'
+
+    def __init__(self, directory):
+        self.directory = directory
+
+    def __call__(self, *remaining_paths):
+
+        # Find the physical path of the given path parts
+        physical_path = join(self.directory, *remaining_paths)
+
+        # Check to do not access the parent directory of root and also we are not listing directories here.
+        if isdir(physical_path) or pardir in relpath(physical_path, self.directory):
+            raise HttpForbidden()
+
+        context.headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
+
+        try:
+            f = open(physical_path, mode='rb')
+            stat = os.fstat(f.fileno())
+            context.headers.add_header('Content-Length', str(stat[6]))
+            context.headers.add_header('Last-Modified', time.strftime(self.datetime_format, time.gmtime(stat.st_mtime)))
+
+            with f:
+                while True:
+                    r = f.read(self.chunk_size)
+                    if not r:
+                        break
+                    yield r
+
+        except OSError:
+            raise HttpNotFound()
 
 
 def quickstart(controller=None, host='localhost',  port=8080):
@@ -372,7 +389,6 @@ class Demo(Controller):
 def main():
     import argparse
     import importlib.util
-    from os.path import basename, join
 
     parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
     parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE, help='Default: %s' % DEFAULT_CONFIG_FILE)
@@ -412,7 +428,13 @@ DEFAULT_ADDRESS = '8080'
 DEFAULT_APP = 'nanohttp:Demo'
 
 thread_local = threading.local()
-context = ObjectProxy(Context.get_current)
+context = ContextProxy()
+
+
+
+__all__ = [
+
+]
 
 
 if __name__ == '__main__':

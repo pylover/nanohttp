@@ -3,6 +3,7 @@ import unittest
 import base64
 import mimetypes
 import io
+from hashlib import md5
 from os import path, urandom
 from urllib.parse import urlencode
 
@@ -13,6 +14,25 @@ from nanohttp import Controller
 
 TEST_DIR = path.abspath(path.dirname(__file__))
 STUFF_DIR = path.join(TEST_DIR, 'stuff')
+
+
+def md5sum(f):
+    if isinstance(f, str):
+        file_obj = open(f, 'rb')
+    else:
+        file_obj = f
+
+    try:
+        checksum = md5()
+        while True:
+            d = file_obj.read(0x8000)
+            if not d:
+                break
+            checksum.update(d)
+        return checksum.digest()
+    finally:
+        if file_obj is not f:
+            file_obj.close()
 
 
 class WsgiTester(httplib2.Http):
@@ -63,18 +83,29 @@ class WsgiAppTestCase(unittest.TestCase):
     def tearDown(self):
         self.client.__exit__(*sys.exc_info())
 
-    def assert_request(self, uri, method, resp=None, status=200, content_type=None, **kw):
+    def assert_request(self, uri, method, expected_response=None, expected_checksum=None, not_expected_headers=None,
+                       expected_headers=None, status=200, **kw):
         response, content = self.client.request(uri, method=method, **kw)
         self.assertEqual(response.status, status)
 
-        if resp is not None:
-            if isinstance(resp, str):
-                self.assertEqual(content.decode(), resp)
+        if expected_response is not None:
+            if isinstance(expected_response, str):
+                self.assertEqual(content.decode(), expected_response)
             else:
-                self.assertRegex(content.decode(), resp)
+                self.assertRegex(content.decode(), expected_response)
 
-        if content_type:
-            self.assertEqual(response['content-type'], content_type)
+        for k, v in (expected_headers or {}).items():
+            k = k.lower()
+            if isinstance(expected_response, str):
+                self.assertEqual(response[k], v)
+            else:
+                self.assertRegex(response[k], v)
+
+        for k in not_expected_headers or []:
+            self.assertNotIn(k.lower(), response)
+
+        if expected_checksum:
+            self.assertEqual(md5sum(io.BytesIO(content)), expected_checksum)
 
         return response, content
 

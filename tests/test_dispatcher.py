@@ -54,15 +54,15 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/', 'Index')
 
     def test_arguments(self):
-        self.assert_get('/users/10/jobs', 'User: 10\nAttr: jobs\n')
-        self.assert_get('/users/10/', 'User: 10\nAttr: \n')
+        self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
+        self.assert_get('/users/10/', expected_response='User: 10\nAttr: \n')
         self.assert_get('/users/10/11/11', status=404)
 
     def test_exception(self):
-        self.assert_get('/bad', resp=re.compile('.*Exception.*'), status=500)
+        self.assert_get('/bad', expected_response=re.compile('.*Exception.*'), status=500)
 
     def test_nested(self):
-        self.assert_get('/links', 'Links index')
-        self.assert_get('/links/add/mylink', 'Adding link: mylink')
-        self.assert_get('/links/promos/', 'Promotions index')
-        self.assert_get('/links/promos/select/1', 'Selection promotion: 1')
+        self.assert_get('/links', expected_response='Links index')
+        self.assert_get('/links/add/mylink', expected_response='Adding link: mylink')
+        self.assert_get('/links/promos/', expected_response='Promotions index')
+        self.assert_get('/links/promos/select/1', expected_response='Selection promotion: 1')

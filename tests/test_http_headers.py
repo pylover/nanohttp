@@ -20,6 +20,6 @@ class HttpHeadersTestCase(WsgiAppTestCase):
 
 
     def test_response_header(self):
-        self.assert_get('/', content_type='text/plain')
-        self.assert_get('/html', content_type='text/html')
-        self.assertIsNone(self.assert_get('/no_content_type')[0].get('content-type'))
+        self.assert_get('/', expected_headers={'Content-Type': 'text/plain'})
+        self.assert_get('/html', expected_headers={'Content-Type': 'text/html'})
+        self.assert_get('/no_content_type', not_expected_headers=['Content-Type'])
