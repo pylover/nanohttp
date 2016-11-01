@@ -3,6 +3,19 @@ nanohttp
 
 A very micro HTTP framework.
 
+Features
+--------
+
+- Very simple, less-code & fast
+- Using object dispatcher instead of regex route dispatcher.
+- Url-Encoded & Multipart form parsing.
+
+Roadmap
+-------
+
+The road map is to keep it simple. no built-in template engine and or ORM will be included.
+
+
 Install
 -------
 
