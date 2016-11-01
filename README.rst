@@ -11,7 +11,7 @@ PyPI
 
 ..  code-block:: bash
 
-    $ pip install nanohttp
+    $ pip install --pre nanohttp
 
 
 Source
