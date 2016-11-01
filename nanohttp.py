@@ -2,8 +2,9 @@
 import time
 import os
 import sys
-import traceback
 import cgi
+import functools
+import traceback
 import threading
 import wsgiref.util
 import wsgiref.headers
@@ -223,6 +224,11 @@ def action(methods='any', encoding='utf8', content_type='text/plain'):
         return func
 
     return _decorator
+
+
+html = functools.partial(action, content_type='text/html')
+text = functools.partial(action, content_type='text/text')
+json = functools.partial(action, content_type='application/json')
 
 
 class Controller(object):

@@ -44,19 +44,18 @@ Quick Start
 ..  code-block:: python
 
     from os.path import dirname, abspath
-    from nanohttp import Controller, action, context, Static
+    from nanohttp import Controller, html, context, Static
+    
     
     class Root(Controller):
         static = Static(abspath(dirname(__file__)))
     
-        @action()
+        @html()
         def index(self):
-            yield from ('%s: %s\n' % i for i in context.environ.items())
-    
-        @action(content_type='text/html')
-        def cat(self):
             yield '<img src="/static/cat.jpg" />'
-
+            yield '<ul>'
+            yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
+            yield '</ul>'
 
 
 ..  code-block:: bash
