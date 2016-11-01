@@ -46,6 +46,11 @@ class HttpNotFound(HttpStatus):
     status_text = 'Not Found'
 
 
+class HttpMethodNotAllowed(HttpStatus):
+    status_code = 405
+    status_text = 'Method not allowed'
+
+
 class HttpConflict(HttpStatus):
     status_code = 409
     status_text = 'Conflict'
@@ -54,11 +59,6 @@ class HttpConflict(HttpStatus):
 class HttpGone(HttpStatus):
     status_code = 410
     status_text = 'Access to resource is no longer available. Please contact us to find the reason.'
-
-
-class HttpMethodNotAllowed(HttpStatus):
-    status_code = 405
-    status_text = 'Method not allowed'
 
 
 class InternalServerError(HttpStatus):
