@@ -13,7 +13,7 @@ from mimetypes import guess_type
 from urllib.parse import parse_qs
 
 
-__version__ = '0.1.0-dev.0'
+__version__ = '0.1.0-dev.1'
 
 
 class HttpStatus(Exception):
