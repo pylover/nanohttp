@@ -64,6 +64,12 @@ Or
 
     quickstart(Root())
 
+Are you may need a ``WSGI`` application?
+
+..  code-block:: python
+    
+    wsgi_app = Root().load_app()
+    # Pass the ``app`` to every ``WSGI`` server you want.
 
 Command Line Interface
 ----------------------
