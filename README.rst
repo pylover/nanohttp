@@ -64,7 +64,7 @@ Or
 
     quickstart(Root())
 
-Are you may need a ``WSGI`` application?
+Are you need a ``WSGI`` application?
 
 ..  code-block:: python
     
