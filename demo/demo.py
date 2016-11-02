@@ -1,6 +1,6 @@
 
 from os.path import dirname, abspath
-from nanohttp import Controller, html, context, Static, HttpFound
+from nanohttp import Controller, html, context, Static, HttpFound, settings
 
 
 class Root(Controller):
@@ -10,6 +10,7 @@ class Root(Controller):
     def index(self):
         yield '<html><head><title>nanohttp demo</title></head><body>'
         yield '<h1>nanohttp demo page</h1>'
+        yield '<h2>debug flag is: %s</h2>' % settings.debug
         yield '<img src="/static/cat.jpg" />'
         yield '<ul>'
         yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
@@ -23,6 +24,10 @@ class Root(Controller):
     @html
     def google(self):
         raise HttpFound('http://google.com')
+
+    @html
+    def error(self):
+        raise Exception()
 
 
 if __name__ == '__main__':

@@ -12,8 +12,17 @@ from os.path import isdir, join, relpath, pardir, basename
 from mimetypes import guess_type
 from urllib.parse import parse_qs
 
+import pymlconf
+
 
 __version__ = '0.1.0-dev.1'
+
+DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
+DEFAULT_ADDRESS = '8080'
+DEFAULT_APP = 'nanohttp:Demo'
+BUILTIN_CONFIG = """
+debug: true
+"""
 
 
 class HttpStatus(Exception):
@@ -254,9 +263,23 @@ class Controller(object):
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
-    def load_app(self):
+    def load_app(self, config=None, config_files=None):
+        print("Loading Configuration")
+        settings.load(builtin=BUILTIN_CONFIG, init_value=config, files=config_files, force=True)
         self._hook('app_load')
         return self._handle_request
+
+    def _handle_exception(self, ex):
+        context.response_content_type = 'text/plain'
+        context.response_encoding = 'utf8'
+        if isinstance(ex, HttpStatus):
+            return ex.status, ex.render()
+        else:
+            traceback.print_exc()
+            error_page = self._hook('request_error', ex)
+            e = InternalServerError(sys.exc_info())
+            return e.status, e.render() if settings.debug else e.info if error_page is None else error_page
+
 
     def _handle_request(self, environ, start_response):
         ctx = Context(environ)
@@ -271,18 +294,8 @@ class Controller(object):
             resp_generator = iter(self(*ctx.path[1:].split('/')))
             buffer = next(resp_generator)
 
-        except HttpStatus as ex:
-            status = ex.status
-            ctx.response_encoding = 'utf8'
-            resp_generator = iter(ex.render())
-
         except Exception as ex:
-            error_page = self._hook('request_error', ex)
-            e = InternalServerError(sys.exc_info())
-            status = e.status
-            ctx.response_encoding = 'utf8'
-            resp_generator = iter(e.render() if error_page is None else error_page)
-            traceback.print_exc()
+            status, resp_generator = self._handle_exception(ex)
 
         finally:
             start_response(status, ctx.response_headers.items())
@@ -380,10 +393,10 @@ class Static(Controller):
             raise HttpNotFound()
 
 
-def quickstart(controller, host='localhost',  port=8080, block=True):
+def quickstart(controller, host='localhost',  port=8080, block=True, **kwargs):
     from wsgiref.simple_server import make_server
 
-    app = controller.load_app()
+    app = controller.load_app(**kwargs)
 
     httpd = make_server(host, port, app)
 
@@ -410,7 +423,7 @@ class Demo(Controller):
         yield from ('%s: %s\n' % i for i in context.environ.items())
 
 
-def _bootstrap(args, block=True):
+def _bootstrap(args, config_files=None, **kwargs):
     import importlib.util
 
     host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
@@ -423,14 +436,20 @@ def _bootstrap(args, block=True):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
-    return quickstart(getattr(module, class_name)(), host=host, port=int(port), block=block)
+    config_files = config_files or []
+    config_files = [config_files] if isinstance(config_files, str) else config_files
+    if args.config_file:
+        config_files.extend(args.config_file)
+
+    return quickstart(getattr(module, class_name)(), host=host, port=int(port), config_files=config_files, **kwargs)
 
 
-def main():
+def _cli_args():
     import argparse
 
     parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
-    parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE, help='Default: %s' % DEFAULT_CONFIG_FILE)
+    parser.add_argument('-c', '--config-file', action='append', default=[], help='This option may be passed multiple '
+                                                                                 'times.')
     parser.add_argument('-b', '--bind', default=DEFAULT_ADDRESS, metavar='{HOST:}PORT', help='Bind Address. default: '
                                                                                              '%s' % DEFAULT_ADDRESS)
     parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
@@ -442,7 +461,72 @@ def main():
                         help='The python module and controller class to launch. default: '
                              '`%s`, And the default value for `:CLASS` is `:Root` if omitted.' % DEFAULT_APP)
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def _watch(args):
+    try:
+        # noinspection PyPackageRequirements
+        from inotify.adapters import Inotify
+        from inotify.constants import IN_CLOSE_WRITE, IN_MOVE
+    except ImportError:
+        print(
+            'In order please install the `inotify` to enable watching: `$ pip install inotify`.',
+            file=sys.stderr
+        )
+        sys.exit(-1)
+
+    shutdown = _bootstrap(args, block=False)
+
+    watchdog = Inotify()
+    watch_directory = args.directory.encode()
+
+    try:
+
+        add_watch = functools.partial(watchdog.add_watch, watch_directory, mask=IN_CLOSE_WRITE | IN_MOVE)
+
+        add_watch()
+        for event in watchdog.event_gen():
+            if event is not None:
+                header, type_names, watch_path, filename = event
+                if not filename or filename.startswith(b'__') or filename.startswith(b'.'):
+                    continue
+                watchdog.remove_watch(watch_directory, superficial=True)
+                print('Change detected in %s, Restarting' % filename.decode())
+                shutdown()
+                try_count = 0
+                try_gap = 2
+                while True:
+                    try_count += 1
+                    try_gap += try_count / 5
+                    # noinspection PyBroadException
+                    try:
+                        shutdown = _bootstrap(args, block=False)
+                    except:
+                        traceback.print_exc()
+                        print('Cannot load the: %s, due above exception, trying for %.2F seconds later. repeats: %d' % (
+                            filename.decode(),
+                            try_gap,
+                            try_count
+                        ))
+                        # noinspection PyBroadException
+                        try:
+                            shutdown()
+                        except:
+                            pass
+                        time.sleep(try_gap)
+                    else:
+                        break
+
+                add_watch()
+
+    finally:
+        watchdog.remove_watch(watch_directory)
+
+
+def main():
+
+    args = _cli_args()
 
     if args.version:
         print(__version__)
@@ -450,34 +534,10 @@ def main():
 
     try:
 
-        if not args.watch:
-            _bootstrap(args)
+        if args.watch:
+            _watch(args)
         else:
-
-            # noinspection PyPackageRequirements
-            from inotify.adapters import Inotify
-
-            shutdown = _bootstrap(args, block=False)
-
-            watchdog = Inotify()
-            watch_directory = args.directory.encode()
-
-            try:
-
-                watchdog.add_watch(watch_directory)
-                for event in watchdog.event_gen():
-                    if event is not None:
-                        header, type_names, watch_path, filename = event
-                        if not filename or filename.startswith(b'__') or filename.startswith(b'.'):
-                            continue
-                        watchdog.remove_watch(watch_directory)
-                        print('Change detected in %s, Restarting' % filename.decode())
-                        shutdown()
-                        shutdown = _bootstrap(args, block=False)
-                        watchdog.add_watch(watch_directory)
-
-            finally:
-                watchdog.remove_watch(watch_directory)
+            _bootstrap(args)
 
     except KeyboardInterrupt:
         print('CTRL+C detected.')
@@ -486,12 +546,9 @@ def main():
         return 0
 
 
-DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
-DEFAULT_ADDRESS = '8080'
-DEFAULT_APP = 'nanohttp:Demo'
-
 thread_local = threading.local()
 context = ContextProxy()
+settings = pymlconf.DeferredConfigManager()
 
 
 __all__ = [
@@ -504,6 +561,7 @@ __all__ = [
     'HttpConflict',
     'HttpGone',
     'HttpMovedPermanently',
+    'HttpFound',
     'InternalServerError',
     'Controller',
     'Static',
@@ -515,6 +573,7 @@ __all__ = [
     'quickstart',
     'main',
     'context',
+    'settings'
 ]
 
 
