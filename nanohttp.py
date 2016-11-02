@@ -369,21 +369,27 @@ class Static(Controller):
             raise HttpNotFound()
 
 
-def quickstart(controller=None, host='localhost',  port=8080):
+def quickstart(controller, host='localhost',  port=8080, block=True):
     from wsgiref.simple_server import make_server
 
-    if controller is None:
-        from wsgiref.simple_server import demo_app
-        app = demo_app
-    else:
-        app = controller.load_app()
+    app = controller.load_app()
 
     httpd = make_server(host, port, app)
-    try:
-        print("Serving http://%s:%d" % (host or 'localhost', port))
+
+    print("Serving http://%s:%d" % (host or 'localhost', port))
+    if block:
         httpd.serve_forever()
-    except KeyboardInterrupt:
-        print('CTRL+C Detected !')
+    else:
+        t = threading.Thread(target=httpd.serve_forever, daemon=True)
+        t.start()
+
+        def shutdown():
+            httpd.shutdown()
+            httpd.server_close()
+            t.join()
+
+
+        return shutdown
 
 
 class Demo(Controller):
@@ -393,9 +399,24 @@ class Demo(Controller):
         yield from ('%s: %s\n' % i for i in context.environ.items())
 
 
+def _bootstrap(args, block=True):
+    import importlib.util
+
+    host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
+    module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
+
+    if module_name.endswith('.py'):
+        module_name = module_name[:-3]
+
+    spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    return quickstart(getattr(module, class_name)(), host=host, port=int(port), block=block)
+
+
 def main():
     import argparse
-    import importlib.util
 
     parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
     parser.add_argument('-c', '--config-file', default=DEFAULT_CONFIG_FILE, help='Default: %s' % DEFAULT_CONFIG_FILE)
@@ -403,6 +424,8 @@ def main():
                                                                                              '%s' % DEFAULT_ADDRESS)
     parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
                                                                'contains the controller class. default is: `.`')
+    parser.add_argument('-w', '--watch', default=False, action='store_true', help='If given, Watches the `--directory` '
+                                                                                  'and reload the app on changes.')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
     parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{.py}{:CLASS}',
                         help='The python module and controller class to launch. default: '
@@ -414,19 +437,40 @@ def main():
         print(__version__)
         return 0
 
-    host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
-    module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
-    module_name = module_name.rstrip('.py')
-    spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-
-    # noinspection PyBroadException
     try:
-        quickstart(getattr(module, class_name)(), host=host, port=int(port))
-    except:
-        traceback.print_exc()
-        return 1
+
+        if not args.watch:
+            _bootstrap(args)
+        else:
+
+            # noinspection PyPackageRequirements
+            from inotify.adapters import Inotify
+
+            shutdown = _bootstrap(args, block=False)
+
+            watchdog = Inotify()
+            watch_directory = args.directory.encode()
+
+            try:
+
+                watchdog.add_watch(watch_directory)
+                for event in watchdog.event_gen():
+                    if event is not None:
+                        header, type_names, watch_path, filename = event
+                        if not filename or filename.startswith(b'__') or filename.startswith(b'.'):
+                            continue
+                        watchdog.remove_watch(watch_directory)
+                        print('Change detected in %s, Restarting' % filename.decode())
+                        shutdown()
+                        shutdown = _bootstrap(args, block=False)
+                        watchdog.add_watch(watch_directory)
+
+            finally:
+                watchdog.remove_watch(watch_directory)
+
+    except KeyboardInterrupt:
+        print('CTRL+C detected.')
+        return -1
     else:
         return 0
 
@@ -465,5 +509,4 @@ __all__ = [
 
 if __name__ == '__main__':
     sys.exit(main())
-
 

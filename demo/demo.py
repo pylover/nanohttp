@@ -8,10 +8,13 @@ class Root(Controller):
 
     @html
     def index(self):
+        yield '<html><head><title>nanohttp demo</title></head><body>'
+        yield '<h1>nanohttp demo page</h1>'
         yield '<img src="/static/cat.jpg" />'
         yield '<ul>'
         yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
         yield '</ul>'
+        yield '</body>'
 
     @html(methods=['post', 'put'])
     def contact(self):

@@ -10,6 +10,7 @@ Features
 - Using object dispatcher instead of regex route dispatcher.
 - Url-Encoded & Multipart form parsing.
 - No `request` or `response` objects are available, everything is combined in `nanohttp.context`.
+- Use `-w/--watch` to observe the changes in your project directory and reload the development server if desired.
 
 Roadmap
 -------
@@ -89,7 +90,8 @@ Command Line Interface
 
     $ nanohttp -h
 
-    usage: nanohttp [-h] [-c CONFIG_FILE] [-b {HOST:}PORT] [-d DIRECTORY] [-V]
+    usage: nanohttp [-h] [-c CONFIG_FILE] [-b {HOST:}PORT] [-d DIRECTORY] [-w]
+                    [-V]
                     [MODULE{.py}{:CLASS}]
 
     positional arguments:
@@ -106,4 +108,7 @@ Command Line Interface
       -d DIRECTORY, --directory DIRECTORY
                             The path to search for the python module, which
                             contains the controller class. default is: `.`
+      -w, --watch           If given, Watches the `--directory` and reload the app
+                            on changes.
       -V, --version         Show the version.
+
