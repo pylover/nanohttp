@@ -161,7 +161,7 @@ Command Line Interface
       -d DIRECTORY, --directory DIRECTORY
                             The path to search for the python module, which
                             contains the controller class. default is: `.`
-      -w, --watch           If given, Watches the `--directory` and reload the app
+      -w, --watch           If given, tries to watch the `--directory` and reload the app
                             on changes.
       -V, --version         Show the version.
 

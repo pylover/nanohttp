@@ -454,8 +454,9 @@ def _cli_args():
                                                                                              '%s' % DEFAULT_ADDRESS)
     parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
                                                                'contains the controller class. default is: `.`')
-    parser.add_argument('-w', '--watch', default=False, action='store_true', help='If given, Watches the `--directory` '
-                                                                                  'and reload the app on changes.')
+    parser.add_argument('-w', '--watch', default=False, action='store_true', help='If given, tries to watch the '
+                                                                                  '`--directory` and reload the app on '
+                                                                                  'changes.')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
     parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{.py}{:CLASS}',
                         help='The python module and controller class to launch. default: '
