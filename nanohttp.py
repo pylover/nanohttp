@@ -402,7 +402,7 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
     httpd = make_server(host, port, app)
 
     print("Serving http://%s:%d" % (host or 'localhost', port))
-    if block:
+    if block:  # pragma: no cover
         httpd.serve_forever()
     else:
         t = threading.Thread(target=httpd.serve_forever, daemon=True)
