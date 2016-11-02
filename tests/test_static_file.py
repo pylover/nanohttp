@@ -13,10 +13,6 @@ class StaticFileTestCase(WsgiAppTestCase):
         cat = Static(CAT)
         static = Static(STUFF_DIR)
 
-        @action()
-        def index(self):
-            yield 'Index'
-
     def test_simple_query_string(self):
         checksum = md5sum(CAT)
         self.assert_get('/cat', expected_checksum=checksum)

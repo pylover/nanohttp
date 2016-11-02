@@ -43,10 +43,6 @@ class DispatcherTestCase(WsgiAppTestCase):
             yield 'Index'
 
         @action()
-        def not_forbidden(self):
-            raise HttpForbidden()
-
-        @action()
         def bad(self):
             raise Exception
 

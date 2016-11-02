@@ -96,7 +96,7 @@ class WsgiAppTestCase(unittest.TestCase):
 
         for k, v in (expected_headers or {}).items():
             k = k.lower()
-            if isinstance(expected_response, str):
+            if isinstance(v, str):
                 self.assertEqual(response[k], v)
             else:
                 self.assertRegex(response[k], v)

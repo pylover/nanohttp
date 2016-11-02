@@ -1,13 +1,14 @@
 import re
 from os.path import join
 
-from nanohttp import Controller, action, context
+from nanohttp import Controller, text, context
 from tests.helpers import WsgiAppTestCase, STUFF_DIR
 
 
 class FormTestCase(WsgiAppTestCase):
     class Root(Controller):
-        @action(methods='post')
+
+        @text(methods='post')
         def index(self):
             return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.form.items(), key=lambda x: x[0]))
 
@@ -33,5 +34,8 @@ class FormTestCase(WsgiAppTestCase):
                 'b': [2, 3],
             },
             files={'c': join(STUFF_DIR, 'cat.jpg')},
-            expected_response=re.compile("a: 1, b: \[2, 3\], c: FieldStorage\('c', 'cat\.jpg.*")
+            expected_response=re.compile("a: 1, b: \[2, 3\], c: FieldStorage\('c', 'cat\.jpg.*"),
+            expected_headers={
+                'Content-Type': re.compile('text/plain')
+            }
         )

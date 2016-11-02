@@ -8,18 +8,14 @@ class HttpHeadersTestCase(WsgiAppTestCase):
 
         @text()
         def index(self):
-            raise HttpMovedPermanently('/html')
+            raise HttpMovedPermanently('/new/address')
 
         @action()
         def about(self):
-            raise HttpFound('/html')
-
-        @html()
-        def html(self):
-            return 'Html'
+            raise HttpFound('/new/address')
 
 
     def test_redirect_response_header(self):
-        self.assert_get('/', status=301, expected_headers={'Location': '/html'})
-        self.assert_get('/about', status=302, expected_headers={'Location': '/html'})
+        self.assert_get('/', status=301, expected_headers={'Location': '/new/address'})
+        self.assert_get('/about', status=302, expected_headers={'Location': '/new/address'})
 
