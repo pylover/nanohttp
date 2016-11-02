@@ -2,6 +2,7 @@ import sys
 import unittest
 import base64
 import mimetypes
+import socket
 import io
 from hashlib import md5
 from os import path, urandom
@@ -158,6 +159,15 @@ def encode_multipart_data(fields=None, files=None):  # pragma: no cover
     body.seek(0)
     content_type = 'multipart/form-data; boundary=%s' % boundary
     return content_type, body, length
+
+
+def find_free_tcp_port():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((socket.gethostname(), 0))
+        return s.getsockname()[1]
+    finally:
+        s.close()
 
 
 if __name__ == '__main__':  # pragma: no cover

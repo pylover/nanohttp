@@ -435,7 +435,7 @@ def _load_controller_from_file(specifier, search_path):
     return controller
 
 
-def _bootstrap(args, config_files=None, **kwargs):  # pragma: no cover
+def _bootstrap(args, config_files=None, **kwargs):
     host, port = args.bind.split(':') if ':' in args.bind else ('', args.bind)
 
     controller = _load_controller_from_file(args.controller, args.directory)
@@ -448,10 +448,10 @@ def _bootstrap(args, config_files=None, **kwargs):  # pragma: no cover
     return quickstart(controller=controller, host=host, port=int(port), config_files=config_files, **kwargs)
 
 
-def _cli_args():  # pragma: no cover
+def _cli_args(argv):
     import argparse
 
-    parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
+    parser = argparse.ArgumentParser(prog=basename(argv[0]))
     parser.add_argument('-c', '--config-file', action='append', default=[], help='This option may be passed multiple '
                                                                                  'times.')
     parser.add_argument('-b', '--bind', default=DEFAULT_ADDRESS, metavar='{HOST:}PORT', help='Bind Address. default: '
@@ -466,17 +466,17 @@ def _cli_args():  # pragma: no cover
                         help='The python module and controller class to launch. default is python built-in\'s : '
                              '`demo_app`, And the default value for `:CLASS` is `:Root` if omitted.')
 
-    return parser.parse_args()
+    return parser.parse_args(argv[1:])
 
 
-def _watch(args):  # pragma: no cover
+def _watch(args):
 
     try:
         # noinspection PyPackageRequirements
         from inotify.adapters import Inotify
         # noinspection PyPackageRequirements
         from inotify.constants import IN_CLOSE_WRITE, IN_MOVE
-    except ImportError:
+    except ImportError:  # pragma: no cover
         print(
             'In order please install the `inotify` to enable watching: `$ pip install inotify`.',
             file=sys.stderr
@@ -531,11 +531,11 @@ def _watch(args):  # pragma: no cover
         watchdog.remove_watch(watch_directory)
 
 
-def main():  # pragma: no cover
+def main(argv=None):
+    print(sys.argv)
+    args = _cli_args(argv or sys.argv)
 
-    args = _cli_args()
-
-    if args.version:
+    if args.version:  # pragma: no cover
         print(__version__)
         return 0
 
@@ -546,7 +546,7 @@ def main():  # pragma: no cover
         else:
             _bootstrap(args)
 
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:  # pragma: no cover
         print('CTRL+C detected.')
         return -1
     else:

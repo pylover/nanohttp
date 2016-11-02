@@ -2,7 +2,8 @@
 import unittest
 from os.path import join
 
-from nanohttp import Controller, _load_controller_from_file
+# noinspection PyProtectedMember
+from nanohttp import _load_controller_from_file
 from tests.helpers import TEST_DIR
 
 
