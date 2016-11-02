@@ -359,7 +359,7 @@ class Static(Controller):
     chunk_size = 0x4000
     datetime_format = '%a, %m %b %Y %H:%M:%S GMT'
 
-    def __init__(self, directory):
+    def __init__(self, directory='.'):
         self.directory = directory
 
     def __call__(self, *remaining_paths):
@@ -417,21 +417,28 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
         return shutdown
 
 
-def _bootstrap(args, config_files=None, **kwargs):
+def _load_controller_from_file(specifier, search_path):
     import importlib.util
-
     controller = None
-    host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
-    if args.controller:
-        module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
+
+    if specifier:
+        module_name, class_name = specifier.split(':') if ':' in specifier else (specifier, 'Root')
 
         if module_name.endswith('.py'):
             module_name = module_name[:-3]
 
-        spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
+        spec = importlib.util.spec_from_file_location(module_name, location=join(search_path, '%s.py' % module_name))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         controller = getattr(module, class_name)()
+
+    return controller
+
+
+def _bootstrap(args, config_files=None, **kwargs):  # pragma: no cover
+    host, port = args.bind.split(':') if ':' in args.bind else ('', args.bind)
+
+    controller = _load_controller_from_file(args.controller, args.directory)
 
     config_files = config_files or []
     config_files = [config_files] if isinstance(config_files, str) else config_files
@@ -441,7 +448,7 @@ def _bootstrap(args, config_files=None, **kwargs):
     return quickstart(controller=controller, host=host, port=int(port), config_files=config_files, **kwargs)
 
 
-def _cli_args():
+def _cli_args():  # pragma: no cover
     import argparse
 
     parser = argparse.ArgumentParser(prog=basename(sys.argv[0]))
@@ -462,7 +469,7 @@ def _cli_args():
     return parser.parse_args()
 
 
-def _watch(args):
+def _watch(args):  # pragma: no cover
 
     try:
         # noinspection PyPackageRequirements
@@ -524,7 +531,7 @@ def _watch(args):
         watchdog.remove_watch(watch_directory)
 
 
-def main():
+def main():  # pragma: no cover
 
     args = _cli_args()
 
@@ -577,6 +584,6 @@ __all__ = [
 ]
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     sys.exit(main())
 

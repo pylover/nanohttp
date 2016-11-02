@@ -1,12 +1,10 @@
 import time
 
-import httplib2
-
 from nanohttp import Controller, text, quickstart
 from tests.helpers import WsgiAppTestCase
 
 
-class HttpRedirectTestCase(WsgiAppTestCase):
+class QuickstartTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
