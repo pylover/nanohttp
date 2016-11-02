@@ -111,6 +111,16 @@ Are you need a ``WSGI`` application?
     # Pass the ``app`` to every ``WSGI`` server you want.
 
 
+Watch
+-----
+
+..  code-block:: bash
+
+    $ pip install -r requirements-optional.txt
+    $ nanohttp -w
+
+
+
 Config File
 -----------
 
