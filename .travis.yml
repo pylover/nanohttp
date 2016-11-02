@@ -1,0 +1,27 @@
+
+language: python
+
+python:
+  - 3.5
+  - 3.5-dev
+
+before_install:
+  - pip install -U pip setuptools wheel
+  - pip install -r requirements-dev.txt
+  - pip install -r requirements-optional.txt
+
+install: pip install -ve .
+script: coverage run --source nanohttp.py $(which nosetests)
+after_success: coveralls
+deploy:
+  provider: pypi
+  skip_cleanup: true
+  user: Vahid.Mardani
+  skip_cleanup: true
+  password:
+    secure: KkO9k3Ig0Jy6MifKarIOKYLA4lIK/GYFvpvQCbO3K+G+G938xcUnPb5GpN3XCPx+uaoOo/Q3nS7GC8fK0NETM1UdrGOjbuPC3GdGwjqapT5N110bJvbZg9CyUqI+qQ0sXFqPM1BdbtPtJT1LYgEbM/zGC68cOrYzxsVfNhOe3yMTIQEmONr6p+NEJd0we5F+P1OqlxHy6hlImLzPGs88zofr3JI/vXGMFoAYmpZHjRJrioWwjQtsiiEGGp1GxCOAKgDHiNyT0MLC9QP3TP8k7WdaOpLdl/xSvd/rNM7BE7aqEVIA+YTCjzyhT4rciiq8bOBcyeprawm8ozzeDpxn1Lx1qX685F8h6Oc9XACBGKOttN1IwMGHFfFsRLkYGNzdllDyhO5ONQpaZupGcMYrUH7iGZL85Js1slHyZ7eztQWvOf6suqYU3Ru3fW9vzTgJYKKK6UB15dt9+7b/qKQTEobabjxb7G5vPQUWq2I4jIymPnPShtHlS1sIZtJqEKHygl32XM+Qn4J8msLZ6yJo9dRcaFtXf3LnH0kAxH2KHh/1dqioYoA8boXpdYfj3Hj37F72a/poWoVWixVNAAfM8yN5jUC6U4lXPP5FO6iVNnwjBzAnWcNZbnDTrinRZBCVR88JU1L4knkFlUwhpny7+HBF0Op5hkz5SFUpQJPYlBU=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: pylover/nanohttp
+    all_branches: true
