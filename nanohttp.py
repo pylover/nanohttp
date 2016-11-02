@@ -19,7 +19,6 @@ __version__ = '0.1.0-dev.5'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
-DEFAULT_APP = 'nanohttp:Demo'
 BUILTIN_CONFIG = """
 debug: true
 """
@@ -423,22 +422,25 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
 def _bootstrap(args, config_files=None, **kwargs):
     import importlib.util
 
+    controller = None
     host, port = args.bind.split(':') if ':' in args.bind else ('',  args.bind)
-    module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
+    if args.controller:
+        module_name, class_name = args.controller.split(':') if ':' in args.controller else (args.controller, 'Root')
 
-    if module_name.endswith('.py'):
-        module_name = module_name[:-3]
+        if module_name.endswith('.py'):
+            module_name = module_name[:-3]
 
-    spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+        spec = importlib.util.spec_from_file_location(module_name, location=join(args.directory, '%s.py' % module_name))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        controller = getattr(module, class_name)()
 
     config_files = config_files or []
     config_files = [config_files] if isinstance(config_files, str) else config_files
     if args.config_file:
         config_files.extend(args.config_file)
 
-    return quickstart(getattr(module, class_name)(), host=host, port=int(port), config_files=config_files, **kwargs)
+    return quickstart(controller=controller, host=host, port=int(port), config_files=config_files, **kwargs)
 
 
 def _cli_args():
@@ -455,17 +457,19 @@ def _cli_args():
                                                                                   '`--directory` and reload the app on '
                                                                                   'changes.')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
-    parser.add_argument('controller', nargs='?', default=DEFAULT_APP, metavar='MODULE{.py}{:CLASS}',
-                        help='The python module and controller class to launch. default: '
-                             '`%s`, And the default value for `:CLASS` is `:Root` if omitted.' % DEFAULT_APP)
+    parser.add_argument('controller', nargs='?', metavar='MODULE{.py}{:CLASS}',
+                        help='The python module and controller class to launch. default is python built-in\'s : '
+                             '`demo_app`, And the default value for `:CLASS` is `:Root` if omitted.')
 
     return parser.parse_args()
 
 
 def _watch(args):
+
     try:
         # noinspection PyPackageRequirements
         from inotify.adapters import Inotify
+        # noinspection PyPackageRequirements
         from inotify.constants import IN_CLOSE_WRITE, IN_MOVE
     except ImportError:
         print(
