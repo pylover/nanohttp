@@ -15,7 +15,7 @@ class Root(Controller):
         yield '<ul>'
         yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
         yield '</ul>'
-        yield '</body>'
+        yield '</body></html>'
 
     @html(methods=['post', 'put'])
     def contact(self):

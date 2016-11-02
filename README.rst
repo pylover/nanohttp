@@ -11,6 +11,8 @@ Features
 - Url-Encoded & Multipart form parsing.
 - No `request` or `response` objects are available, everything is combined in `nanohttp.context`.
 - Use `-w/--watch` to observe the changes in your project directory and reload the development server if desired.
+- A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
+
 
 Roadmap
 -------
@@ -46,22 +48,33 @@ Quick Start
 ..  code-block:: python
 
     from os.path import dirname, abspath
-    from nanohttp import Controller, html, context, Static
-    
-    
+    from nanohttp import Controller, html, context, Static, HttpFound, settings
+
     class Root(Controller):
         static = Static(abspath(dirname(__file__)))
-    
+
         @html
         def index(self):
+            yield '<html><head><title>nanohttp demo</title></head><body>'
+            yield '<h1>nanohttp demo page</h1>'
+            yield '<h2>debug flag is: %s</h2>' % settings.debug
             yield '<img src="/static/cat.jpg" />'
             yield '<ul>'
             yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
             yield '</ul>'
-    
+            yield '</body></html>'
+
         @html(methods=['post', 'put'])
         def contact(self):
             yield '<h1>Thanks: %s</h1>' % context.form['name'] if context.form else 'Please send a name.'
+
+        @html
+        def google(self):
+            raise HttpFound('http://google.com')
+
+        @html
+        def error(self):
+            raise Exception()
 
 
 ..  code-block:: bash
@@ -82,6 +95,46 @@ Are you need a ``WSGI`` application?
     
     app = Root().load_app()
     # Pass the ``app`` to every ``WSGI`` server you want.
+
+
+Config File
+-----------
+
+Create a ``demo.yaml`` file.
+
+..  code-block:: yaml
+
+    debug: false
+
+Use the ``nanohttp.settings`` anywhere to access the config values.
+
+..  code-block:: python
+
+    from nanohttp import Controller, html, settings
+
+    class Root(Controller):
+
+        @html
+        def index(self):
+            yield '<html><head><title>nanohttp demo</title></head><body>'
+            yield '<h2>debug flag is: %s</h2>' % settings.debug
+            yield '</body></html>'
+
+Passing the config file(s) using command line:
+
+..  code-block:: bash
+
+    $ nanohttp -c demo.yaml [-c another.yaml] demo
+
+
+Passing the config file(s) Using python:
+
+..  code-block:: bash
+
+    from nanohttp import quickstart
+
+    quickstart(Root(), config_files=['file1', 'file2'])
+
 
 Command Line Interface
 ----------------------
