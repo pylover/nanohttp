@@ -15,7 +15,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.4'
+__version__ = '0.1.0-dev.5'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
@@ -393,10 +393,14 @@ class Static(Controller):
             raise HttpNotFound()
 
 
-def quickstart(controller, host='localhost',  port=8080, block=True, **kwargs):
+def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwargs):
     from wsgiref.simple_server import make_server
 
-    app = controller.load_app(**kwargs)
+    if controller is None:
+        from wsgiref.simple_server import demo_app
+        app = demo_app
+    else:
+        app = controller.load_app(**kwargs)
 
     httpd = make_server(host, port, app)
 
@@ -414,13 +418,6 @@ def quickstart(controller, host='localhost',  port=8080, block=True, **kwargs):
 
 
         return shutdown
-
-
-class Demo(Controller):
-
-    @action()
-    def index(self):
-        yield from ('%s: %s\n' % i for i in context.environ.items())
 
 
 def _bootstrap(args, config_files=None, **kwargs):

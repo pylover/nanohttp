@@ -1,4 +1,5 @@
 wsgi_intercept
 nose
 coverage
+coveralls
 httplib2
