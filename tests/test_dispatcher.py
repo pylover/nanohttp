@@ -38,7 +38,7 @@ class DispatcherTestCase(WsgiAppTestCase):
             yield 'User: %s\n' % user_id
             yield 'Attr: %s\n' % attr
 
-        @action()
+        @action(methods='get')
         def index(self, *args, **kw):
             yield 'Index'
 
@@ -56,6 +56,7 @@ class DispatcherTestCase(WsgiAppTestCase):
 
     def test_exception(self):
         self.assert_get('/bad', expected_response=re.compile('.*Exception.*'), status=500)
+        self.assert_post('/', status=405)
 
     def test_nested(self):
         self.assert_get('/links', expected_response='Links index')

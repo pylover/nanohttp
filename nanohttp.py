@@ -295,8 +295,8 @@ class Controller(object):
             status, resp_generator = self._handle_exception(ex)
 
         finally:
-            start_response(status, ctx.response_headers.items())
             self._hook('begin_response')
+            start_response(status, ctx.response_headers.items())
 
         def _response():
             try:

@@ -6,13 +6,13 @@ from nanohttp import Controller, html, ContextIsNotInitializedError, context, Co
 from tests.helpers import WsgiAppTestCase
 
 
-class ContextTestCase(unittest.TestCase):
+class ContextProxyTestCase(unittest.TestCase):
 
     def test_context(self):
         self.assertRaises(ContextIsNotInitializedError, Context.get_current)
 
 
-class HttpHeadersTestCase(WsgiAppTestCase):
+class ContextTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 

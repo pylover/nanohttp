@@ -1,6 +1,6 @@
 from os.path import join
 
-from nanohttp import Controller, action, Static
+from nanohttp import Controller, Static
 from tests.helpers import WsgiAppTestCase, STUFF_DIR, md5sum
 
 
@@ -13,7 +13,9 @@ class StaticFileTestCase(WsgiAppTestCase):
         cat = Static(CAT)
         static = Static(STUFF_DIR)
 
-    def test_simple_query_string(self):
+    def test_static_file(self):
         checksum = md5sum(CAT)
         self.assert_get('/cat', expected_checksum=checksum)
         self.assert_get('/static/cat.jpg', expected_checksum=checksum)
+        self.assert_get('/static', status=403)
+        self.assert_get('/static/not-exists', status=404)
