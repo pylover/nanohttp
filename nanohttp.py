@@ -131,7 +131,7 @@ class LazyAttribute(object):
         return val
 
 
-class Context(dict):
+class Context(object):
     response_encoding = None
 
     def __init__(self, environ):
@@ -156,10 +156,9 @@ class Context(dict):
 
     @classmethod
     def get_current(cls):
-        try:
-            return thread_local.nanohttp_context
-        except AttributeError:
+        if not hasattr(thread_local, 'nanohttp_context'):
             raise ContextIsNotInitializedError("Context is not initialized yet.")
+        return thread_local.nanohttp_context
 
     @LazyAttribute
     def method(self):
@@ -170,16 +169,12 @@ class Context(dict):
         return self.environ['PATH_INFO']
 
     @LazyAttribute
-    def uri(self):
+    def request_uri(self):
         return wsgiref.util.request_uri(self.environ, include_query=True)
 
     @LazyAttribute
-    def scheme(self):
+    def request_scheme(self):
         return wsgiref.util.guess_scheme(self.environ)
-
-    @LazyAttribute
-    def request_encoding(self):
-        raise NotImplementedError
 
     @LazyAttribute
     def query_string(self):
@@ -199,8 +194,8 @@ class Context(dict):
             keep_blank_values=True
         )
 
-        if storage.list is None:
-            return None
+        if storage.list is None or not len(storage.list):
+            return {}
 
         def get_value(f):
             # noinspection PyProtectedMember
@@ -221,9 +216,12 @@ class Context(dict):
 
 class ContextProxy(Context):
 
-    # noinspection PyMissingConstructor
-    def __init__(self):
-        pass
+    def __new__(cls):
+        type_proxy = type('ContextProxy', (object, ), {
+            '__getattr__': cls.__getattr__,
+            '__setattr__': cls.__setattr__,
+        })
+        return object.__new__(type_proxy)
 
     def __getattr__(self, key):
         return getattr(Context.get_current(), key)

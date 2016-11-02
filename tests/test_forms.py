@@ -10,7 +10,9 @@ class FormTestCase(WsgiAppTestCase):
 
         @text(methods='post')
         def index(self):
-            return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.form.items(), key=lambda x: x[0]))
+            if not context.form:
+                yield 'empty'
+            yield ', '.join('%s: %s' % (k, v) for k, v in sorted(context.form.items(), key=lambda x: x[0]))
 
     def test_simple_query_string(self):
         self.assert_post('/?a=1&b=&c=2', expected_response="a: 1, b: , c: 2")
@@ -35,7 +37,11 @@ class FormTestCase(WsgiAppTestCase):
             },
             files={'c': join(STUFF_DIR, 'cat.jpg')},
             expected_response=re.compile("a: 1, b: \[2, 3\], c: FieldStorage\('c', 'cat\.jpg.*"),
-            expected_headers={
-                'Content-Type': re.compile('text/plain')
-            }
+        )
+
+    def test_empty_form(self):
+        self.assert_post(
+            '/',
+            fields={},
+            expected_response='empty',
         )

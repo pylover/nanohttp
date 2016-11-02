@@ -1,4 +1,7 @@
-from nanohttp import Controller, action, text, html
+
+import re
+
+from nanohttp import Controller, action, text, html, context
 from tests.helpers import WsgiAppTestCase
 
 
@@ -8,18 +11,27 @@ class HttpHeadersTestCase(WsgiAppTestCase):
 
         @text()
         def index(self):
-            return 'Index'
+            yield 'Index'
 
         @action()
         def no_content_type(self):
-            return 'No Content Type'
+            yield'No Content Type'
 
         @html()
         def html(self):
-            return 'Html'
+            yield context.response_content_type
+
+        @action
+        def custom_header(self):
+            import time
+            context.response_headers.add_header('my-header',  str(time.time()))
+            yield ''
 
 
     def test_response_header(self):
         self.assert_get('/', expected_headers={'Content-Type': 'text/plain'})
         self.assert_get('/html', expected_headers={'Content-Type': 'text/html'})
         self.assert_get('/no_content_type', not_expected_headers=['Content-Type'])
+        self.assert_get('/custom_header', expected_headers={
+            'my-header': re. compile('\d+.?\d*')
+        })
