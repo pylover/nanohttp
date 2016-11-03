@@ -17,11 +17,11 @@ class EntryPointTestCase(unittest.TestCase):
         with open(self.demo_filename, mode='w') as f:
             f.write('some text')
         self.port = find_free_tcp_port()
-        self.url = 'http://localhost:%s/stuff/demo.txt' % self.port
+        self.url = 'http://localhost:%s/tests/stuff/demo.txt' % self.port
 
     def test_main_function(self):
 
-        args = ['nanohttp', '-d', '..', '-b', str(self.port), 'nanohttp:Static']
+        args = ['nanohttp', '-d', '.', '-b', str(self.port), 'nanohttp:Static']
         t = threading.Thread(target=main, args=(args,), daemon=True)
         t.start()
 
