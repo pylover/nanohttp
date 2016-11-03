@@ -8,7 +8,6 @@ python:
 before_install:
   - pip install -U pip setuptools wheel
   - pip install -r requirements-dev.txt
-  - pip install -r requirements-optional.txt
 
 install: pip install -ve .
 script: coverage run --source nanohttp.py $(which nosetests)
