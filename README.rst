@@ -114,11 +114,32 @@ Are you need a ``WSGI`` application?
 Watch
 -----
 
+Create a ``maryjane.yml`` file:
+
+..  code-block:: yaml
+
+    port: 8080
+    module: demo.py
+    controller: Root
+    config_file: demo.yml
+
+    # Storing the pid of current running server into the `pid` variable.
+    SHELL-INTO: pid netstat -lnpt 2>/dev/null | grep {port} | awk '{{split($7,a,"/"); printf a[1]}}'
+    ECHO: Old pid: {pid}
+
+    SHELL:
+      - if [ -n "{pid}" ]; then  kill -9 {pid}; fi
+      - while [ -n "{pid}" -a -e /proc/{pid} ]; do sleep .6; done
+      - nanohttp -b {port} -c {config_file} {module}:{controller} & echo New pid: $!
+
+    WATCH-ALL:
+      - !^{here}[a-z0-9\.-_/]+\.(css|py|yml|js|html)$
+
+
 ..  code-block:: bash
 
-    $ pip install -r requirements-optional.txt
-    $ nanohttp -w
-
+    $ pip3.6 install "maryjane>=4.2.0"
+    $ maryjane -w
 
 
 Config File

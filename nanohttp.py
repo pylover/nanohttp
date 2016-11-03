@@ -458,9 +458,6 @@ def _cli_args(argv):
                                                                                              '%s' % DEFAULT_ADDRESS)
     parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
                                                                'contains the controller class. default is: `.`')
-    parser.add_argument('-w', '--watch', default=False, action='store_true', help='If given, tries to watch the '
-                                                                                  '`--directory` and reload the app on '
-                                                                                  'changes.')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
     parser.add_argument('controller', nargs='?', metavar='MODULE{.py}{:CLASS}',
                         help='The python module and controller class to launch. default is python built-in\'s : '
@@ -469,70 +466,7 @@ def _cli_args(argv):
     return parser.parse_args(argv[1:])
 
 
-def _watch(args):
-
-    try:
-        # noinspection PyPackageRequirements
-        from inotify.adapters import Inotify
-        # noinspection PyPackageRequirements
-        from inotify.constants import IN_CLOSE_WRITE, IN_MOVE
-    except ImportError:  # pragma: no cover
-        print(
-            'In order please install the `inotify` to enable watching: `$ pip install inotify`.',
-            file=sys.stderr
-        )
-        sys.exit(-1)
-
-    shutdown = _bootstrap(args, block=False)
-
-    watchdog = Inotify()
-    watch_directory = args.directory.encode()
-
-    try:
-
-        add_watch = functools.partial(watchdog.add_watch, watch_directory, mask=IN_CLOSE_WRITE | IN_MOVE)
-
-        add_watch()
-        for event in watchdog.event_gen():
-            if event is not None:
-                header, type_names, watch_path, filename = event
-                if not filename or filename.startswith(b'__') or filename.startswith(b'.'):
-                    continue
-                watchdog.remove_watch(watch_directory, superficial=True)
-                print('Change detected in %s, Restarting' % filename.decode())
-                shutdown()
-                try_count = 0
-                try_gap = 2
-                while True:
-                    try_count += 1
-                    try_gap += try_count / 5
-                    # noinspection PyBroadException
-                    try:
-                        shutdown = _bootstrap(args, block=False)
-                    except:
-                        traceback.print_exc()
-                        print('Cannot load the: %s, due above exception, trying for %.2F seconds later. repeats: %d' % (
-                            filename.decode(),
-                            try_gap,
-                            try_count
-                        ))
-                        # noinspection PyBroadException
-                        try:
-                            shutdown()
-                        except:
-                            pass
-                        time.sleep(try_gap)
-                    else:
-                        break
-
-                add_watch()
-
-    finally:
-        watchdog.remove_watch(watch_directory)
-
-
 def main(argv=None):
-    print(sys.argv)
     args = _cli_args(argv or sys.argv)
 
     if args.version:  # pragma: no cover
@@ -540,12 +474,7 @@ def main(argv=None):
         return 0
 
     try:
-
-        if args.watch:
-            _watch(args)
-        else:
-            _bootstrap(args)
-
+        _bootstrap(args)
     except KeyboardInterrupt:  # pragma: no cover
         print('CTRL+C detected.')
         return -1

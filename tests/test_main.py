@@ -31,33 +31,3 @@ class EntryPointTestCase(unittest.TestCase):
         response, content = client.request(self.url)
         self.assertEqual(response.status, 200)
         self.assertEqual(content, b'some text')
-
-    def test_watch(self):
-        args = ['nanohttp', '-w', '-d', '..', '-b', str(self.port), 'nanohttp:Static']
-        t = threading.Thread(target=main, args=(args,), daemon=True)
-        t.start()
-        time.sleep(.5)
-
-        client = httplib2.Http()
-        response, content = client.request(self.url)
-        self.assertEqual(response.status, 200)
-        self.assertEqual(content, b'some text')
-
-        with open(self.demo_filename, mode='w') as f:
-            f.write('some text, changed !')
-
-        time.sleep(1)
-
-        response, content = client.request(self.url)
-        self.assertEqual(response.status, 200)
-        self.assertEqual(content, b'some text, changed !')
-
-
-
-
-
-
-
-
-
-
