@@ -27,6 +27,7 @@ debug: true
 class HttpStatus(Exception):
     status_code = None
     status_text = None
+    info = None
 
     def __init__(self, message=None):
         super().__init__(message or self.status_text)
