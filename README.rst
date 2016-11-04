@@ -23,15 +23,16 @@ Features
 - Very simple, less-code & fast
 - Using object dispatcher instead of regex route dispatcher.
 - Url-Encoded & Multipart form parsing.
-- No `request` or `response` objects are available, everything is combined in `nanohttp.context`.
-- Use `-w/--watch` to observe the changes in your project directory and reload the development server if desired.
+- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
+- You can `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
+  the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 
 
 Roadmap
 -------
 
-The road map is to keep it simple. no built-in template engine and or ORM will be included.
+The road map is to keep it simple with 100% code coverage. no built-in template engine and or ORM will be included.
 
 
 Install
@@ -102,6 +103,10 @@ Or
     from nanohttp import quickstart
 
     quickstart(Root())
+
+
+WSGI
+----
 
 Are you need a ``WSGI`` application?
 
