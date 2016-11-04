@@ -15,7 +15,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.6'
+__version__ = '0.1.0-dev.7'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
@@ -164,7 +164,7 @@ class Context(object):
     def method(self):
         return self.environ['REQUEST_METHOD'].lower()
 
-    @property
+    @LazyAttribute
     def path(self):
         return self.environ['PATH_INFO']
 
@@ -235,10 +235,10 @@ def action(*a, methods='any', encoding='utf8', content_type=None):
         func.http_methods = methods.split(',') if isinstance(methods, str) else methods
 
         if encoding:
-            func.response_encoding = encoding
+            func.__response_encoding__ = encoding
 
         if content_type:
-            func.content_type = content_type
+            func.__content_type__ = content_type
 
         return func
 
@@ -253,8 +253,9 @@ xml = functools.partial(action, content_type='application/xml')
 
 class Controller(object):
     http_methods = 'any'
-    response_encoding = 'utf8'
-    default_action = 'index'
+    __response_encoding__ = 'utf8'
+    __default_action__ = 'index'
+    __remove_trailing_slash__ = True
 
     def _hook(self, name, *args, **kwargs):
         if hasattr(self, name):
@@ -288,6 +289,8 @@ class Controller(object):
 
         try:
             self._hook('begin_request')
+            if self.__remove_trailing_slash__:
+                ctx.path = ctx.path.rstrip('/')
             resp_generator = iter(self(*ctx.path[1:].split('/')))
             buffer = next(resp_generator)
 
@@ -331,33 +334,36 @@ class Controller(object):
         """
 
         if not len(remaining_paths):
-            path = self.default_action
+            path = self.__default_action__
         else:
-            path = self.default_action if remaining_paths[0] == '' else remaining_paths[0]
+            path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
             remaining_paths = remaining_paths[1:]
 
         handler = getattr(self, path, None)
-        if handler is None \
-                or not hasattr(handler, 'http_methods') \
-                or (hasattr(handler, '__code__') and handler.__code__.co_argcount - 1 != len(remaining_paths)):
+        if handler is None or not hasattr(handler, 'http_methods') \
+                or (hasattr(handler, '__code__') and handler.__code__.co_argcount-1 != len(remaining_paths)):
             raise HttpNotFound()
 
         if 'any' not in handler.http_methods and context.method not in handler.http_methods:
             raise HttpMethodNotAllowed()
 
-        if hasattr(handler, 'response_encoding'):
-            context.response_encoding = handler.response_encoding
+        if hasattr(handler, '__response_encoding__'):
+            context.response_encoding = handler.__response_encoding__
 
-        if hasattr(handler, 'content_type'):
-            context.response_content_type = handler.content_type
+        if hasattr(handler, '__content_type__'):
+            context.response_content_type = handler.__content_type__
 
-        return handler(*remaining_paths)
+        try:
+            return handler(*remaining_paths)
+        except TypeError as ex:
+            raise HttpNotFound(str(ex))
+
 
 
 class Static(Controller):
-    response_encoding = None
-    chunk_size = 0x4000
-    datetime_format = '%a, %m %b %Y %H:%M:%S GMT'
+    __response_encoding__ = None
+    __chunk_size__ = 0x4000
+    __datetime_format__ = '%a, %m %b %Y %H:%M:%S GMT'
 
     def __init__(self, directory='.'):
         self.directory = directory
@@ -377,11 +383,11 @@ class Static(Controller):
             f = open(physical_path, mode='rb')
             stat = os.fstat(f.fileno())
             context.response_headers.add_header('Content-Length', str(stat[6]))
-            context.response_headers.add_header('Last-Modified', time.strftime(self.datetime_format, time.gmtime(stat.st_mtime)))
+            context.response_headers.add_header('Last-Modified', time.strftime(self.__datetime_format__, time.gmtime(stat.st_mtime)))
 
             with f:
                 while True:
-                    r = f.read(self.chunk_size)
+                    r = f.read(self.__chunk_size__)
                     if not r:
                         break
                     yield r
@@ -478,7 +484,7 @@ def main(argv=None):
     except KeyboardInterrupt:  # pragma: no cover
         print('CTRL+C detected.')
         return -1
-    else:
+    else:  # pragma: no cover
         return 0
 
 

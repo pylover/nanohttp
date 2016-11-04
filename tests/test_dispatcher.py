@@ -1,6 +1,6 @@
 import re
 
-from nanohttp import Controller, action, HttpForbidden
+from nanohttp import Controller, action, html
 from tests.helpers import WsgiAppTestCase
 
 
@@ -49,9 +49,12 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_root(self):
         self.assert_get('/', 'Index')
 
+    def test_trailing_slash(self):
+        self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
+
     def test_arguments(self):
+        self.assert_get('/users/10/', status=404)
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
-        self.assert_get('/users/10/', expected_response='User: 10\nAttr: \n')
         self.assert_get('/users/10/11/11', status=404)
 
     def test_exception(self):
