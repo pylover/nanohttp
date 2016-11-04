@@ -24,7 +24,7 @@ Features
 - Using object dispatcher instead of regex route dispatcher.
 - Url-Encoded & Multipart form parsing.
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
-- You can `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
+- You can use `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
   the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 
