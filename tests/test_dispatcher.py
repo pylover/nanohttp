@@ -1,6 +1,6 @@
 import re
 
-from nanohttp import Controller, action, html
+from nanohttp import Controller, action
 from tests.helpers import WsgiAppTestCase
 
 
