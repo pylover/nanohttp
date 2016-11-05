@@ -23,15 +23,10 @@ DEFAULT_ADDRESS = '8080'
 HTTP_DATETIME_FORMAT = '%a, %m %b %Y %H:%M:%S GMT'
 BUILTIN_CONFIG = """
 debug: true
-
 domain:
-
 cookie:
   http_only: false
   secure: false
-
-
-
 """
 
 
