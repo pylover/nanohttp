@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.12'
+__version__ = '0.1.0-dev.13'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
