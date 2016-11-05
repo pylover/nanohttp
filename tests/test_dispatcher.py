@@ -47,7 +47,7 @@ class DispatcherTestCase(WsgiAppTestCase):
             raise Exception
 
     def test_root(self):
-        self.assert_get('/', 'Index')
+        self.assert_get('/', expected_response='Index')
 
     def test_trailing_slash(self):
         self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')

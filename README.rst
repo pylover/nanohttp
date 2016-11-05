@@ -143,18 +143,25 @@ Create a ``maryjane.yml`` file:
 
 ..  code-block:: bash
 
-    $ pip3.6 install "maryjane>=4.2.0"
+    $ pip3.6 install "maryjane>=4.4.0"
     $ maryjane -w
 
 
 Config File
 -----------
 
-Create a ``demo.yaml`` file.
+Create a ``demo.yaml`` file. The file below is same as the default configuration.
 
 ..  code-block:: yaml
 
-    debug: false
+    debug: true
+
+    domain:
+
+    cookie:
+      http_only: false
+      secure: false
+
 
 Use the ``nanohttp.settings`` anywhere to access the config values.
 

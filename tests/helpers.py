@@ -50,7 +50,7 @@ class WsgiTester(httplib2.Http):
         self.interceptor.__exit__(exc_type, value, traceback)
 
     def request(self, uri, query_string=None, fields=None, files=None, **kw):
-        headers = {}
+        headers = kw.setdefault('headers', {})
         body = None
 
         if files:
@@ -67,7 +67,6 @@ class WsgiTester(httplib2.Http):
         return super(WsgiTester, self).request(
             '%s%s' % (self.interceptor.url, uri),
             body=body,
-            headers=headers,
             **kw
         )
 
@@ -84,8 +83,13 @@ class WsgiAppTestCase(unittest.TestCase):
     def tearDown(self):
         self.client.__exit__(*sys.exc_info())
 
-    def assert_request(self, uri, method, expected_response=None, expected_checksum=None, not_expected_headers=None,
-                       expected_headers=None, status=200, **kw):
+    def assert_request(self, uri, method, cookies=None, expected_response=None, expected_checksum=None,
+                       not_expected_headers=None, expected_headers=None, status=200, **kw):
+
+        if cookies:
+            headers = kw.setdefault('headers', {})
+            headers['Cookie'] = '; '.join('%s=%s' % (k, v.value) for k, v in cookies.items())
+
         response, content = self.client.request(uri, method=method, **kw)
 
         if response.status == 500:

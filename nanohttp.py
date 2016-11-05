@@ -8,6 +8,7 @@ import traceback
 import threading
 import wsgiref.util
 import wsgiref.headers
+from datetime import datetime
 from os.path import isdir, join, relpath, pardir, basename
 from mimetypes import guess_type
 from urllib.parse import parse_qs
@@ -15,12 +16,22 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.11'
+__version__ = '0.1.0-dev.12'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
+HTTP_DATETIME_FORMAT = '%a, %m %b %Y %H:%M:%S GMT'
 BUILTIN_CONFIG = """
 debug: true
+
+domain:
+
+cookie:
+  http_only: false
+  secure: false
+
+
+
 """
 
 
@@ -132,6 +143,67 @@ class LazyAttribute(object):
         return val
 
 
+class HTTPCookie(object):
+    """
+    HTTP Cookie
+    http://www.ietf.org/rfc/rfc2109.txt
+
+    ``domain``, ``secure`` and ``http_only`` are taken from ``config`` if not set.
+    """
+    __slots__ = ('name', 'value', 'path', 'expires',
+                 'domain', 'secure', 'http_only')
+
+    def __init__(self, name, value=None, path='/', expires=None, max_age=None, domain=None, secure=None,
+                 http_only=None):
+        self.name = name
+        self.value = value
+        self.path = path
+        if max_age is None:
+            self.expires = expires
+        else:
+            self.expires = datetime.utcfromtimestamp(time.time() + max_age)
+        if domain is None:
+            self.domain = settings.domain
+        else:
+            self.domain = domain
+        if secure is None:
+            self.secure = settings.cookie.secure
+        else:
+            self.secure = secure
+        if http_only is None:
+            self.http_only = settings.cookie.http_only
+        else:
+            self.http_only = http_only
+
+    @classmethod
+    def delete(cls, name, path='/', domain=None, options=None):
+        """ Returns a cookie to be deleted by browser.
+        """
+        return cls(name,
+                   expires='Sat, 01 Jan 2000 00:00:01 GMT',
+                   path=path, domain=domain, options=options)
+
+    def http_set_cookie(self):
+        """ Returns Set-Cookie response header.
+        """
+        directives = []
+        append = directives.append
+        append(self.name + '=')
+        if self.value:
+            append(self.value)
+        if self.domain:
+            append('; domain=%s' % self.domain)
+        if self.expires:
+            append('; expires=%s' % self.expires.strftime(HTTP_DATETIME_FORMAT))
+        if self.path:
+            append('; path=%s' % self.path)
+        if self.secure:
+            append('; secure')
+        if self.http_only:
+            append('; httponly')
+        return 'Set-Cookie', ''.join(directives)
+
+
 class Context(object):
     response_encoding = None
 
@@ -139,6 +211,7 @@ class Context(object):
         super(Context, self).__init__()
         self.environ = environ
         self.response_headers = wsgiref.headers.Headers()
+        self.response_cookies = []
 
     def __enter__(self):
         thread_local.nanohttp_context = self
@@ -213,6 +286,13 @@ class Context(object):
                 result[k] = get_value(v)
 
         return result
+
+    @LazyAttribute
+    def cookies(self):
+        if 'HTTP_COOKIE' in self.environ:
+            return dict([pair.split('=', 1) for pair in self.environ['HTTP_COOKIE'].split('; ')]) or {}
+        else:
+            return {}
 
 
 class ContextProxy(Context):
@@ -300,6 +380,10 @@ class Controller(object):
 
         finally:
             self._hook('begin_response')
+
+            if context.response_cookies:
+                for cookie in context.response_cookies:
+                    ctx.response_headers.add_header(*cookie.http_set_cookie())
             start_response(status, ctx.response_headers.items())
 
         def _response():
@@ -364,7 +448,6 @@ class Controller(object):
 class Static(Controller):
     __response_encoding__ = None
     __chunk_size__ = 0x4000
-    __datetime_format__ = '%a, %m %b %Y %H:%M:%S GMT'
 
     def __init__(self, directory='.'):
         self.directory = directory
@@ -384,7 +467,10 @@ class Static(Controller):
             f = open(physical_path, mode='rb')
             stat = os.fstat(f.fileno())
             context.response_headers.add_header('Content-Length', str(stat[6]))
-            context.response_headers.add_header('Last-Modified', time.strftime(self.__datetime_format__, time.gmtime(stat.st_mtime)))
+            context.response_headers.add_header(
+                'Last-Modified',
+                time.strftime(HTTP_DATETIME_FORMAT, time.gmtime(stat.st_mtime))
+            )
 
             with f:
                 while True:
