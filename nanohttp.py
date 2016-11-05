@@ -297,7 +297,8 @@ class Context(object):
 
 class ContextProxy(Context):
 
-    def __new__(cls):
+    # noinspection PyInitNewSignature
+    def __new__(cls) -> Context:
         type_proxy = type('ContextProxy', (object, ), {
             '__getattr__': cls.__getattr__,
             '__setattr__': cls.__setattr__,
@@ -608,4 +609,3 @@ __all__ = [
 
 if __name__ == '__main__':  # pragma: no cover
     sys.exit(main())
-
