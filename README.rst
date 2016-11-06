@@ -108,7 +108,7 @@ Or
 WSGI
 ----
 
-DO you need a ``WSGI`` application?
+Do you need a ``WSGI`` application?
 
 ..  code-block:: python
     
