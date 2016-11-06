@@ -1,7 +1,7 @@
 
 from http import cookies
 
-from nanohttp import Controller, html, context, HTTPCookie
+from nanohttp import Controller, html, context, HttpCookie
 from tests.helpers import WsgiAppTestCase
 
 
@@ -13,17 +13,17 @@ class HttpCookieTestCase(WsgiAppTestCase):
         def index(self):
             counter = int(context.cookies.get('test-cookie', 0))
             counter += 1
-            context.response_cookies.append(HTTPCookie('test-cookie', value=str(counter), max_age=1))
-            context.response_cookies.append(HTTPCookie('dummy-cookie', value=str(counter)))
-            context.response_cookies.append(HTTPCookie('dummy-cookie3', value=str(counter), domain='example.com'))
-            return 'Index'
+            context.response_cookies.append(HttpCookie('test-cookie', value=str(counter), max_age=1))
+            context.response_cookies.append(HttpCookie('dummy-cookie', value=str(counter)))
+            context.response_cookies.append(HttpCookie('dummy-cookie3', value=str(counter), domain='example.com'))
+            yield 'Index'
 
         @html
         def secure(self):
-            context.response_cookies.append(HTTPCookie('dummy-cookie1', value='dummy', http_only=True))
-            context.response_cookies.append(HTTPCookie('dummy-cookie2', value='dummy', domain='example.com'))
-            context.response_cookies.append(HTTPCookie('dummy-cookie3', value='dummy', secure=True))
-            return 'Index'
+            context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
+            context.response_cookies.append(HttpCookie('dummy-cookie2', value='dummy', domain='example.com'))
+            context.response_cookies.append(HttpCookie('dummy-cookie3', value='dummy', secure=True))
+            yield 'Index'
 
 
     def test_cookie(self):

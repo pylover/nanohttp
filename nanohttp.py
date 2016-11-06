@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.13'
+__version__ = '0.1.0-dev.14'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
 DEFAULT_ADDRESS = '8080'
@@ -138,7 +138,7 @@ class LazyAttribute(object):
         return val
 
 
-class HTTPCookie(object):
+class HttpCookie(object):
     """
     HTTP Cookie
     http://www.ietf.org/rfc/rfc2109.txt
@@ -588,6 +588,7 @@ __all__ = [
     'HttpMovedPermanently',
     'HttpFound',
     'InternalServerError',
+    'HttpCookie',
     'Controller',
     'Static',
     'action',
