@@ -200,25 +200,21 @@ Command Line Interface
 
     $ nanohttp -h
 
-    usage: nanohttp [-h] [-c CONFIG_FILE] [-b {HOST:}PORT] [-d DIRECTORY] [-w]
-                    [-V]
+    usage: nanohttp [-h] [-c CONFIG_FILE] [-b {HOST:}PORT] [-d DIRECTORY] [-V]
                     [MODULE{.py}{:CLASS}]
 
     positional arguments:
       MODULE{.py}{:CLASS}   The python module and controller class to launch.
-                            default: `nanohttp:Demo`, And the default value for
-                            `:CLASS` is `:Root` if omitted.
+                            default is python built-in's : `demo_app`, And the
+                            default value for `:CLASS` is `:Root` if omitted.
 
     optional arguments:
       -h, --help            show this help message and exit
       -c CONFIG_FILE, --config-file CONFIG_FILE
-                            Default: nanohttp.yaml
+                            This option may be passed multiple times.
       -b {HOST:}PORT, --bind {HOST:}PORT
                             Bind Address. default: 8080
       -d DIRECTORY, --directory DIRECTORY
                             The path to search for the python module, which
                             contains the controller class. default is: `.`
-      -w, --watch           If given, tries to watch the `--directory` and reload the app
-                            on changes.
       -V, --version         Show the version.
-
