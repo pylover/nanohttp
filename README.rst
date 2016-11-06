@@ -108,12 +108,12 @@ Or
 WSGI
 ----
 
-Are you need a ``WSGI`` application?
+DO you need a ``WSGI`` application?
 
 ..  code-block:: python
     
     app = Root().load_app()
-    # Pass the ``app`` to every ``WSGI`` server you want.
+    # Pass the ``app`` to any ``WSGI`` server you want.
 
 
 Watch
@@ -163,7 +163,7 @@ Create a ``demo.yaml`` file. The file below is same as the default configuration
       secure: false
 
 
-Use the ``nanohttp.settings`` anywhere to access the config values.
+You may use ``nanohttp.settings`` anywhere to access the config values.
 
 ..  code-block:: python
 
