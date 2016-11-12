@@ -16,9 +16,9 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.16'
+__version__ = '0.1.0-dev.17'
 
-DEFAULT_CONFIG_FILE = 'nanohttp.yaml'
+DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
 HTTP_DATETIME_FORMAT = '%a, %m %b %Y %H:%M:%S GMT'
 BUILTIN_CONFIG = """
@@ -328,6 +328,11 @@ json = functools.partial(action, content_type='application/json')
 xml = functools.partial(action, content_type='application/xml')
 
 
+def configure(config=None, config_files=None):
+    print("Loading Configuration")
+    settings.load(builtin=BUILTIN_CONFIG, init_value=config, files=config_files, force=True)
+
+
 class Controller(object):
     http_methods = 'any'
     __response_encoding__ = 'utf8'
@@ -338,9 +343,7 @@ class Controller(object):
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
-    def load_app(self, config=None, config_files=None):
-        print("Loading Configuration")
-        settings.load(builtin=BUILTIN_CONFIG, init_value=config, files=config_files, force=True)
+    def load_app(self):
         self._hook('app_load')
         return self._handle_request
 
@@ -486,7 +489,8 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
         from wsgiref.simple_server import demo_app
         app = demo_app
     else:
-        app = controller.load_app(**kwargs)
+        configure(**kwargs)
+        app = controller.load_app()
 
     httpd = make_server(host, port, app)
 
@@ -501,7 +505,6 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
             httpd.shutdown()
             httpd.server_close()
             t.join()
-
 
         return shutdown
 

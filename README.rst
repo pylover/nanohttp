@@ -111,7 +111,10 @@ WSGI
 Do you need a ``WSGI`` application?
 
 ..  code-block:: python
-    
+
+    from nanohttp import configure
+
+    configure(config='<yaml config string>', config_file='path/to/config.file')
     app = Root().load_app()
     # Pass the ``app`` to any ``WSGI`` server you want.
 
@@ -121,7 +124,7 @@ Watch
 
 Create a ``maryjane.yml`` file:
 
-..  code-block:: yaml
+..  code-block:: yml
 
     port: 8080
     module: demo.py
@@ -150,9 +153,9 @@ Create a ``maryjane.yml`` file:
 Config File
 -----------
 
-Create a ``demo.yaml`` file. The file below is same as the default configuration.
+Create a ``demo.yml`` file. The file below is same as the default configuration.
 
-..  code-block:: yaml
+..  code-block:: yml
 
     debug: true
 
@@ -181,7 +184,7 @@ Passing the config file(s) using command line:
 
 ..  code-block:: bash
 
-    $ nanohttp -c demo.yaml [-c another.yaml] demo
+    $ nanohttp -c demo.yml [-c another.yml] demo
 
 
 Passing the config file(s) Using python:

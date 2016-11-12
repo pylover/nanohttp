@@ -11,7 +11,7 @@ from urllib.parse import urlencode
 import httplib2
 from wsgi_intercept.interceptor import Httplib2Interceptor
 
-from nanohttp import Controller
+from nanohttp import Controller, configure
 
 TEST_DIR = path.abspath(path.dirname(__file__))
 STUFF_DIR = path.join(TEST_DIR, 'stuff')
@@ -77,6 +77,7 @@ class WsgiAppTestCase(unittest.TestCase):
         pass
 
     def setUp(self):
+        configure()
         self.client = WsgiTester(self.Root().load_app)
         self.client.__enter__()
 
