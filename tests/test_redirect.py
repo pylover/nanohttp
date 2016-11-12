@@ -14,7 +14,6 @@ class HttpRedirectTestCase(WsgiAppTestCase):
         def about(self):
             raise HttpFound('/new/address')
 
-
     def test_redirect_response_header(self):
         self.assert_get('/', status=301, expected_headers={'Location': '/new/address'})
         self.assert_get('/about', status=302, expected_headers={'Location': '/new/address'})

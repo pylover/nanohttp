@@ -14,9 +14,10 @@ from mimetypes import guess_type
 from urllib.parse import parse_qs
 
 import pymlconf
+import ujson
 
 
-__version__ = '0.1.0-dev.23'
+__version__ = '0.1.0-dev.25'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -27,6 +28,8 @@ domain:
 cookie:
   http_only: false
   secure: false
+json:
+  indent: 4
 """
 
 
@@ -307,9 +310,15 @@ class ContextProxy(Context):
         setattr(Context.get_current(), key, value)
 
 
-def action(*a, methods='any', encoding='utf-8', content_type=None):
+def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorator=None):
     def _decorator(func):
-        func.http_methods = methods.split(',') if isinstance(methods, str) else methods
+
+        args_count = func.__code__.co_argcount
+        if inner_decorator is not None:
+            func = inner_decorator(func)
+
+        func.__args_count__ = args_count
+        func.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
 
         if encoding:
             func.__response_encoding__ = encoding
@@ -322,9 +331,18 @@ def action(*a, methods='any', encoding='utf-8', content_type=None):
     return _decorator(a[0]) if len(a) == 1 and callable(a[0]) else _decorator
 
 
+def jsonify(func):
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        yield ujson.dumps(func(*args, **kwargs), indent=settings.json.indent)
+
+    return wrapper
+
+
 html = functools.partial(action, content_type='text/html')
 text = functools.partial(action, content_type='text/plain')
-json = functools.partial(action, content_type='application/json')
+json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
 xml = functools.partial(action, content_type='application/xml')
 
 
@@ -334,7 +352,7 @@ def configure(*args, **kwargs):
 
 
 class Controller(object):
-    http_methods = 'any'
+    __http_methods__ = 'any'
     __response_encoding__ = 'utf8'
     __default_action__ = 'index'
     __remove_trailing_slash__ = True
@@ -423,11 +441,11 @@ class Controller(object):
             remaining_paths = remaining_paths[1:]
 
         handler = getattr(self, path, None)
-        if handler is None or not hasattr(handler, 'http_methods') \
-                or (hasattr(handler, '__code__') and handler.__code__.co_argcount-1 != len(remaining_paths)):
+        if handler is None or not hasattr(handler, '__http_methods__') \
+                or (hasattr(handler, '__code__') and handler.__args_count__-1 != len(remaining_paths)):
             raise HttpNotFound()
 
-        if 'any' not in handler.http_methods and context.method not in handler.http_methods:
+        if 'any' not in handler.__http_methods__ and context.method not in handler.__http_methods__:
             raise HttpMethodNotAllowed()
 
         if hasattr(handler, '__response_encoding__'):
