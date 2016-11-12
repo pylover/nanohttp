@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.21'
+__version__ = '0.1.0-dev.22'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -40,7 +40,7 @@ class HttpStatus(Exception):
 
     @property
     def status(self):
-        return '%s %s' % (self.status_code, self.status_text)
+        return '%s %s' % (self.status_code, self)
 
     def render(self):
         yield self.status
