@@ -27,10 +27,9 @@ class HttpHeadersTestCase(WsgiAppTestCase):
             context.response_headers.add_header('my-header',  str(time.time()))
             yield ''
 
-
     def test_response_header(self):
-        self.assert_get('/', expected_headers={'Content-Type': 'text/plain'})
-        self.assert_get('/html', expected_headers={'Content-Type': 'text/html'})
+        self.assert_get('/', expected_headers={'Content-Type': 'text/plain; charset=utf-8'})
+        self.assert_get('/html', expected_headers={'Content-Type': 'text/html; charset=utf-8'})
         self.assert_get('/no_content_type', not_expected_headers=['Content-Type'])
         self.assert_get('/custom_header', expected_headers={
             'my-header': re. compile('\d+.?\d*')

@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.22'
+__version__ = '0.1.0-dev.23'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -217,11 +217,11 @@ class Context(object):
 
     @property
     def response_content_type(self):
-        return self.response_headers.get('Content-Type')
+        return self.response_headers.get('Content-Type').split(';')[0]
 
     @response_content_type.setter
     def response_content_type(self, v):
-        self.response_headers['Content-Type'] = v
+        self.response_headers['Content-Type'] = '%s; charset=%s' % (v, self.response_encoding)
 
     @classmethod
     def get_current(cls):
@@ -307,7 +307,7 @@ class ContextProxy(Context):
         setattr(Context.get_current(), key, value)
 
 
-def action(*a, methods='any', encoding='utf8', content_type=None):
+def action(*a, methods='any', encoding='utf-8', content_type=None):
     def _decorator(func):
         func.http_methods = methods.split(',') if isinstance(methods, str) else methods
 
