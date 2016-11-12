@@ -114,7 +114,7 @@ Do you need a ``WSGI`` application?
 
     from nanohttp import configure
 
-    configure(config='<yaml config string>', config_file='path/to/config.file')
+    configure(config='<yaml config string>', config_files='path/to/config.file')
     app = Root().load_app()
     # Pass the ``app`` to any ``WSGI`` server you want.
 
