@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.20'
+__version__ = '0.1.0-dev.21'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -492,6 +492,7 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, config
     else:
         app = controller.load_app()
 
+    port = int(port)
     httpd = make_server(host, port, app)
 
     print("Serving http://%s:%d" % (host or 'localhost', port))
