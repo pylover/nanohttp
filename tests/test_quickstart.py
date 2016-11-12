@@ -17,7 +17,7 @@ class QuickstartTestCase(WsgiAppTestCase):
         self.port = find_free_tcp_port()
 
     def test_without_controller(self):
-        shutdown = quickstart(block=False, port=self.port)
+        shutdown = quickstart(port=self.port, block=False)
         self.assertTrue(callable(shutdown))
         time.sleep(.5)
         shutdown()

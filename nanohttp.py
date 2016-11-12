@@ -16,7 +16,7 @@ from urllib.parse import parse_qs
 import pymlconf
 
 
-__version__ = '0.1.0-dev.19'
+__version__ = '0.1.0-dev.20'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -328,9 +328,9 @@ json = functools.partial(action, content_type='application/json')
 xml = functools.partial(action, content_type='application/xml')
 
 
-def configure(config=None, config_files=None):
+def configure(*args, **kwargs):
     print("Loading Configuration")
-    settings.load(builtin=BUILTIN_CONFIG, init_value=config, files=config_files, force=True)
+    settings.load(*args, builtin=BUILTIN_CONFIG, **kwargs)
 
 
 class Controller(object):
@@ -357,7 +357,6 @@ class Controller(object):
             error_page = self._hook('request_error', ex)
             e = InternalServerError(sys.exc_info())
             return e.status, e.render() if settings.debug else e.info if error_page is None else error_page
-
 
     def _handle_request(self, environ, start_response):
         ctx = Context(environ)
@@ -443,7 +442,6 @@ class Controller(object):
             raise HttpNotFound(str(ex))
 
 
-
 class Static(Controller):
     __response_encoding__ = None
     __chunk_size__ = 0x4000
@@ -482,14 +480,16 @@ class Static(Controller):
             raise HttpNotFound()
 
 
-def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwargs):
+def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None,
+               config_files=None, config_dirs=None):
     from wsgiref.simple_server import make_server
+
+    configure(init_value=config, files=config_files, dirs=config_dirs, force=True)
 
     if controller is None:
         from wsgiref.simple_server import demo_app
         app = demo_app
     else:
-        configure(**kwargs)
         app = controller.load_app()
 
     httpd = make_server(host, port, app)
@@ -509,7 +509,7 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, **kwar
         return shutdown
 
 
-def _load_controller_from_file(specifier, search_path):
+def _load_controller_from_file(specifier):
     import importlib.util
     controller = None
 
@@ -519,7 +519,7 @@ def _load_controller_from_file(specifier, search_path):
         if module_name.endswith('.py'):
             module_name = module_name[:-3]
 
-        spec = importlib.util.spec_from_file_location(module_name, location=join(search_path, '%s.py' % module_name))
+        spec = importlib.util.spec_from_file_location(module_name, location=join('%s.py' % module_name))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         controller = getattr(module, class_name)()
@@ -527,17 +527,31 @@ def _load_controller_from_file(specifier, search_path):
     return controller
 
 
-def _bootstrap(args, config_files=None, **kwargs):
+def _bootstrap(args, config_files=None, config_dirs=None, **kwargs):
     host, port = args.bind.split(':') if ':' in args.bind else ('', args.bind)
 
-    controller = _load_controller_from_file(args.controller, args.directory)
+    # Change dir
+    if relpath(args.directory, '.') != '.':
+        os.chdir(args.directory)
 
     config_files = config_files or []
     config_files = [config_files] if isinstance(config_files, str) else config_files
     if args.config_file:
         config_files.extend(args.config_file)
 
-    return quickstart(controller=controller, host=host, port=int(port), config_files=config_files, **kwargs)
+    config_dirs = config_dirs or []
+    config_dirs = [config_dirs] if isinstance(config_dirs, str) else config_dirs
+    if args.config_directory:
+        config_dirs.extend(args.config_directory)
+
+    return quickstart(
+        controller=_load_controller_from_file(args.controller),
+        host=host,
+        port=int(port),
+        config_files=config_files,
+        config_dirs=config_dirs,
+        **kwargs
+    )
 
 
 def _cli_args(argv):
@@ -546,10 +560,12 @@ def _cli_args(argv):
     parser = argparse.ArgumentParser(prog=basename(argv[0]))
     parser.add_argument('-c', '--config-file', action='append', default=[], help='This option may be passed multiple '
                                                                                  'times.')
+    parser.add_argument('-d', '--config-directory', action='append', default=[], help='This option may be passed '
+                                                                                      'multiple times.')
     parser.add_argument('-b', '--bind', default=DEFAULT_ADDRESS, metavar='{HOST:}PORT', help='Bind Address. default: '
                                                                                              '%s' % DEFAULT_ADDRESS)
-    parser.add_argument('-d', '--directory', default='.', help='The path to search for the python module, which '
-                                                               'contains the controller class. default is: `.`')
+    parser.add_argument('-C', '--directory', default='.', help='Change to this path before starting the server '
+                                                               'default is: `.`')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
     parser.add_argument('controller', nargs='?', metavar='MODULE{.py}{:CLASS}',
                         help='The python module and controller class to launch. default is python built-in\'s : '
@@ -602,7 +618,8 @@ __all__ = [
     'quickstart',
     'main',
     'context',
-    'settings'
+    'settings',
+    'configure'
 ]
 
 

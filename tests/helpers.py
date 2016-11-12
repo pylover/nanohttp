@@ -77,7 +77,7 @@ class WsgiAppTestCase(unittest.TestCase):
         pass
 
     def setUp(self):
-        configure()
+        configure(force=True)
         self.client = WsgiTester(self.Root().load_app)
         self.client.__enter__()
 

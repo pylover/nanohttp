@@ -23,7 +23,7 @@ class EntryPointTestCase(unittest.TestCase):
 
     def test_main_function(self):
 
-        args = ['nanohttp', '-d', self.module_dir, '-b', str(self.port), 'nanohttp:Static']
+        args = ['nanohttp', '-C', self.module_dir, '-b', str(self.port), 'nanohttp:Static']
         t = threading.Thread(target=main, args=(args,), daemon=True)
         t.start()
 
