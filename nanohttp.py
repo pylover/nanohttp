@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.25'
+__version__ = '0.1.0-dev.26'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -366,8 +366,8 @@ class Controller(object):
         return self._handle_request
 
     def _handle_exception(self, ex):
+        context.response_encoding = 'utf-8'
         context.response_content_type = 'text/plain'
-        context.response_encoding = 'utf8'
         if isinstance(ex, HttpStatus):
             return ex.status, ex.render()
         else:
