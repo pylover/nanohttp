@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.30'
+__version__ = '0.1.0-dev.31'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -323,7 +323,7 @@ def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorat
             func = inner_decorator(func)
 
         func.__args_count__ = args_count
-        fu, status=404nc.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
+        func.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
 
         if encoding:
             func.__response_encoding__ = encoding
