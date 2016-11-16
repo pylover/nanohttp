@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.27'
+__version__ = '0.1.0-dev.29'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -217,6 +217,10 @@ class Context(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del thread_local.nanohttp_context
+        for attr in ('environ', 'response_headers', 'response_cookies', 'method', 'path', 'request_uri',
+                     'request_scheme', 'query_string', 'form', 'cookies'):
+            if hasattr(self, attr):
+                delattr(self, attr)
 
     @property
     def response_content_type(self):
