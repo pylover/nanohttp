@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.29'
+__version__ = '0.1.0-dev.30'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -202,6 +202,7 @@ class HttpCookie(object):
         return 'Set-Cookie', ''.join(directives)
 
 
+# FIXME: use __slots__
 class Context(object):
     response_encoding = None
 
@@ -322,7 +323,7 @@ def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorat
             func = inner_decorator(func)
 
         func.__args_count__ = args_count
-        func.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
+        fu, status=404nc.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
 
         if encoding:
             func.__response_encoding__ = encoding
@@ -446,7 +447,7 @@ class Controller(object):
 
         handler = getattr(self, path, None)
         if handler is None or not hasattr(handler, '__http_methods__') \
-                or (hasattr(handler, '__code__') and handler.__args_count__-1 != len(remaining_paths)):
+                or (hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths)):
             raise HttpNotFound()
 
         if 'any' not in handler.__http_methods__ and context.method not in handler.__http_methods__:

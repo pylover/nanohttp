@@ -6,7 +6,6 @@ from tests.helpers import WsgiAppTestCase
 
 class DispatcherTestCase(WsgiAppTestCase):
 
-
     class Root(Controller):
 
         class Links(Controller):
@@ -53,7 +52,7 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
 
     def test_arguments(self):
-        self.assert_get('/users/10/', status=404)
+        self.assert_get('/users/10/')
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
         self.assert_get('/users/10/11/11', status=404)
 
