@@ -93,8 +93,8 @@ class WsgiAppTestCase(unittest.TestCase):
 
         response, content = self.client.request(uri, method=method, **kw)
 
-        if response.status == 500:
-            print(content.decode(), file=sys.stderr)
+        # if response.status == 500:
+        #     print(content.decode(), file=sys.stderr)
         self.assertEqual(response.status, status)
 
         if expected_response is not None:

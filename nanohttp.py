@@ -46,7 +46,7 @@ class HttpStatus(Exception):
         return '%s %s' % (self.status_code, self)
 
     def render(self):
-        yield self.status
+        return self.status
 
 
 class HttpBadRequest(HttpStatus):
@@ -101,9 +101,11 @@ class InternalServerError(HttpStatus):
     def render(self):
         from traceback import format_tb
         e_type, e_value, tb = self.exc_info
-        yield 'Traceback (most recent call last):'
-        yield from format_tb(tb)
-        yield '%s: %s' % (e_type.__name__, e_value)
+        return 'Traceback (most recent call last):\n%s\n%s: %s' % (
+            ''.join(format_tb(tb)),
+            e_type.__name__,
+            e_value
+        )
 
 
 class ContextIsNotInitializedError(Exception):
@@ -225,7 +227,10 @@ class Context(object):
 
     @property
     def response_content_type(self):
-        return self.response_headers.get('Content-Type').split(';')[0]
+        content_type = self.response_headers.get('Content-Type')
+        if content_type:
+            return content_type.split(';')[0]
+        return None
 
     @response_content_type.setter
     def response_content_type(self, v):
@@ -372,14 +377,28 @@ class Controller(object):
 
     def _handle_exception(self, ex):
         context.response_encoding = 'utf-8'
-        context.response_content_type = 'text/plain'
-        if isinstance(ex, HttpStatus):
-            return ex.status, ex.render()
+
+        error = ex if isinstance(ex, HttpStatus) else InternalServerError(sys.exc_info())
+        error_page = self._hook('request_error', error)
+        message = error.status_text
+        description = error.render() if settings.debug else error.info if error_page is None else error_page
+
+        if context.response_content_type == 'application/json':
+            response = ujson.encode(dict(
+                message=message,
+                description=description
+            ))
         else:
+            context.response_content_type = 'text/plain'
+            response = "%s\n%s" % (message, description)
+
+        if isinstance(error, InternalServerError):
             traceback.print_exc()
-            error_page = self._hook('request_error', ex)
-            e = InternalServerError(sys.exc_info())
-            return e.status, e.render() if settings.debug else e.info if error_page is None else error_page
+
+        def resp():
+            yield response
+
+        return error.status, resp()
 
     def _handle_request(self, environ, start_response):
         ctx = Context(environ)
