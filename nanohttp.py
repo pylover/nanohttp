@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.31'
+__version__ = '0.1.0-dev.32'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -559,13 +559,18 @@ def _load_controller_from_file(specifier):
     if specifier:
         module_name, class_name = specifier.split(':') if ':' in specifier else (specifier, 'Root')
 
-        if module_name.endswith('.py'):
-            module_name = module_name[:-3]
+        if module_name:
 
-        spec = importlib.util.spec_from_file_location(module_name, location=join('%s.py' % module_name))
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        controller = getattr(module, class_name)()
+            if module_name.endswith('.py'):
+                module_name = module_name[:-3]
+
+            spec = importlib.util.spec_from_file_location(module_name, location=join('%s.py' % module_name))
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            controller = getattr(module, class_name)()
+
+        else:
+            controller = globals()[class_name]()
 
     return controller
 
@@ -610,7 +615,7 @@ def _cli_args(argv):
     parser.add_argument('-C', '--directory', default='.', help='Change to this path before starting the server '
                                                                'default is: `.`')
     parser.add_argument('-V', '--version', default=False, action='store_true', help='Show the version.')
-    parser.add_argument('controller', nargs='?', metavar='MODULE{.py}{:CLASS}',
+    parser.add_argument('controller', nargs='?', metavar='{MODULE{.py}}{:CLASS}',
                         help='The python module and controller class to launch. default is python built-in\'s : '
                              '`demo_app`, And the default value for `:CLASS` is `:Root` if omitted.')
 
