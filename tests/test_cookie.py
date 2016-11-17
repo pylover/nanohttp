@@ -25,7 +25,6 @@ class HttpCookieTestCase(WsgiAppTestCase):
             context.response_cookies.append(HttpCookie('dummy-cookie3', value='dummy', secure=True))
             yield 'Index'
 
-
     def test_cookie(self):
 
         response, content = self.assert_get('/')

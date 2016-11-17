@@ -1,4 +1,5 @@
 import re
+import unittest
 from os.path import join
 
 from nanohttp import Controller, text, context
@@ -45,3 +46,7 @@ class FormTestCase(WsgiAppTestCase):
             fields={},
             expected_response='empty',
         )
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()
