@@ -9,7 +9,7 @@ import threading
 import wsgiref.util
 import wsgiref.headers
 from datetime import datetime
-from os.path import isdir, join, relpath, pardir, basename
+from os.path import isdir, join, relpath, pardir, basename, exists
 from mimetypes import guess_type
 from urllib.parse import parse_qs
 
@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.34'
+__version__ = '0.1.0-dev.35'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -507,6 +507,8 @@ class Static(Controller):
         if isdir(physical_path):
             if self.default_document:
                 physical_path = join(physical_path, self.default_document)
+                if not exists(physical_path):
+                    raise HttpForbidden
             else:
                 raise HttpForbidden
 
