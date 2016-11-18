@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.33'
+__version__ = '0.1.0-dev.34'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -488,7 +488,8 @@ class Static(Controller):
     __response_encoding__ = None
     __chunk_size__ = 0x4000
 
-    def __init__(self, directory='.'):
+    def __init__(self, directory='.', default_document='index.html'):
+        self.default_document = default_document
         self.directory = directory
 
     def __call__(self, *remaining_paths):
@@ -496,9 +497,18 @@ class Static(Controller):
         # Find the physical path of the given path parts
         physical_path = join(self.directory, *remaining_paths)
 
+        # if len(remaining_paths) == 1 and not remaining_paths[0].strip():
+        #     remaining_paths = [self.default_document]
+
         # Check to do not access the parent directory of root and also we are not listing directories here.
-        if isdir(physical_path) or pardir in relpath(physical_path, self.directory):
+        if pardir in relpath(physical_path, self.directory):
             raise HttpForbidden()
+
+        if isdir(physical_path):
+            if self.default_document:
+                physical_path = join(physical_path, self.default_document)
+            else:
+                raise HttpForbidden
 
         context.response_headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
 
