@@ -16,6 +16,10 @@ class DispatcherTestCase(WsgiAppTestCase):
                 def index(self):
                     yield 'Promotions index'
 
+                @action
+                def index_options(self):
+                    yield 'Promotions Options'
+
                 @action()
                 def select(self, id):
                     yield 'Selection promotion: %s' % id
@@ -25,6 +29,9 @@ class DispatcherTestCase(WsgiAppTestCase):
             @action()
             def index(self):
                 yield 'Links index'
+
+            def index_options(self):
+                yield 'Links Options'
 
             @action()
             def add(self, link):
@@ -41,12 +48,17 @@ class DispatcherTestCase(WsgiAppTestCase):
         def index(self, *args, **kw):
             yield 'Index'
 
+        @action(methods='post')
+        def index_options(self, *args, **kw):
+            yield 'Index'
+
         @action()
         def bad(self):
             raise Exception
 
     def test_root(self):
         self.assert_get('/', expected_response='Index')
+        self.assert_options('/', status=405)
 
     def test_trailing_slash(self):
         self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
@@ -62,6 +74,8 @@ class DispatcherTestCase(WsgiAppTestCase):
 
     def test_nested(self):
         self.assert_get('/links', expected_response='Links index')
+        self.assert_options('/links', status=404)
         self.assert_get('/links/add/mylink', expected_response='Adding link: mylink')
         self.assert_get('/links/promos/', expected_response='Promotions index')
+        self.assert_options('/links/promos/', expected_response='Promotions Options')
         self.assert_get('/links/promos/select/1', expected_response='Selection promotion: 1')

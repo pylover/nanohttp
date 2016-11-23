@@ -121,6 +121,9 @@ class WsgiAppTestCase(unittest.TestCase):
     def assert_get(self, uri, *args, **kw):
         return self.assert_request(uri, 'get', *args, **kw)
 
+    def assert_options(self, uri, *args, **kw):
+        return self.assert_request(uri, 'options', *args, **kw)
+
     def assert_post(self, uri, *args, **kw):
         return self.assert_request(uri, 'post', *args, **kw)
 

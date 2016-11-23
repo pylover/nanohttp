@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.35'
+__version__ = '0.1.0-dev.36'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -464,7 +464,12 @@ class Controller(object):
             path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
             remaining_paths = remaining_paths[1:]
 
-        handler = getattr(self, path, None)
+        # Checking for `path_VERB`:
+        attr_name = '%s_%s' % (path, context.method)
+        handler = getattr(self, attr_name, None)
+        if handler is None:
+            handler = getattr(self, path, None)
+
         if handler is None or not hasattr(handler, '__http_methods__') \
                 or (hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths)):
             raise HttpNotFound()
