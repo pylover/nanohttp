@@ -220,10 +220,21 @@ class Context(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del thread_local.nanohttp_context
-        for attr in ('environ', 'response_headers', 'response_cookies', 'method', 'path', 'request_uri',
-                     'request_scheme', 'query_string', 'form', 'cookies'):
-            if hasattr(self, attr):
-                delattr(self, attr)
+        # for attr in ('environ', 'response_headers', 'response_cookies', 'method', 'path', 'request_uri',
+        #              'request_scheme', 'query_string', 'form', 'cookies'):
+        #     if hasattr(self, attr):
+        #         delattr(self, attr)
+
+    @LazyAttribute
+    def request_content_length(self):
+        return int(self.environ.get('CONTENT_LENGTH'))
+
+    @LazyAttribute
+    def request_content_type(self):
+        content_type = self.environ.get('CONTENT_TYPE')
+        if content_type:
+            return content_type.split(';')[0]
+        return None
 
     @property
     def response_content_type(self):
@@ -270,9 +281,15 @@ class Context(object):
     def form(self):
         result = {}
 
+        if self.request_content_type == 'application/json':
+            fp = self.environ['wsgi.input']
+            data = fp.read(self.request_content_length)
+            return ujson.decode(data)
+
         storage = cgi.FieldStorage(
             fp=self.environ['wsgi.input'],
             environ=self.environ,
+            strict_parsing=False,
             keep_blank_values=True
         )
 
@@ -301,6 +318,12 @@ class Context(object):
             return dict([pair.split('=', 1) for pair in self.environ['HTTP_COOKIE'].split('; ')]) or {}
         else:
             return {}
+
+    def encode_response(self, buffer):
+        if self.response_encoding:
+            return buffer.encode(self.response_encoding)
+        else:
+            return buffer
 
 
 class ContextProxy(Context):
@@ -412,8 +435,13 @@ class Controller(object):
             self._hook('begin_request')
             if self.__remove_trailing_slash__:
                 ctx.path = ctx.path.rstrip('/')
-            resp_generator = iter(self(*ctx.path[1:].split('/')))
-            buffer = next(resp_generator)
+
+            result = self(*ctx.path[1:].split('/'))
+            if result:
+                resp_generator = iter(result)
+                buffer = next(resp_generator)
+            else:
+                resp_generator = None
 
         except Exception as ex:
             status, resp_generator = self._handle_exception(ex)
@@ -428,21 +456,12 @@ class Controller(object):
 
         def _response():
             try:
+                if buffer is not None:
+                    yield ctx.encode_response(buffer)
 
-                if ctx.response_encoding:
-
-                    if buffer is not None:
-                        yield buffer.encode(ctx.response_encoding)
-
+                if resp_generator:
                     for chunk in resp_generator:
-                        yield chunk.encode(ctx.response_encoding)
-
-                else:
-                    if buffer is not None:
-                        yield buffer
-
-                    for chunk in resp_generator:
-                        yield chunk
+                        yield ctx.encode_response(chunk)
 
             finally:
                 self._hook('end_response')
@@ -539,11 +558,11 @@ class Static(Controller):
             raise HttpNotFound()
 
 
-def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None,
-               config_files=None, config_dirs=None):
+def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None):
     from wsgiref.simple_server import make_server
 
-    configure(init_value=config, files=config_files, dirs=config_dirs, force=True)
+    if config:
+        settings.merge(config)
 
     if controller is None:
         from wsgiref.simple_server import demo_app
@@ -609,12 +628,12 @@ def _bootstrap(args, config_files=None, config_dirs=None, **kwargs):
     if args.config_directory:
         config_dirs.extend(args.config_directory)
 
+    configure(files=config_files, dirs=config_dirs, force=True)
+
     return quickstart(
         controller=_load_controller_from_file(args.controller),
         host=host,
         port=int(port),
-        config_files=config_files,
-        config_dirs=config_dirs,
         **kwargs
     )
 
