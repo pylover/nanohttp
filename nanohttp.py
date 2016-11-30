@@ -368,7 +368,13 @@ def jsonify(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        yield ujson.dumps(func(*args, **kwargs), indent=settings.json.indent)
+        result = func(*args, **kwargs)
+        if hasattr(result, 'to_dict'):
+            result = result.to_dict()
+        elif not isinstance(result, (list, dict)):
+            raise TypeError('Cannot encode to json: %s' % type(result))
+
+        yield ujson.dumps(result, indent=settings.json.indent)
 
     return wrapper
 
