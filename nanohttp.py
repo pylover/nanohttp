@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0-dev.36'
+__version__ = '0.1.0-dev.38'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -343,7 +343,7 @@ class ContextProxy(Context):
         setattr(Context.get_current(), key, value)
 
 
-def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorator=None):
+def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
     def _decorator(func):
 
         args_count = func.__code__.co_argcount
@@ -351,7 +351,7 @@ def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorat
             func = inner_decorator(func)
 
         func.__args_count__ = args_count
-        func.__http_methods__ = methods.split(',') if isinstance(methods, str) else methods
+        func.__http_methods__ = verbs if verbs else 'any'
 
         if encoding:
             func.__response_encoding__ = encoding
@@ -361,7 +361,12 @@ def action(*a, methods='any', encoding='utf-8', content_type=None, inner_decorat
 
         return func
 
-    return _decorator(a[0]) if len(a) == 1 and callable(a[0]) else _decorator
+    if verbs and callable(verbs[0]):
+        f = verbs[0]
+        verbs = tuple()
+        return _decorator(f)
+    else:
+        return _decorator
 
 
 def jsonify(func):
@@ -475,33 +480,7 @@ class Controller(object):
 
         return _response()
 
-    def __call__(self, *remaining_paths):
-        """
-        Dispatcher
-        :param path:
-        :param remaining_paths:
-        :return:
-        """
-
-        if not len(remaining_paths):
-            path = self.__default_action__
-        else:
-            path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
-            remaining_paths = remaining_paths[1:]
-
-        # Checking for `path_VERB`:
-        attr_name = '%s_%s' % (path, context.method)
-        handler = getattr(self, attr_name, None)
-        if handler is None:
-            handler = getattr(self, path, None)
-
-        if handler is None or not hasattr(handler, '__http_methods__') \
-                or (hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths)):
-            raise HttpNotFound()
-
-        if 'any' not in handler.__http_methods__ and context.method not in handler.__http_methods__:
-            raise HttpMethodNotAllowed()
-
+    def _serve_handler(self, handler, *remaining_paths):
         if hasattr(handler, '__response_encoding__'):
             context.response_encoding = handler.__response_encoding__
 
@@ -512,6 +491,47 @@ class Controller(object):
             return handler(*remaining_paths)
         except TypeError as ex:
             raise HttpNotFound(str(ex))
+
+    def _dispatch(self, *remaining_paths):
+        if not len(remaining_paths):
+            path = self.__default_action__
+        else:
+            path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
+            remaining_paths = remaining_paths[1:]
+
+        # Ensuring the handler
+        handler = getattr(self, path, None)
+        if handler is None:
+            handler = getattr(self, self.__default_action__)
+            remaining_paths = (path, ) + remaining_paths
+
+        if handler is None or not hasattr(handler, '__http_methods__') \
+                or (hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths)):
+            raise HttpNotFound()
+
+        if 'any' != handler.__http_methods__ and context.method not in handler.__http_methods__:
+            raise HttpMethodNotAllowed()
+
+        return handler, remaining_paths
+
+    def __call__(self, *remaining_paths):
+        handler, remaining_paths = self._dispatch(*remaining_paths)
+        return self._serve_handler(handler, *remaining_paths)
+
+
+class RestController(Controller):
+
+    def _dispatch(self, *remaining_paths):
+
+        if remaining_paths:
+            first_path = remaining_paths[0]
+            if hasattr(self, first_path):
+                return getattr(self, first_path), remaining_paths[1:]
+
+        if not hasattr(self, context.method):
+            raise HttpMethodNotAllowed()
+
+        return getattr(self, context.method), remaining_paths
 
 
 class Static(Controller):

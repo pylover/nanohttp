@@ -99,7 +99,7 @@ class WsgiAppTestCase(unittest.TestCase):
 
         if expected_response is not None:
             if isinstance(expected_response, str):
-                self.assertEqual(content.decode(), expected_response)
+                self.assertEqual(expected_response, content.decode())
             else:
                 self.assertRegex(content.decode(), expected_response)
 
@@ -126,6 +126,9 @@ class WsgiAppTestCase(unittest.TestCase):
 
     def assert_post(self, uri, *args, **kw):
         return self.assert_request(uri, 'post', *args, **kw)
+
+    def assert_put(self, uri, *args, **kw):
+        return self.assert_request(uri, 'put', *args, **kw)
 
 
 def encode_multipart_data(fields=None, files=None):  # pragma: no cover

@@ -9,7 +9,7 @@ from tests.helpers import WsgiAppTestCase, STUFF_DIR
 class FormTestCase(WsgiAppTestCase):
     class Root(Controller):
 
-        @text(methods='post')
+        @text('post')
         def index(self):
             if not context.form:
                 yield 'empty'
