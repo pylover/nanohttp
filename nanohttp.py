@@ -334,6 +334,7 @@ class ContextProxy(Context):
             '__getattr__': cls.__getattr__,
             '__setattr__': cls.__setattr__,
         })
+        # noinspection PyTypeChecker
         return object.__new__(type_proxy)
 
     def __getattr__(self, key):
@@ -471,6 +472,7 @@ class Controller(object):
                     yield ctx.encode_response(buffer)
 
                 if resp_generator:
+                    # noinspection PyTypeChecker
                     for chunk in resp_generator:
                         yield ctx.encode_response(chunk)
 
@@ -480,6 +482,7 @@ class Controller(object):
 
         return _response()
 
+    # noinspection PyMethodMayBeStatic
     def _serve_handler(self, handler, *remaining_paths):
         if hasattr(handler, '__response_encoding__'):
             context.response_encoding = handler.__response_encoding__
@@ -547,9 +550,6 @@ class Static(Controller):
 
         # Find the physical path of the given path parts
         physical_path = join(self.directory, *remaining_paths)
-
-        # if len(remaining_paths) == 1 and not remaining_paths[0].strip():
-        #     remaining_paths = [self.default_document]
 
         # Check to do not access the parent directory of root and also we are not listing directories here.
         if pardir in relpath(physical_path, self.directory):
@@ -720,6 +720,7 @@ __all__ = [
     'InternalServerError',
     'HttpCookie',
     'Controller',
+    'RestController',
     'Static',
     'action',
     'html',

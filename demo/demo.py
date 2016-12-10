@@ -17,7 +17,7 @@ class Root(Controller):
         yield '</ul>'
         yield '</body></html>'
 
-    @html(methods=['post', 'put'])
+    @html('post', 'put')
     def contact(self):
         yield '<h1>Thanks: %s</h1>' % context.form['name'] if context.form else 'Please send a name.'
 
