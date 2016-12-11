@@ -24,7 +24,7 @@ class ArticleController(RestController):
     def post(self):
         yield "POST Article"
 
-    def put(self, article_id=None, *remaining):
+    def put(self, article_id: int=None, *remaining):
         if remaining:
             yield from self.links(article_id, *remaining[1:])
         else:
