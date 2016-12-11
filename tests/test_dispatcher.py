@@ -20,6 +20,7 @@ class ArticleController(RestController):
             's' if not article_id else (': ' + article_id)
         )
 
+    @html
     def post(self):
         yield "POST Article"
 
@@ -64,6 +65,7 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_arguments(self):
         self.assert_get('/contact/1', expected_response='Contact: 1')
         self.assert_post('/contact', expected_response='Contact: None')
+        self.assert_post('/articles/2', status=404)
         self.assert_get('/users', status=404)
         self.assert_get('/users/10/')
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')

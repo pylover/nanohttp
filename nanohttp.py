@@ -535,7 +535,12 @@ class RestController(Controller):
         if not hasattr(self, context.method):
             raise HttpMethodNotAllowed()
 
-        return getattr(self, context.method), remaining_paths
+        handler = getattr(self, context.method)
+
+        if hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths):
+            raise HttpNotFound()
+
+        return handler, remaining_paths
 
 
 class Static(Controller):
