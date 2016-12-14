@@ -27,6 +27,7 @@ Features
 - You can use `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
   the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
+- Dispatch arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
 
 
 Roadmap
