@@ -8,14 +8,14 @@ from tests.helpers import WsgiAppTestCase
 class LinksController(Controller):
 
     @html
-    def index(self, article_id, link_id):
+    def index(self, article_id: int, link_id: int):
         yield 'Article: %s, Links index: %s' % (article_id, link_id)
 
 
 class ArticleController(RestController):
     links = LinksController()
 
-    def get(self, article_id=None):
+    def get(self, article_id: int=None):
         yield "GET Article%s" % (
             's' if not article_id else (': ' + article_id)
         )
@@ -24,9 +24,9 @@ class ArticleController(RestController):
     def post(self):
         yield "POST Article"
 
-    def put(self, article_id=None, *remaining):
-        if remaining:
-            yield from self.links(article_id, *remaining[1:])
+    def put(self, article_id: int=None, inner_resource: str=None, link_id: int=None):
+        if inner_resource == 'links':
+            yield from self.links(article_id, link_id)
         else:
             yield "PUT Article: %s" % article_id
 
@@ -46,11 +46,11 @@ class DispatcherTestCase(WsgiAppTestCase):
             return ["token"]
 
         @html('get', 'post')
-        def contact(self, contact_id=None):
+        def contact(self, contact_id: int=None):
             yield "Contact: %s" % contact_id
 
         @html
-        def users(self, user_id, attr=None):
+        def users(self, user_id: int, attr: str=None):
             yield 'User: %s\n' % user_id
             yield 'Attr: %s\n' % attr
 
@@ -65,11 +65,11 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_arguments(self):
         self.assert_get('/contact/1', expected_response='Contact: 1')
         self.assert_post('/contact', expected_response='Contact: None')
-        self.assert_post('/articles/2', status=404)
         self.assert_get('/users', status=404)
         self.assert_get('/users/10/')
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
         self.assert_get('/users/10/11/11', status=404)
+        self.assert_post('/articles/2', status=404)
 
     def test_verbs(self):
         self.assert_put('/', expected_response='Index')

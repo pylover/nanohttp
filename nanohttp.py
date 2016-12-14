@@ -347,11 +347,11 @@ class ContextProxy(Context):
 def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
     def _decorator(func):
 
-        args_count = func.__code__.co_argcount
+        # args_count = func.__code__.co_argcount
         if inner_decorator is not None:
             func = inner_decorator(func)
 
-        func.__args_count__ = args_count
+        # func.__args_count__ = args_count
         func.__http_methods__ = verbs if verbs else 'any'
 
         if encoding:
@@ -510,7 +510,7 @@ class Controller(object):
                 remaining_paths = (path, ) + remaining_paths
 
         if handler is None or not hasattr(handler, '__http_methods__') \
-                or (hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths)):
+                or (hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths)):
             raise HttpNotFound()
 
         if 'any' != handler.__http_methods__ and context.method not in handler.__http_methods__:
@@ -537,7 +537,7 @@ class RestController(Controller):
 
         handler = getattr(self, context.method)
 
-        if hasattr(handler, '__code__') and handler.__args_count__ < len(remaining_paths):
+        if hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths):
             raise HttpNotFound()
 
         return handler, remaining_paths
