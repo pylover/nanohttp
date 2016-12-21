@@ -227,7 +227,8 @@ class Context(object):
 
     @LazyAttribute
     def request_content_length(self):
-        return int(self.environ.get('CONTENT_LENGTH'))
+        v = self.environ.get('CONTENT_LENGTH')
+        return v if v is None else int(v)
 
     @LazyAttribute
     def request_content_type(self):
