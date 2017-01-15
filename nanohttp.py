@@ -449,7 +449,7 @@ class Controller(object):
             if self.__remove_trailing_slash__:
                 ctx.path = ctx.path.rstrip('/')
 
-            result = self(*ctx.path[1:].split('/'))
+            result = self(*ctx.path.split('?')[0][1:].split('/'))
             if result:
                 resp_generator = iter(result)
                 buffer = next(resp_generator)
