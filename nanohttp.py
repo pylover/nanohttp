@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -355,8 +355,7 @@ def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
         # func.__args_count__ = args_count
         func.__http_methods__ = verbs if verbs else 'any'
 
-        if encoding:
-            func.__response_encoding__ = encoding
+        func.__response_encoding__ = encoding
 
         if content_type:
             func.__content_type__ = content_type
@@ -390,6 +389,7 @@ html = functools.partial(action, content_type='text/html')
 text = functools.partial(action, content_type='text/plain')
 json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
 xml = functools.partial(action, content_type='application/xml')
+binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
 
 
 def configure(*args, **kwargs):
