@@ -14,6 +14,8 @@ nanohttp
 .. image:: https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master
      :target: https://coveralls.io/github/pylover/nanohttp?branch=master
 
+.. image:: https://img.shields.io/gitter/room/pylover/nanohttp.svg
+     :target: https://gitter.im/pylover/nanohttp
 
 A very micro HTTP framework.
 
@@ -289,3 +291,127 @@ Other decorators are defined using ``functools.partial``:
     json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
     xml = functools.partial(action, content_type='application/xml')
     binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
+
+Of-course, you can set the response content type using:
+
+..  code-block:: python
+
+    context.response_content_type = 'application/pdf'
+
+But you define your very own decorator to make it DRY:
+
+..  code-block:: python
+
+    import functools
+    from nanohttp import action, RestController
+
+    pdf = functools.partial(action, content_type='application/pdf')
+
+    class MyController(RestController)
+
+        @pdf
+        def get(index):
+            .......
+
+
+Serving Static file(s)
+----------------------
+
+The ``nanohttp.Static`` class is responsible to serve static files:
+
+..  code-block:: python
+
+    from nanohttp import Controller, Static
+
+    class Root(Controller):
+        static = Static('path/to/static/directory', default_document='index.html')
+
+Then you can access static files on ``/static/filename.ext``
+
+A simple way to run server and only serve static files is:
+
+..  code-block:: bash
+
+    cd path/to/static/directory
+    nanohttp :Static
+
+
+Accessing request payload
+-------------------------
+
+The `context.form` is a dictionary representing the request payload, supported request formats are ``query-string``,
+``multipart/form-data``, ``application/x-www-form-urlencoded`` and ``json``.
+
+..  code-block:: python
+
+    from nanohttp import context, RestController
+
+    class TipsControllers(RestController):
+
+        @json
+        def post(self, tip_id: int = None):
+            tip_title = context.form.get('title')
+
+
+Dispatcher
+----------
+
+The requested path will be split-ed by ``/`` and python's ``getattr`` will be used on the ``Root`` controller
+recursively to find specific callable to handle request.
+
+..  code-block:: python
+
+    class Nested(Controller):
+        pass
+
+    class Root()
+        children = Nested()
+
+Then you can access methods on nested controller using: ``http://host:port/nesteds/{method-name}``
+
+On the ``RestController`` dispatcher tries to dispatch request using HTTP method(verb) at first.
+
+
+Context
+-------
+
+The ``context`` object is a proxy to an instance of ``nanohttp.Context`` which is ``unique per request``.
+
+.. TODO: ADD link to documentation
+
+Hooks
+-----
+
+A few hooks are available in ``Controller`` class: ``app_load``, ``begin_request``, ``begin_response``,
+``end_response``, ``request_error``.
+
+For example this how I detect JWT token and refresh it if possible:
+
+
+..  code-block:: python
+
+
+    class JwtController(Controller):
+        token_key = 'HTTP_AUTHORIZATION'
+        refresh_token_cookie_key = 'refresh-token'
+
+        def begin_request(self):
+            if self.token_key in context.environ:
+                encoded_token = context.environ[self.token_key]
+                try:
+                    context.identity = JwtPrincipal.decode(encoded_token)
+                except itsdangerous.SignatureExpired as ex:
+                    refresh_token_encoded = context.cookies.get(self.refresh_token_cookie_key)
+                    if refresh_token_encoded:
+                        # Extracting session_id
+                        session_id = ex.payload.get('sessionId')
+                        if session_id:
+                            context.identity = new_token = self.refresh_jwt_token(refresh_token_encoded, session_id)
+                            if new_token:
+                                context.response_headers.add_header('X-New-JWT-Token', new_token.encode().decode())
+
+                except itsdangerous.BadData:
+                    pass
+
+            if not hasattr(context, 'identity'):
+                context.identity = None
