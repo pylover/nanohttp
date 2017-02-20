@@ -1,15 +1,18 @@
 
 import unittest
 
-from nanohttp import Controller, html, json, RestController
+from nanohttp import Controller, html, json, RestController, text
 from tests.helpers import WsgiAppTestCase
 
 
 class LinksController(Controller):
 
     @html
-    def index(self, article_id: int, link_id: int):
-        yield 'Article: %s, Links index: %s' % (article_id, link_id)
+    def index(self, article_id: int=None, link_id: int=None):
+        if link_id:
+            yield 'Article: %s, Links index: %s' % (article_id, link_id)
+        else:
+            yield 'Link1, Link2, Link3'
 
 
 class ArticleController(RestController):
@@ -58,6 +61,10 @@ class DispatcherTestCase(WsgiAppTestCase):
         def bad(self):
             raise Exception()
 
+        @text
+        def empty(self):
+            pass
+
     def test_root(self):
         self.assert_get('/', expected_response='Index')
         self.assert_get('/index', expected_response='Index')
@@ -79,6 +86,7 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_put('/contact', status=405)
         self.assert_options('/contact', status=405)
         self.assert_options('/')
+        self.assert_delete('/articles', status=405)
 
     def test_rest_controller(self):
         self.assert_get('/articles', expected_response='GET Articles')
@@ -86,12 +94,16 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_post('/articles', expected_response='POST Article')
         self.assert_put('/articles/23', expected_response='PUT Article: 23')
         self.assert_put('/articles/23/links/2', expected_response='Article: 23, Links index: 2')
+        self.assert_get('/articles/links', expected_response='Link1, Link2, Link3')
 
     def test_trailing_slash(self):
         self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
 
     def test_exception(self):
         self.assert_get('/bad', status=500)
+
+    def test_empty_response(self):
+        self.assert_get('/empty', expected_response='')
 
 
 if __name__ == '__main__':  # pragma: no cover

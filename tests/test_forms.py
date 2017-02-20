@@ -2,6 +2,8 @@ import re
 import unittest
 from os.path import join
 
+import ujson
+
 from nanohttp import Controller, text, context
 from tests.helpers import WsgiAppTestCase, STUFF_DIR
 
@@ -45,6 +47,16 @@ class FormTestCase(WsgiAppTestCase):
             '/',
             fields={},
             expected_response='empty',
+        )
+
+    def test_json(self):
+        self.assert_post(
+            '/',
+            json=ujson.dumps({
+                'a': 1,
+                'b': [2, 3],
+            }),
+            expected_response='a: 1, b: [2, 3]',
         )
 
 

@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -176,12 +176,10 @@ class HttpCookie(object):
             self.http_only = http_only
 
     @classmethod
-    def delete(cls, name, path='/', domain=None, options=None):
+    def delete(cls, name, **kwargs):
         """ Returns a cookie to be deleted by browser.
         """
-        return cls(name,
-                   expires='Sat, 01 Jan 2000 00:00:01 GMT',
-                   path=path, domain=domain, options=options)
+        return cls(name, expires='Sat, 01 Jan 2000 00:00:01 GMT', **kwargs)
 
     def http_set_cookie(self):
         """ Returns Set-Cookie response header.
@@ -194,7 +192,10 @@ class HttpCookie(object):
         if self.domain:
             append('; domain=%s' % self.domain)
         if self.expires:
-            append('; expires=%s' % self.expires.strftime(HTTP_DATETIME_FORMAT))
+            append('; expires=%s' % (
+                self.expires if isinstance(self.expires, str)
+                else self.expires.strftime(HTTP_DATETIME_FORMAT))
+            )
         if self.path:
             append('; path=%s' % self.path)
         if self.secure:
@@ -220,15 +221,11 @@ class Context(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del thread_local.nanohttp_context
-        # for attr in ('environ', 'response_headers', 'response_cookies', 'method', 'path', 'request_uri',
-        #              'request_scheme', 'query_string', 'form', 'cookies'):
-        #     if hasattr(self, attr):
-        #         delattr(self, attr)
 
     @LazyAttribute
     def request_content_length(self):
         v = self.environ.get('CONTENT_LENGTH')
-        return v if v is None else int(v)
+        return None if v is None else int(v)
 
     @LazyAttribute
     def request_content_type(self):
@@ -321,10 +318,13 @@ class Context(object):
             return {}
 
     def encode_response(self, buffer):
-        if self.response_encoding:
-            return buffer.encode(self.response_encoding)
-        else:
-            return buffer
+        try:
+            if self.response_encoding:
+                return buffer.encode(self.response_encoding)
+            else:
+                return buffer
+        except AttributeError:  # pragma: no cover
+            raise TypeError('The returned response should has the `encode` attribute, such as `str`.')
 
 
 class ContextProxy(Context):
@@ -375,7 +375,7 @@ def jsonify(func):
         result = func(*args, **kwargs)
         if hasattr(result, 'to_dict'):
             result = result.to_dict()
-        elif not isinstance(result, (list, dict)):
+        elif not isinstance(result, (list, dict, int, str)):
             raise TypeError('Cannot encode to json: %s' % type(result))
 
         yield ujson.dumps(result, indent=settings.json.indent)
@@ -474,6 +474,10 @@ class Controller(object):
                     # noinspection PyTypeChecker
                     for chunk in resp_generator:
                         yield ctx.encode_response(chunk)
+            except Exception as ex_:  # pragma: no cover
+                if settings.debug:
+                    yield str(ex_).encode()
+                raise ex_
 
             finally:
                 self._hook('end_response')
@@ -565,7 +569,7 @@ class Static(Controller):
                 if not exists(physical_path):
                     raise HttpForbidden
             else:
-                raise HttpForbidden
+                raise HttpForbidden()
 
         context.response_headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
 
@@ -592,7 +596,7 @@ class Static(Controller):
 def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None):
     from wsgiref.simple_server import make_server
 
-    if config:
+    if config:  # pragma: no cover
         settings.merge(config)
 
     if controller is None:
@@ -636,7 +640,7 @@ def _load_controller_from_file(specifier):
             spec.loader.exec_module(module)
             controller = getattr(module, class_name)()
 
-        else:
+        else:  # pragma: no cover
             controller = globals()[class_name]()
 
     return controller
@@ -651,12 +655,12 @@ def _bootstrap(args, config_files=None, config_dirs=None, **kwargs):
 
     config_files = config_files or []
     config_files = [config_files] if isinstance(config_files, str) else config_files
-    if args.config_file:
+    if args.config_file:  # pragma: no cover
         config_files.extend(args.config_file)
 
     config_dirs = config_dirs or []
     config_dirs = [config_dirs] if isinstance(config_dirs, str) else config_dirs
-    if args.config_directory:
+    if args.config_directory:  # pragma: no cover
         config_dirs.extend(args.config_directory)
 
     configure(files=config_files, dirs=config_dirs, force=True)
@@ -731,6 +735,7 @@ __all__ = [
     'text',
     'json',
     'xml',
+    'binary',
     'quickstart',
     'main',
     'context',

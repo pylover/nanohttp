@@ -2,7 +2,7 @@
 import re
 import unittest
 
-from nanohttp import Controller, html, ContextIsNotInitializedError, context, Context
+from nanohttp import Controller, text, ContextIsNotInitializedError, context, Context
 from tests.helpers import WsgiAppTestCase
 
 
@@ -16,13 +16,18 @@ class ContextTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
-        @html
+        @text
         def get_uri(self):
             yield context.request_uri
 
-        @html
+        @text
         def get_scheme(self):
             yield context.request_scheme
+
+        @text('post')
+        def get_request_content_length(self):
+            yield str(context.request_content_length)
+
 
     def test_redirect_response_header(self):
         self.assert_get(
@@ -36,6 +41,14 @@ class ContextTestCase(WsgiAppTestCase):
             expected_response='http'
         )
 
+        self.assert_post(
+            '/get_request_content_length',
+            fields={
+                'a': 1,
+                'b': [2, 3],
+            },
+            expected_response='18'
+        )
 
 
 

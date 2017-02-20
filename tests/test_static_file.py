@@ -12,6 +12,7 @@ class StaticFileTestCase(WsgiAppTestCase):
     class Root(Controller):
         cat = Static(CAT)
         static = Static(STUFF_DIR)
+        assets = Static(STUFF_DIR, default_document=None)
 
     def test_static_file(self):
         checksum = md5sum(CAT)
@@ -19,3 +20,5 @@ class StaticFileTestCase(WsgiAppTestCase):
         self.assert_get('/static/cat.jpg', expected_checksum=checksum)
         self.assert_get('/static', status=403)
         self.assert_get('/static/not-exists', status=404)
+        self.assert_get('/static/..', status=403)
+        self.assert_get('/assets/', status=403)

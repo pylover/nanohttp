@@ -25,6 +25,12 @@ class HttpCookieTestCase(WsgiAppTestCase):
             context.response_cookies.append(HttpCookie('dummy-cookie3', value='dummy', secure=True))
             yield 'Secure'
 
+        @html
+        def clear(self):
+            context.response_cookies.append(HttpCookie.delete('dummy-cookie'))
+            yield 'remove'
+
+
     def test_cookie(self):
 
         response, content = self.assert_get('/')
@@ -42,3 +48,8 @@ class HttpCookieTestCase(WsgiAppTestCase):
         self.assertNotIn('dummy-cookie1', cookies_)
         self.assertNotIn('dummy-cookie2', cookies_)
         self.assertNotIn('dummy-cookie3', cookies_)
+
+        response, content = self.assert_get('/clear')
+        cookies_ = cookies.SimpleCookie(response['set-cookie'])
+        self.assertIn('dummy-cookie', cookies_)
+        self.assertEqual(cookies_['dummy-cookie']['expires'], 'Sat, 01 Jan 2000 00:00:01 GMT')

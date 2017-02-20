@@ -16,10 +16,32 @@ class JsonTestCase(WsgiAppTestCase):
                 'b': '2'
             }
 
+        @json
+        def via_to_dict(self):
+            class Model:
+                @staticmethod
+                def to_dict():
+                    return dict(
+                        a=1,
+                        b='2'
+                    )
+            return Model()
+
+        @json
+        def error(self):
+            class Bad:
+                pass
+            return Bad()
+
+
     def test_json(self):
         resp, content = self.assert_get(
             '/',
-            status=200,
             expected_headers={'content-type': 'application/json; charset=utf-8'},
         )
         self.assertDictEqual(ujson.loads(content), {'b': '2', 'a': 1})
+
+        resp, content = self.assert_get('/via_to_dict',)
+        self.assertDictEqual(ujson.loads(content), {'b': '2', 'a': 1})
+
+        self.assert_get('/error', status=500)

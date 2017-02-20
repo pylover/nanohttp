@@ -241,7 +241,7 @@ Setting cookie:
 Trailing slashes
 ----------------
 
-All trailing slashes are ignored.
+if ``Controller.__remove_trailing_slash__`` is True, then all trailing slashes are ignored.
 
 ..  code-block:: python
 

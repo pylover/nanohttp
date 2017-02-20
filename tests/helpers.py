@@ -49,7 +49,7 @@ class WsgiTester(httplib2.Http):
     def __exit__(self, exc_type, value, traceback):
         self.interceptor.__exit__(exc_type, value, traceback)
 
-    def request(self, uri, query_string=None, fields=None, files=None, **kw):
+    def request(self, uri, query_string=None, fields=None, files=None, json=None, **kw):
         headers = kw.setdefault('headers', {})
         body = None
 
@@ -60,6 +60,9 @@ class WsgiTester(httplib2.Http):
         elif fields:
             body = urlencode(fields)
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        elif json:
+            body = json
+            headers['Content-Type'] = 'application/json'
 
         if query_string:
             uri += '%s%s' % ('&' if '?' in uri else '?', urlencode(query_string))
@@ -129,6 +132,9 @@ class WsgiAppTestCase(unittest.TestCase):
 
     def assert_put(self, uri, *args, **kw):
         return self.assert_request(uri, 'put', *args, **kw)
+
+    def assert_delete(self, uri, *args, **kw):
+        return self.assert_request(uri, 'delete', *args, **kw)
 
 
 def encode_multipart_data(fields=None, files=None):  # pragma: no cover
