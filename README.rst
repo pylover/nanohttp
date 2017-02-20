@@ -27,7 +27,7 @@ Features
 - You can use `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
   the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
-- Dispatch arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
+- Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
 
 
 Roadmap
@@ -44,11 +44,11 @@ PyPI
 
 ..  code-block:: bash
 
-    $ pip install --pre nanohttp
+    $ pip install nanohttp
 
 
-Source
-^^^^^^
+From Source
+^^^^^^^^^^^
 
 ..  code-block:: bash
 
@@ -63,34 +63,43 @@ Quick Start
 
 ..  code-block:: python
 
-    from os.path import dirname, abspath
-    from nanohttp import Controller, html, context, Static, HttpFound, settings
+    from nanohttp import Controller, RestController, context, html, json, HttpFound
+
+
+    class TipsControllers(RestController):
+        @json
+        def get(self, tip_id: int = None):
+            if tip_id is None:
+                return [dict(id=i, title="Tip %s" % i) for i in range(1, 4)]
+            else:
+                return dict(
+                    id=tip_id,
+                    title="Tip %s" % tip_id
+                )
+
+        @json
+        def post(self, tip_id: int = None):
+            tip_title = context.form.get('title')
+            print(tip_id, tip_title)
+
+            # Updating the tips title
+            # TipStore.get(tip_id).update(tip_title)
+            raise HttpFound('/tips/')
+
 
     class Root(Controller):
-        static = Static(abspath(dirname(__file__)))
+        tips = TipsControllers()
 
         @html
         def index(self):
-            yield '<html><head><title>nanohttp demo</title></head><body>'
-            yield '<h1>nanohttp demo page</h1>'
-            yield '<h2>debug flag is: %s</h2>' % settings.debug
-            yield '<img src="/static/cat.jpg" />'
-            yield '<ul>'
-            yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
-            yield '</ul>'
-            yield '</body></html>'
-
-        @html(methods=['post', 'put'])
-        def contact(self):
-            yield '<h1>Thanks: %s</h1>' % context.form['name'] if context.form else 'Please send a name.'
-
-        @html
-        def google(self):
-            raise HttpFound('http://google.com')
-
-        @html
-        def error(self):
-            raise Exception()
+            yield """
+            <html><head><title>nanohttp Demo</title></head><body>
+            <form method="POST" action="/tips/2">
+                <input type="text" name="title" />
+                <input type="submit" value="Update" />
+            </form>
+            </body></html>
+            """
 
 
 ..  code-block:: bash
@@ -111,6 +120,8 @@ WSGI
 
 Do you need a ``WSGI`` application?
 
+``wsgi.py``
+
 ..  code-block:: python
 
     from nanohttp import configure
@@ -120,35 +131,11 @@ Do you need a ``WSGI`` application?
     # Pass the ``app`` to any ``WSGI`` server you want.
 
 
-Watch
------
-
-Create a ``maryjane.yml`` file:
-
-..  code-block:: yml
-
-    port: 8080
-    module: demo.py
-    controller: Root
-    config_file: demo.yml
-
-    # Storing the pid of current running server into the `pid` variable.
-    SHELL-INTO: pid netstat -lnpt 2>/dev/null | grep {port} | awk '{{split($7,a,"/"); printf a[1]}}'
-    ECHO: Old pid: {pid}
-
-    SHELL:
-      - if [ -n "{pid}" ]; then  kill -9 {pid}; fi
-      - while [ -n "{pid}" -a -e /proc/{pid} ]; do sleep .6; done
-      - nanohttp -b {port} -c {config_file} {module}:{controller} & echo New pid: $!
-
-    WATCH-ALL:
-      - !^{here}[a-z0-9\.-_/]+\.(css|py|yml|js|html)$
-
+Serve it by gunicorn:
 
 ..  code-block:: bash
 
-    $ pip3.6 install "maryjane>=4.4.0"
-    $ maryjane -w
+    gunicorn --reload wsgi:app
 
 
 Config File
