@@ -215,3 +215,77 @@ Command Line Interface
       -V, --version         Show the version.
 
 
+Cookies
+-------
+
+Accessing the request cookies:
+
+
+..  code-block:: python
+
+    from nanohttp import context
+
+    counter = context.cookies.get('counter', 0)
+
+Setting cookie:
+
+..  code-block:: python
+
+    from nanohttp import context, HttpCookie
+
+    context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
+
+
+Trailing slashes
+----------------
+
+All trailing slashes are ignored.
+
+..  code-block:: python
+
+    def test_trailing_slash(self):
+        self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
+
+Decorators
+----------
+
+Available decorators are: ``action``, ``html``, ``text``, ``json``, ``xml``, ``binary``
+
+Those decorators are useful to encapsulate response preparation such as setting ``Content-Type`` HTTP header.
+
+Take a look at the code of the ``action`` decorator, all other decorators are derived from this:
+
+
+..  code-block:: python
+
+    def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
+        def _decorator(func):
+
+            if inner_decorator is not None:
+                func = inner_decorator(func)
+
+            func.__http_methods__ = verbs if verbs else 'any'
+
+            func.__response_encoding__ = encoding
+
+            if content_type:
+                func.__content_type__ = content_type
+
+            return func
+
+        if verbs and callable(verbs[0]):
+            f = verbs[0]
+            verbs = tuple()
+            return _decorator(f)
+        else:
+            return _decorator
+
+Other decorators are defined using ``functools.partial``:
+
+..  code-block:: python
+
+    html = functools.partial(action, content_type='text/html')
+    text = functools.partial(action, content_type='text/plain')
+    json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
+    xml = functools.partial(action, content_type='application/xml')
+    binary = functools.partial(action, content_type='application/octet-stream', encoding=None)

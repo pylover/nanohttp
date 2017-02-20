@@ -348,11 +348,9 @@ class ContextProxy(Context):
 def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
     def _decorator(func):
 
-        # args_count = func.__code__.co_argcount
         if inner_decorator is not None:
             func = inner_decorator(func)
 
-        # func.__args_count__ = args_count
         func.__http_methods__ = verbs if verbs else 'any'
 
         func.__response_encoding__ = encoding

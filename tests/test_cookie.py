@@ -23,7 +23,7 @@ class HttpCookieTestCase(WsgiAppTestCase):
             context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
             context.response_cookies.append(HttpCookie('dummy-cookie2', value='dummy', domain='example.com'))
             context.response_cookies.append(HttpCookie('dummy-cookie3', value='dummy', secure=True))
-            yield 'Index'
+            yield 'Secure'
 
     def test_cookie(self):
 
