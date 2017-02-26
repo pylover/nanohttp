@@ -24,12 +24,11 @@ Features
 
 - Very simple, less-code & fast
 - Using object dispatcher instead of regex route dispatcher.
-- Url-Encoded & Multipart form parsing.
+- Url-Encoded, Multipart and JSON form parsing.
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
-  the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
-
+- Method(verb) dispatcher.
 
 Roadmap
 -------
