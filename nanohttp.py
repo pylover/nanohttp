@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'

@@ -30,5 +30,5 @@ class QueryStringTestCase(WsgiAppTestCase):
         self.assert_post('/users', query_string=dict(a=1, b=2), expected_response="a: 1, b: 2")
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     unittest.main()

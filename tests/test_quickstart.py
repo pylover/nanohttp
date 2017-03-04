@@ -7,10 +7,7 @@ from tests.helpers import WsgiAppTestCase, find_free_tcp_port
 class QuickstartTestCase(WsgiAppTestCase):
 
     class Root(Controller):
-
-        @text
-        def index(self):
-            yield 'Index'
+        pass
 
     def setUp(self):
         super().setUp()

@@ -16,6 +16,14 @@ class ContextTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
+        @staticmethod
+        def begin_request():
+            context.example = True
+
+        @staticmethod
+        def end_response():
+            del context.example
+
         @text
         def get_uri(self):
             yield context.request_uri
@@ -28,6 +36,9 @@ class ContextTestCase(WsgiAppTestCase):
         def get_request_content_length(self):
             yield str(context.request_content_length)
 
+        @text
+        def example(self):
+            return 'example' if context.example else ''
 
     def test_redirect_response_header(self):
         self.assert_get(
@@ -50,5 +61,11 @@ class ContextTestCase(WsgiAppTestCase):
             expected_response='18'
         )
 
+        self.assert_get(
+            '/example',
+            expected_response='example'
+        )
 
 
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()
