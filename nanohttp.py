@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -334,6 +334,7 @@ class ContextProxy(Context):
         type_proxy = type('ContextProxy', (object, ), {
             '__getattr__': cls.__getattr__,
             '__setattr__': cls.__setattr__,
+            '__delattr__': cls.__delattr__
         })
         # noinspection PyTypeChecker
         return object.__new__(type_proxy)
@@ -343,6 +344,9 @@ class ContextProxy(Context):
 
     def __setattr__(self, key, value):
         setattr(Context.get_current(), key, value)
+
+    def __delattr__(self, key):
+        delattr(Context.get_current(), key)
 
 
 def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
