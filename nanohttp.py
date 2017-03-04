@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -376,9 +376,9 @@ def jsonify(func):
         if hasattr(result, 'to_dict'):
             result = result.to_dict()
         elif not isinstance(result, (list, dict, int, str)):
-            raise TypeError('Cannot encode to json: %s' % type(result))
+            raise ValueError('Cannot encode to json: %s' % type(result))
 
-        yield ujson.dumps(result, indent=settings.json.indent)
+        return ujson.dumps(result, indent=settings.json.indent)
 
     return wrapper
 

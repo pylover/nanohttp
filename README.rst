@@ -296,7 +296,7 @@ Of-course, you can set the response content type using:
 
     context.response_content_type = 'application/pdf'
 
-But you define your very own decorator to make it DRY:
+Of-course, you can define your very own decorator to make your code DRY:
 
 ..  code-block:: python
 

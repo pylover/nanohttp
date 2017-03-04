@@ -33,7 +33,6 @@ class JsonTestCase(WsgiAppTestCase):
                 pass
             return Bad()
 
-
     def test_json(self):
         resp, content = self.assert_get(
             '/',
