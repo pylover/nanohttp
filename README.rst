@@ -126,7 +126,7 @@ Do you need a ``WSGI`` application?
 
     from nanohttp import configure
 
-    configure(config='<yaml config string>', config_files='path/to/config.file')
+    configure(config='<yaml config string>', files=['path/to/config.file', '...'], dirs=['path/to/config/directory', '...'])
     app = Root().load_app()
     # Pass the ``app`` to any ``WSGI`` server you want.
 
@@ -181,7 +181,7 @@ Passing the config file(s) Using python:
 
     from nanohttp import quickstart
 
-    quickstart(Root(), config_files=['file1', 'file2'])
+    quickstart(Root(), config='<YAML config string>')
 
 
 Command Line Interface
