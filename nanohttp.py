@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -284,12 +284,15 @@ class Context(object):
             data = fp.read(self.request_content_length)
             return ujson.decode(data)
 
-        storage = cgi.FieldStorage(
-            fp=self.environ['wsgi.input'],
-            environ=self.environ,
-            strict_parsing=False,
-            keep_blank_values=True
-        )
+        try:
+            storage = cgi.FieldStorage(
+                fp=self.environ['wsgi.input'],
+                environ=self.environ,
+                strict_parsing=False,
+                keep_blank_values=True
+            )
+        except TypeError:
+            raise HttpBadRequest('Cannot parse the request.')
 
         if storage.list is None or not len(storage.list):
             return {}
