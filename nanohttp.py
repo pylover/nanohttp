@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.8'
+__version__ = '0.1.9'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -631,7 +631,7 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, config
 
 
 def _load_controller_from_file(specifier):
-    import importlib.util
+    from importlib.util import spec_from_file_location, module_from_spec
     controller = None
 
     if specifier:
@@ -639,11 +639,16 @@ def _load_controller_from_file(specifier):
 
         if module_name:
 
-            if module_name.endswith('.py'):
+            if isdir(module_name):
+                location = join(module_name, '__init__.py')
+            elif module_name.endswith('.py'):
+                location = module_name
                 module_name = module_name[:-3]
+            else:
+                location = '%s.py' % module_name
 
-            spec = importlib.util.spec_from_file_location(module_name, location=join('%s.py' % module_name))
-            module = importlib.util.module_from_spec(spec)
+            spec = spec_from_file_location(module_name, location=location)
+            module = module_from_spec(spec)
             spec.loader.exec_module(module)
             controller = getattr(module, class_name)()
 

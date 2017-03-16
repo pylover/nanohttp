@@ -17,3 +17,7 @@ class BootstrapTestCase(unittest.TestCase):
         controller = _load_controller_from_file('%s:Static' % join(TEST_DIR, '..', 'nanohttp.py'))
         self.assertIsNotNone(controller)
         self.assertTrue(hasattr(controller, 'load_app'))
+
+        controller = _load_controller_from_file(join(TEST_DIR, 'stuff', 'package_for_test_bootstrapping'))
+        self.assertIsNotNone(controller)
+        self.assertTrue(hasattr(controller, 'load_app'))
