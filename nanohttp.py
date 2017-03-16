@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.10'
+__version__ = '0.1.11'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -354,13 +354,14 @@ class ContextProxy(Context):
 
 def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
     def _decorator(func):
+        argcount = func.__code__.co_argcount
 
         if inner_decorator is not None:
             func = inner_decorator(func)
 
         func.__http_methods__ = verbs if verbs else 'any'
-
         func.__response_encoding__ = encoding
+        func.__argcount__ = argcount
 
         if content_type:
             func.__content_type__ = content_type
@@ -500,10 +501,7 @@ class Controller(object):
         if hasattr(handler, '__content_type__'):
             context.response_content_type = handler.__content_type__
 
-        try:
-            return handler(*remaining_paths)
-        except TypeError as ex:
-            raise HttpNotFound(str(ex))
+        return handler(*remaining_paths)
 
     def _dispatch(self, *remaining_paths):
         if not len(remaining_paths):
@@ -519,8 +517,10 @@ class Controller(object):
             if handler is not None:
                 remaining_paths = (path, ) + remaining_paths
 
-        if handler is None or not hasattr(handler, '__http_methods__') \
-                or (hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths)):
+        args_count = len(remaining_paths)
+        if (handler is None or not hasattr(handler, '__http_methods__')) \
+                or (hasattr(handler, '__argcount__') and handler.__argcount__ < args_count) \
+                or (hasattr(handler, '__annotations__') and len(handler.__annotations__) < args_count):
             raise HttpNotFound()
 
         if 'any' != handler.__http_methods__ and context.method not in handler.__http_methods__:

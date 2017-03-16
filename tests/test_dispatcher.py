@@ -53,7 +53,7 @@ class DispatcherTestCase(WsgiAppTestCase):
             yield "Contact: %s" % contact_id
 
         @html
-        def users(self, user_id: int, attr: str=None):
+        def users(self, user_id: int=None, attr: str=None):
             yield 'User: %s\n' % user_id
             yield 'Attr: %s\n' % attr
 
@@ -72,7 +72,7 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_arguments(self):
         self.assert_get('/contact/1', expected_response='Contact: 1')
         self.assert_post('/contact', expected_response='Contact: None')
-        self.assert_get('/users', status=404)
+        self.assert_get('/users', expected_response='User: None\nAttr: None\n')
         self.assert_get('/users/10/')
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
         self.assert_get('/users/10/11/11', status=404)
