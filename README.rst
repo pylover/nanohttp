@@ -359,13 +359,15 @@ recursively to find specific callable to handle request.
 
 ..  code-block:: python
 
-    class Nested(Controller):
+    from nanohttp import RestController
+
+    class Nested(RestController):
         pass
 
     class Root()
         children = Nested()
 
-Then you can access methods on nested controller using: ``http://host:port/nesteds/{method-name}``
+Then you can access methods on nested controller using: ``http://host:port/children``
 
 On the ``RestController`` dispatcher tries to dispatch request using HTTP method(verb) at first.
 
