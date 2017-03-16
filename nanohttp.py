@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.11'
+__version__ = '0.1.12'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -482,6 +482,8 @@ class Controller(object):
                     # noinspection PyTypeChecker
                     for chunk in resp_generator:
                         yield ctx.encode_response(chunk)
+                else:
+                    yield ctx.encode_response('')
             except Exception as ex_:  # pragma: no cover
                 if settings.debug:
                     yield str(ex_).encode()
