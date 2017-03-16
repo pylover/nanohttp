@@ -56,13 +56,13 @@ class WsgiTester(httplib2.Http):
         if files:
             content_type, body, length = encode_multipart_data(fields, files)
             body = body.getvalue()
-            headers['Content-Type'] = content_type
+            headers.setdefault('Content-Type', content_type)
         elif fields:
             body = urlencode(fields)
-            headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            headers.setdefault('Content-Type', 'application/x-www-form-urlencoded')
         elif json:
             body = json
-            headers['Content-Type'] = 'application/json'
+            headers.setdefault('Content-Type', 'application/json')
 
         if query_string:
             uri += '%s%s' % ('&' if '?' in uri else '?', urlencode(query_string))

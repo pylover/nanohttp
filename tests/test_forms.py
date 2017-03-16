@@ -59,6 +59,17 @@ class FormTestCase(WsgiAppTestCase):
             expected_response='a: 1, b: [2, 3]',
         )
 
+    def test_invalid_form(self):
+        self.assert_post(
+            '/',
+            fields={
+                'a': 1,
+                'b': [2, 3],
+            },
+            status=400,
+            headers={'Content-Type': 'invalid/content-type'}
+        )
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
