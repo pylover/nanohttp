@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(__file__), 'nanohttp.py')) as v_file:
 
 
 dependencies = [
-    'pymlconf',
+    'pymlconf >= 0.7.1',
     'ujson'
 ]
 

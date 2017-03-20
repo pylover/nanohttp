@@ -17,7 +17,7 @@ import pymlconf
 import ujson
 
 
-__version__ = '0.1.12'
+__version__ = '0.1.13'
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -605,7 +605,12 @@ class Static(Controller):
 def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None):
     from wsgiref.simple_server import make_server
 
-    if config:  # pragma: no cover
+    try:
+        settings.proxied_object
+    except pymlconf.ConfigurationNotInitializedError:
+        settings.load()
+
+    if config:
         settings.merge(config)
 
     if controller is None:

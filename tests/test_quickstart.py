@@ -1,6 +1,7 @@
 import time
+import unittest
 
-from nanohttp import Controller, text, quickstart
+from nanohttp import Controller, quickstart, settings
 from tests.helpers import WsgiAppTestCase, find_free_tcp_port
 
 
@@ -25,6 +26,22 @@ class QuickstartTestCase(WsgiAppTestCase):
         time.sleep(.5)
         shutdown()
 
+    def test_before_configure(self):
+        settings.__class__._set_instance(None)
+        shutdown = quickstart(
+            port=self.port,
+            block=False,
+            config='''
+            test_config_item: item1
+            '''
+        )
+        self.assertTrue(callable(shutdown))
+        time.sleep(.5)
+        shutdown()
+
+
+if __name__ == '__main__':
+    unittest.main()
 
 
 
