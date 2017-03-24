@@ -549,6 +549,7 @@ class RestController(Controller):
 
         handler = getattr(self, context.method)
 
+        # FIXME: check argcount
         if hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths):
             raise HttpNotFound()
 
