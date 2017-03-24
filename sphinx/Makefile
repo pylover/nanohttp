@@ -22,4 +22,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 deploy:
-	cp -r $(BUILDDIR)/html/* $(DEPLOYDIR)
+	cp -rT $(BUILDDIR)/html $(DEPLOYDIR)
