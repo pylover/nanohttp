@@ -61,7 +61,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+sphinx/_build/
 
 # PyBuilder
 target/
@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 .idea
 tests/stuff/demo.txt
+
