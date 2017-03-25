@@ -18,7 +18,14 @@ class BootstrapTestCase(unittest.TestCase):
         self.assertIsNotNone(controller)
         self.assertTrue(hasattr(controller, 'load_app'))
 
+        controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping.py'))
+        self.assertIsNotNone(controller)
+        self.assertTrue(hasattr(controller, 'load_app'))
+
+        controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping'))
+        self.assertIsNotNone(controller)
+        self.assertTrue(hasattr(controller, 'load_app'))
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
-
