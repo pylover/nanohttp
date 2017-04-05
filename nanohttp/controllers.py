@@ -94,7 +94,7 @@ class Controller(object):
                     for chunk in resp_generator:
                         yield ctx.encode_response(chunk)
                 else:
-                    yield ctx.encode_response('')
+                    yield b''
             except Exception as ex_:  # pragma: no cover
                 if settings.debug:
                     yield str(ex_).encode()

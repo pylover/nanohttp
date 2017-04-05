@@ -11,4 +11,4 @@ from .cli import main
 from .contexts import context, ContextIsNotInitializedError
 from .configuration import settings, configure
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
