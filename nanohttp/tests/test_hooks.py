@@ -16,6 +16,5 @@ class HooksTestCase(WsgiAppTestCase):
         def index(self):
             yield 'Index'
 
-
     def test_hooks(self):
         self.assert_get('/', expected_headers={'my-header': 'dummy'})

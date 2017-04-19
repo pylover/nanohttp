@@ -2,6 +2,7 @@
 import time
 import os
 import sys
+import logging
 import traceback
 from os.path import isdir, join, relpath, pardir, exists
 from mimetypes import guess_type
@@ -14,7 +15,12 @@ from .contexts import context, Context
 from .constants import HTTP_DATETIME_FORMAT
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('nanohttp')
+
+
 class Controller(object):
+    __logger__ = logger
     __http_methods__ = 'any'
     __response_encoding__ = 'utf8'
     __default_action__ = 'index'
@@ -74,6 +80,7 @@ class Controller(object):
                 resp_generator = None
 
         except Exception as ex:
+            self.__logger__.exception('Exception while handling the request.')
             status, resp_generator = self._handle_exception(ex)
 
         finally:
@@ -96,6 +103,7 @@ class Controller(object):
                 else:
                     yield b''
             except Exception as ex_:  # pragma: no cover
+                self.__logger__.exception('Exception while serving the response.')
                 if settings.debug:
                     yield str(ex_).encode()
                 raise ex_
