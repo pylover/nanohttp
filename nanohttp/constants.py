@@ -1,3 +1,3 @@
 
 
-HTTP_DATETIME_FORMAT = '%a, %m %b %Y %H:%M:%S GMT'
+HTTP_DATETIME_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
