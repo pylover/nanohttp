@@ -2,7 +2,7 @@
 import unittest
 
 from nanohttp import Controller, html, json, RestController, text
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class LinksController(Controller):

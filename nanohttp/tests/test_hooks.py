@@ -1,7 +1,7 @@
 
 
 from nanohttp import Controller, text, context
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class HooksTestCase(WsgiAppTestCase):

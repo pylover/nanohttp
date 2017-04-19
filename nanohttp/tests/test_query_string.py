@@ -1,7 +1,7 @@
 import unittest
 
 from nanohttp import Controller, action, context, RestController
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class Users(RestController):

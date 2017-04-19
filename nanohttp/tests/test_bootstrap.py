@@ -1,10 +1,10 @@
 
 import unittest
-from os.path import join, abspath
+from os.path import join
 
 # noinspection PyProtectedMember
 from nanohttp.helpers import load_controller_from_file
-from tests.helpers import TEST_DIR
+from nanohttp.tests.helpers import TEST_DIR
 
 
 class BootstrapTestCase(unittest.TestCase):

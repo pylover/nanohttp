@@ -1,13 +1,13 @@
 
+import threading
 import time
 import unittest
-import threading
 from os.path import join, dirname, abspath
 
 import httplib2
 
 from nanohttp import main
-from tests.helpers import find_free_tcp_port
+from nanohttp.tests.helpers import find_free_tcp_port
 
 
 class EntryPointTestCase(unittest.TestCase):
@@ -23,7 +23,7 @@ class EntryPointTestCase(unittest.TestCase):
 
     def test_main_function(self):
 
-        args = ['nanohttp', '-C', self.module_dir, '-b', str(self.port), 'nanohttp:Static']
+        args = ['nanohttp', '-C', self.module_dir, '-b', str(self.port), ':Static']
         t = threading.Thread(target=main, args=(args,), daemon=True)
         t.start()
 

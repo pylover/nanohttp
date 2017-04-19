@@ -5,7 +5,7 @@ from nanohttp import Controller, html, settings, context
 class Root(Controller):
 
     @html
-    def index(self):
+    def index(self):  # pragma: no cover
         yield '<html><head><title>nanohttp demo</title></head><body>'
         yield '<h1>nanohttp demo page</h1>'
         yield '<h2>debug flag is: %s</h2>' % settings.debug

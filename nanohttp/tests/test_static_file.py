@@ -1,8 +1,7 @@
 from os.path import join
 
 from nanohttp import Controller, Static
-from tests.helpers import WsgiAppTestCase, STUFF_DIR, md5sum
-
+from nanohttp.tests.helpers import WsgiAppTestCase, STUFF_DIR, md5sum
 
 CAT = join(STUFF_DIR, 'cat.jpg')
 

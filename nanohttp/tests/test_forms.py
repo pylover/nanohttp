@@ -1,11 +1,10 @@
 import re
+import ujson
 import unittest
 from os.path import join
 
-import ujson
-
 from nanohttp import Controller, text, context
-from tests.helpers import WsgiAppTestCase, STUFF_DIR
+from nanohttp.tests.helpers import WsgiAppTestCase, STUFF_DIR
 
 
 class FormTestCase(WsgiAppTestCase):

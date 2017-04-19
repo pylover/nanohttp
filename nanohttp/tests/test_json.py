@@ -2,7 +2,7 @@
 import ujson
 
 from nanohttp import Controller, json
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class JsonTestCase(WsgiAppTestCase):

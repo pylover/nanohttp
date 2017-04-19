@@ -1,5 +1,5 @@
 from nanohttp import Controller, action, text, HttpMovedPermanently, HttpFound
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class HttpRedirectTestCase(WsgiAppTestCase):

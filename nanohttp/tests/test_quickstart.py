@@ -2,7 +2,7 @@ import time
 import unittest
 
 from nanohttp import Controller, quickstart, settings
-from tests.helpers import WsgiAppTestCase, find_free_tcp_port
+from nanohttp.tests.helpers import WsgiAppTestCase, find_free_tcp_port
 
 
 class QuickstartTestCase(WsgiAppTestCase):
@@ -40,7 +40,7 @@ class QuickstartTestCase(WsgiAppTestCase):
         shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     unittest.main()
 
 

@@ -4,7 +4,7 @@ import unittest
 
 from nanohttp import Controller, text, ContextIsNotInitializedError, context
 from nanohttp.contexts import Context
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class ContextProxyTestCase(unittest.TestCase):

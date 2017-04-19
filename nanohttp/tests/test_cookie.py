@@ -2,7 +2,7 @@
 from http import cookies
 
 from nanohttp import Controller, html, context, HttpCookie
-from tests.helpers import WsgiAppTestCase
+from nanohttp.tests.helpers import WsgiAppTestCase
 
 
 class HttpCookieTestCase(WsgiAppTestCase):
