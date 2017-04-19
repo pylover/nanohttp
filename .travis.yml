@@ -10,7 +10,7 @@ before_install:
   - pip install -r requirements-dev.txt
 
 install: pip install -ve .
-script: coverage run --source nanohttp.py $(which nosetests)
+script: coverage run --source nanohttp $(which nosetests)
 after_success: coveralls
 deploy:
   provider: pypi
