@@ -7,7 +7,9 @@ class HttpStatus(Exception):
     status_text = None
     info = None
 
-    def __init__(self, message=None):
+    def __init__(self, message=None, reason=None):
+        if reason:
+            context.response_headers.add_header('X-Reason', reason)
         super().__init__(message or self.status_text)
 
     @property
