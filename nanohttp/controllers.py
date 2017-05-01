@@ -157,16 +157,21 @@ class Controller(object):
 class RestController(Controller):
 
     def _dispatch(self, *remaining_paths):
-
+        handler = None
         if remaining_paths:
             first_path = remaining_paths[0]
             if hasattr(self, first_path):
-                return getattr(self, first_path), remaining_paths[1:]
+                remaining_paths = remaining_paths[1:]
+                handler = getattr(self, first_path)
 
-        if not hasattr(self, context.method):
-            raise HttpMethodNotAllowed()
+        if handler is None:
+            if not hasattr(self, context.method):
+                raise HttpMethodNotAllowed()
 
-        handler = getattr(self, context.method)
+            handler = getattr(self, context.method)
+
+        if handler is None or not hasattr(handler, '__http_methods__'):
+            raise HttpNotFound()
 
         # FIXME: check argcount
         if hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths):

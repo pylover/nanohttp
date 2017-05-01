@@ -18,6 +18,7 @@ class LinksController(Controller):
 class ArticleController(RestController):
     links = LinksController()
 
+    @html
     def get(self, article_id: int=None):
         yield "GET Article%s" % (
             's' if not article_id else (': ' + article_id)
@@ -27,11 +28,15 @@ class ArticleController(RestController):
     def post(self):
         yield "POST Article"
 
+    @html
     def put(self, article_id: int=None, inner_resource: str=None, link_id: int=None):
         if inner_resource == 'links':
             yield from self.links(article_id, link_id)
         else:
             yield "PUT Article: %s" % article_id
+
+    def disallowed(self):  # pragma: no cover
+        yield 'bad'
 
 
 class DispatcherTestCase(WsgiAppTestCase):
@@ -95,6 +100,8 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_put('/articles/23', expected_response='PUT Article: 23')
         self.assert_put('/articles/23/links/2', expected_response='Article: 23, Links index: 2')
         self.assert_get('/articles/links', expected_response='Link1, Link2, Link3')
+        self.assert_request('/articles', 'disallowed', status=404)
+        self.assert_get('/articles/disallowed', status=404)
 
     def test_trailing_slash(self):
         self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
