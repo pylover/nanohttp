@@ -23,7 +23,7 @@ setup(
     description='A very micro http framework.',
     long_description=open('README.rst').read(),
     install_requires=dependencies,
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests.*", "tests"]),
     entry_points={
         'console_scripts': [
             'nanohttp = nanohttp:main'
