@@ -127,7 +127,10 @@ class Context(object):
     @LazyAttribute
     def cookies(self):
         if 'HTTP_COOKIE' in self.environ:
-            return dict([pair.split('=', 1) for pair in self.environ['HTTP_COOKIE'].split('; ')]) or {}
+            try:
+                return dict([pair.split('=', 1) for pair in self.environ['HTTP_COOKIE'].split('; ')]) or {}
+            except ValueError:
+                raise exceptions.HttpBadRequest()
         else:
             return {}
 
