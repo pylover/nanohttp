@@ -16,6 +16,7 @@ class LinksController(Controller):
 
 
 class ArticleController(RestController):
+    __detect_verb_by_header__ = 'HTTP_X_HTTP_VERB'
     links = LinksController()
 
     @html
@@ -111,6 +112,15 @@ class DispatcherTestCase(WsgiAppTestCase):
 
     def test_empty_response(self):
         self.assert_get('/empty', expected_response='')
+
+    def text_detect_verb_by_header(self):
+        self.assert_post(
+            '/articles/23',
+            headers={
+                'X-HTTP-VERB': 'put'
+            },
+            expected_response='PUT Article: 23'
+        )
 
 
 if __name__ == '__main__':  # pragma: no cover

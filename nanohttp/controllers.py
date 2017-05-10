@@ -155,6 +155,7 @@ class Controller(object):
 
 
 class RestController(Controller):
+    __detect_verb_by_header__ = False
 
     def _dispatch(self, *remaining_paths):
         handler = None
@@ -168,7 +169,10 @@ class RestController(Controller):
             if not hasattr(self, context.method):
                 raise HttpMethodNotAllowed()
 
-            handler = getattr(self, context.method)
+            if self.__detect_verb_by_header__ and context.environ.get(self.__detect_verb_by_header__):
+                handler = getattr(self, context.environ.get(self.__detect_verb_by_header__))
+            else:
+                handler = getattr(self, context.method)
 
         if handler is None or not hasattr(handler, '__http_methods__'):
             raise HttpNotFound()
