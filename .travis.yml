@@ -1,4 +1,8 @@
 
+env:
+  global:
+    - COVERALLS_REPO_TOKEN: FGLLwIhV7PXv4wX2HPepRtO9DL4DWagzW
+
 language: python
 
 python:
