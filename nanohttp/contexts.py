@@ -19,10 +19,12 @@ class ContextIsNotInitializedError(Exception):
 class Context(object):
     response_encoding = None
     thread_local = threading.local()
+    application = None
 
-    def __init__(self, environ):
+    def __init__(self, environ, application=None):
         super(Context, self).__init__()
         self.environ = environ
+        self.application = application
         self.response_headers = wsgiref.headers.Headers()
         self.response_cookies = []
 

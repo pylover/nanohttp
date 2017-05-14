@@ -51,7 +51,7 @@ class Application:
         return error.status, resp()
 
     def __call__(self, environ, start_response):
-        ctx = Context(environ)
+        ctx = Context(environ, self)
         ctx.__enter__()
         # start_response("200 OK", [('Content-Type', 'text/plain; charset=utf-8')])
 
