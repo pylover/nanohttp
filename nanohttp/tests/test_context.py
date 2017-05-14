@@ -2,7 +2,7 @@
 import re
 import unittest
 
-from nanohttp import Controller, text, ContextIsNotInitializedError, context
+from nanohttp import Controller, text, ContextIsNotInitializedError, context, Application
 from nanohttp.contexts import Context
 from nanohttp.tests.helpers import WsgiAppTestCase
 
@@ -16,14 +16,6 @@ class ContextProxyTestCase(unittest.TestCase):
 class ContextTestCase(WsgiAppTestCase):
 
     class Root(Controller):
-
-        @staticmethod
-        def begin_request():
-            context.example = True
-
-        @staticmethod
-        def end_response():
-            del context.example
 
         @text
         def get_uri(self):
@@ -40,6 +32,15 @@ class ContextTestCase(WsgiAppTestCase):
         @text
         def example(self):
             return 'example' if context.example else ''
+
+    class Application(Application):
+        @staticmethod
+        def begin_request():
+            context.example = True
+
+        @staticmethod
+        def end_response():
+            del context.example
 
     def test_redirect_response_header(self):
         self.assert_get(

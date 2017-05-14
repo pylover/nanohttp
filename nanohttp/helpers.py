@@ -69,7 +69,7 @@ def load_controller_from_file(specifier):
     return controller
 
 
-def quickstart(controller=None, host='localhost',  port=8080, block=True, config=None):
+def quickstart(controller=None, application=None, host='localhost',  port=8080, block=True, config=None):
     from wsgiref.simple_server import make_server
 
     try:
@@ -80,11 +80,14 @@ def quickstart(controller=None, host='localhost',  port=8080, block=True, config
     if config:
         settings.merge(config)
 
-    if controller is None:
+    if application is not None:
+        app = application
+    elif controller is None:
         from wsgiref.simple_server import demo_app
         app = demo_app
     else:
-        app = controller.load_app()
+        from nanohttp.application import Application
+        app = Application(root=controller)
 
     port = int(port)
     httpd = make_server(host, port, app)

@@ -33,3 +33,7 @@ class EntryPointTestCase(unittest.TestCase):
         response, content = client.request(self.url)
         self.assertIsNotNone(response)
         self.assertIsNotNone(content)
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()

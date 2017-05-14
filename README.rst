@@ -124,10 +124,10 @@ Do you need a ``WSGI`` application?
 
 ..  code-block:: python
 
-    from nanohttp import configure
+    from nanohttp import configure, Application
 
     configure(config='<yaml config string>', files=['path/to/config.file', '...'], dirs=['path/to/config/directory', '...'])
-    app = Root().load_app()
+    app = Application(controller=Root())
     # Pass the ``app`` to any ``WSGI`` server you want.
 
 
@@ -382,7 +382,7 @@ The ``context`` object is a proxy to an instance of ``nanohttp.Context`` which i
 Hooks
 -----
 
-A few hooks are available in ``Controller`` class: ``app_load``, ``begin_request``, ``begin_response``,
+A few hooks are available in ``Controller`` class: ``begin_request``, ``begin_response``,
 ``end_response``, ``request_error``.
 
 For example this how I detect JWT token and refresh it if possible:
@@ -390,8 +390,9 @@ For example this how I detect JWT token and refresh it if possible:
 
 ..  code-block:: python
 
+    from nanohttp import Application, Controller, context
 
-    class JwtController(Controller):
+    class JwtApplication(Application):
         token_key = 'HTTP_AUTHORIZATION'
         refresh_token_cookie_key = 'refresh-token'
 
@@ -415,3 +416,4 @@ For example this how I detect JWT token and refresh it if possible:
 
             if not hasattr(context, 'identity'):
                 context.identity = None
+

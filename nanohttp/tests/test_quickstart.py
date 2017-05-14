@@ -26,6 +26,12 @@ class QuickstartTestCase(WsgiAppTestCase):
         time.sleep(.5)
         shutdown()
 
+    def test_with_application(self):
+        shutdown = quickstart(application=self.application, block=False, port=self.port)
+        self.assertTrue(callable(shutdown))
+        time.sleep(.5)
+        shutdown()
+
     def test_before_configure(self):
         settings.__class__._set_instance(None)
         shutdown = quickstart(

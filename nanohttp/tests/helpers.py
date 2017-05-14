@@ -4,6 +4,7 @@ import base64
 import mimetypes
 import socket
 import io
+import functools
 from hashlib import md5
 from os import path, urandom
 from urllib.parse import urlencode
@@ -11,7 +12,7 @@ from urllib.parse import urlencode
 import httplib2
 from wsgi_intercept.interceptor import Httplib2Interceptor
 
-from nanohttp import Controller, configure
+from nanohttp import Controller, configure, Application
 
 TEST_DIR = path.abspath(path.dirname(__file__))
 STUFF_DIR = path.join(TEST_DIR, 'stuff')
@@ -79,9 +80,13 @@ class WsgiAppTestCase(unittest.TestCase):
     class Root(Controller):
         pass
 
+    class Application(Application):
+        pass
+
     def setUp(self):
         configure(force=True)
-        self.client = WsgiTester(self.Root().load_app)
+        self.application = self.Application(self.Root())
+        self.client = WsgiTester(lambda: self.application)
         self.client.__enter__()
 
     def tearDown(self):

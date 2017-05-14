@@ -12,19 +12,15 @@ class BootstrapTestCase(unittest.TestCase):
     def test_load_controller_from_file(self):
         controller = load_controller_from_file(':Static')
         self.assertIsNotNone(controller)
-        self.assertTrue(hasattr(controller, 'load_app'))
 
         controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'package_for_test_bootstrapping'))
         self.assertIsNotNone(controller)
-        self.assertTrue(hasattr(controller, 'load_app'))
 
         controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping.py'))
         self.assertIsNotNone(controller)
-        self.assertTrue(hasattr(controller, 'load_app'))
 
         controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping'))
         self.assertIsNotNone(controller)
-        self.assertTrue(hasattr(controller, 'load_app'))
 
 
 if __name__ == '__main__':  # pragma: no cover

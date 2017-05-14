@@ -1,4 +1,5 @@
 
+import unittest
 import re
 
 from nanohttp import Controller, action, text, html, context
@@ -34,3 +35,7 @@ class HttpHeadersTestCase(WsgiAppTestCase):
         self.assert_get('/custom_header', expected_headers={
             'my-header': re. compile('\d+.?\d*')
         })
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()

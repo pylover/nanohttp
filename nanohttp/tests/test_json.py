@@ -1,4 +1,6 @@
 
+import unittest
+
 import ujson
 
 from nanohttp import Controller, json
@@ -44,3 +46,7 @@ class JsonTestCase(WsgiAppTestCase):
         self.assertDictEqual(ujson.loads(content), {'b': '2', 'a': 1})
 
         self.assert_get('/error', status=500)
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()

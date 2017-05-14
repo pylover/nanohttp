@@ -1,4 +1,5 @@
 
+import unittest
 from http import cookies
 
 from nanohttp import Controller, html, context, HttpCookie
@@ -30,7 +31,6 @@ class HttpCookieTestCase(WsgiAppTestCase):
             context.response_cookies.append(HttpCookie.delete('dummy-cookie'))
             yield 'remove'
 
-
     def test_cookie(self):
 
         response, content = self.assert_get('/')
@@ -53,3 +53,7 @@ class HttpCookieTestCase(WsgiAppTestCase):
         cookies_ = cookies.SimpleCookie(response['set-cookie'])
         self.assertIn('dummy-cookie', cookies_)
         self.assertEqual(cookies_['dummy-cookie']['expires'], 'Sat, 01 Jan 2000 00:00:01 GMT')
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()
