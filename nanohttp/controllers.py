@@ -71,11 +71,11 @@ class RestController(Controller):
                 handler = getattr(self, first_path)
 
         if handler is None:
-            if not hasattr(self, context.method):
-                raise HttpMethodNotAllowed()
 
             if self.__detect_verb_by_header__ and context.environ.get(self.__detect_verb_by_header__):
-                handler = getattr(self, context.environ.get(self.__detect_verb_by_header__))
+                handler = getattr(self, context.environ.get(self.__detect_verb_by_header__).lower())
+            elif not hasattr(self, context.method):
+                raise HttpMethodNotAllowed()
             else:
                 handler = getattr(self, context.method)
 
