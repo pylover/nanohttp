@@ -1,12 +1,11 @@
 
 import sys
-import traceback
 import logging
 
 import ujson
 
 from nanohttp.contexts import Context, context
-from nanohttp.exceptions import HttpStatus, InternalServerError
+from nanohttp.exceptions import HttpStatus
 from nanohttp.configuration import settings
 
 
@@ -41,9 +40,6 @@ class Application:
             else:
                 context.response_content_type = 'text/plain'
                 response = "%s\n%s" % (message, description)
-
-            if isinstance(ex, InternalServerError):
-                traceback.print_exc()
 
             def resp():
                 yield response

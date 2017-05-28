@@ -109,7 +109,10 @@ class WsgiAppTestCase(unittest.TestCase):
 
         if cookies:
             headers = kw.setdefault('headers', {})
-            headers['Cookie'] = '; '.join('%s=%s' % (k, v.value) for k, v in cookies.items())
+            if isinstance(cookies, str):
+                headers['Cookie'] = cookies
+            else:
+                headers['Cookie'] = '; '.join('%s=%s' % (k, v.value) for k, v in cookies.items())
 
         response, content = self.client.request(uri, method=method, **kw)
 

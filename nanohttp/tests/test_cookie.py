@@ -54,6 +54,9 @@ class HttpCookieTestCase(WsgiAppTestCase):
         self.assertIn('dummy-cookie', cookies_)
         self.assertEqual(cookies_['dummy-cookie']['expires'], 'Sat, 01 Jan 2000 00:00:01 GMT')
 
+    def test_cookie_errors(self):
+        self.assert_get('/', cookies='Invalid; token; data', status=400)
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
