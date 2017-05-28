@@ -63,18 +63,5 @@ class HttpFound(HttpRedirect):
     status_code, status_text, info = 302, 'Found', 'Object moved temporarily -- see URI list'
 
 
-# FIXME: Rename to HttpInternalServerError
-class InternalServerError(HttpStatus):
+class HttpInternalServerError(HttpStatus):
     status_code, status_text, info = 500, 'Internal Server Error', 'Server got itself in trouble'
-
-    def __init__(self, exc_info):
-        self.exc_info = exc_info
-
-    def render(self):
-        from traceback import format_tb
-        e_type, e_value, tb = self.exc_info
-        return 'Traceback (most recent call last):\n%s\n%s: %s' % (
-            ''.join(format_tb(tb)),
-            e_type.__name__,
-            e_value
-        )
