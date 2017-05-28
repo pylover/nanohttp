@@ -4,12 +4,12 @@ import base64
 import mimetypes
 import socket
 import io
-import functools
 from hashlib import md5
 from os import path, urandom
 from urllib.parse import urlencode
 
 import httplib2
+from wsgi_intercept import WSGIAppError
 from wsgi_intercept.interceptor import Httplib2Interceptor
 
 from nanohttp import Controller, configure, Application
@@ -41,6 +41,7 @@ class WsgiTester(httplib2.Http):
 
     def __init__(self, app_factory, host='nanohttp.org', port=80, **kw):
         super(WsgiTester, self).__init__()
+        self.force_exception_to_status_code
         self.interceptor = Httplib2Interceptor(app_factory, host=host, port=port, **kw)
 
     def __enter__(self):
@@ -68,11 +69,22 @@ class WsgiTester(httplib2.Http):
         if query_string:
             uri += '%s%s' % ('&' if '?' in uri else '?', urlencode(query_string))
 
-        return super(WsgiTester, self).request(
-            '%s%s' % (self.interceptor.url, uri),
-            body=body,
-            **kw
-        )
+        try:
+            return super(WsgiTester, self).request(
+                '%s%s' % (self.interceptor.url, uri),
+                body=body,
+                **kw
+            )
+        except WSGIAppError as e:
+            content = b"Internal server error."
+            response = httplib2.Response({
+                "content-type": "text/plain",
+                "status": "408",
+                "content-length": len(content)
+            })
+            response.reason = content
+            response.status = 500
+            return response, content
 
 
 class WsgiAppTestCase(unittest.TestCase):

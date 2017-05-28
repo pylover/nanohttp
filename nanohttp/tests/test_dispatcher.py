@@ -113,7 +113,7 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_empty_response(self):
         self.assert_get('/empty', expected_response='')
 
-    def text_detect_verb_by_header(self):
+    def test_detect_verb_by_header(self):
         self.assert_post(
             '/articles/23',
             headers={

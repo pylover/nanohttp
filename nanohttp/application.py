@@ -28,27 +28,29 @@ class Application:
     def _handle_exception(self, ex):
         context.response_encoding = 'utf-8'
 
-        error = ex if isinstance(ex, HttpStatus) else InternalServerError(sys.exc_info())
-        error_page = self._hook('request_error', error)
-        message = error.status_text
-        description = error.render() if settings.debug else error.info if error_page is None else error_page
+        if isinstance(ex, HttpStatus):
+            error_page = self._hook('request_error', ex)
+            message = ex.status_text
+            description = ex.render() if settings.debug else ex.info if error_page is None else error_page
 
-        if context.response_content_type == 'application/json':
-            response = ujson.encode(dict(
-                message=message,
-                description=description
-            ))
-        else:
-            context.response_content_type = 'text/plain'
-            response = "%s\n%s" % (message, description)
+            if context.response_content_type == 'application/json':
+                response = ujson.encode(dict(
+                    message=message,
+                    description=description
+                ))
+            else:
+                context.response_content_type = 'text/plain'
+                response = "%s\n%s" % (message, description)
 
-        if isinstance(error, InternalServerError):
-            traceback.print_exc()
+            if isinstance(ex, InternalServerError):
+                traceback.print_exc()
 
-        def resp():
-            yield response
+            def resp():
+                yield response
 
-        return error.status, resp()
+            return ex.status, resp()
+
+        raise NotImplementedError()
 
     def __call__(self, environ, start_response):
         ctx = Context(environ, self)
@@ -72,7 +74,10 @@ class Application:
 
         except Exception as ex:
             self.__logger__.exception('Exception while handling the request.')
-            status, resp_generator = self._handle_exception(ex)
+            try:
+                status, resp_generator = self._handle_exception(ex)
+            except NotImplementedError:
+                raise ex
 
         finally:
             self._hook('begin_response')
