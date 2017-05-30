@@ -75,13 +75,12 @@ class Application:
             except NotImplementedError:
                 raise ex
 
-        finally:
-            self._hook('begin_response')
+        self._hook('begin_response')
 
-            if context.response_cookies:
-                for cookie in context.response_cookies:
-                    ctx.response_headers.add_header(*cookie.http_set_cookie())
-            start_response(status, ctx.response_headers.items())
+        if context.response_cookies:
+            for cookie in context.response_cookies:
+                ctx.response_headers.add_header(*cookie.http_set_cookie())
+        start_response(status, ctx.response_headers.items())
 
         def _response():
             try:
