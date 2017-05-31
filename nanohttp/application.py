@@ -30,6 +30,9 @@ class Application:
         """
         if isinstance(ex, HttpStatus):
             return ex.status, ex.render()
+
+        self._hook('end_response')
+        context.__exit__(*sys.exc_info())
         raise ex
 
     def __call__(self, environ, start_response):
