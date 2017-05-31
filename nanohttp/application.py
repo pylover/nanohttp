@@ -24,28 +24,30 @@ class Application:
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
-    def _handle_exception(self, ex):
+    def _handle_http_exception(self, ex):
         context.response_encoding = 'utf-8'
 
+        error_page = self._hook('request_error', ex)
+        message = ex.status_text
+        description = ex.render() if settings.debug else ex.info if error_page is None else error_page
+
+        if context.response_content_type == 'application/json':
+            response = ujson.encode(dict(
+                message=message,
+                description=description
+            ))
+        else:
+            context.response_content_type = 'text/plain'
+            response = "%s\n%s" % (message, description)
+
+        def resp():
+            yield response
+
+        return ex.status, resp()
+
+    def _handle_exception(self, ex):
         if isinstance(ex, HttpStatus):
-            error_page = self._hook('request_error', ex)
-            message = ex.status_text
-            description = ex.render() if settings.debug else ex.info if error_page is None else error_page
-
-            if context.response_content_type == 'application/json':
-                response = ujson.encode(dict(
-                    message=message,
-                    description=description
-                ))
-            else:
-                context.response_content_type = 'text/plain'
-                response = "%s\n%s" % (message, description)
-
-            def resp():
-                yield response
-
-            return ex.status, resp()
-
+            return self._handle_http_exception(ex)
         raise NotImplementedError()
 
     def __call__(self, environ, start_response):
