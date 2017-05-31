@@ -2,8 +2,6 @@
 import sys
 import logging
 
-import ujson
-
 from nanohttp.contexts import Context, context
 from nanohttp.exceptions import HttpStatus
 from nanohttp.configuration import settings
@@ -55,7 +53,6 @@ class Application:
                 resp_generator = None
 
         except Exception as ex:
-            self.__logger__.exception('Exception while handling the request.')
             status, resp_generator = self._handle_exception(ex)
 
         self._hook('begin_response')
@@ -79,6 +76,7 @@ class Application:
             except Exception as ex_:  # pragma: no cover
                 self.__logger__.exception('Exception while serving the response.')
                 if settings.debug:
+                    # FIXME: Proper way to handle exceptions after start_response
                     yield str(ex_).encode()
                 raise ex_
 
