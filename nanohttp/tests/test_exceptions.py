@@ -31,7 +31,10 @@ class ExceptionTestCase(WsgiAppTestCase):
         response, content = self.assert_get('/data', status=400)
         self.assertIn('x-reason', response)
         self.assertEqual(response['x-reason'], 'blah blah')
-        self.assertDictEqual(ujson.loads(content), {'description': '400 Bad Request', 'message': 'Bad Request'})
+        self.assertDictEqual(ujson.loads(content), {
+            'description': 'Bad request syntax or unsupported method',
+            'message': 'Bad Request'
+        })
 
         response, content = self.assert_get('/err', status=500)
         self.assertEqual(content, b'Internal server error.')

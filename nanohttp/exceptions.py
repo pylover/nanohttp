@@ -1,5 +1,9 @@
 
+import ujson
+import traceback
+
 from .contexts import context
+from .configuration import settings
 
 
 class HttpStatus(Exception):
@@ -16,8 +20,19 @@ class HttpStatus(Exception):
     def status(self):
         return '%s %s' % (self.status_code, self)
 
+    def to_dict(self):
+        return dict(
+            message=self.status_text,
+            description=self.info
+        )
+
     def render(self):
-        return self.status
+        if context.response_content_type == 'application/json':
+            return ujson.encode(self.to_dict())
+        else:
+            context.response_encoding = 'utf-8'
+            context.response_content_type = 'text/plain'
+            return "%s\n%s" % (self.status_text, self.info)
 
 
 class HttpBadRequest(HttpStatus):
@@ -64,4 +79,10 @@ class HttpFound(HttpRedirect):
 
 
 class HttpInternalServerError(HttpStatus):
-    status_code, status_text, info = 500, 'Internal Server Error', 'Server got itself in trouble'
+    status_code, status_text = 500, 'Internal Server Error'
+
+    @property
+    def info(self):
+        if settings.debug:
+            return traceback.format_exc()
+        return 'Server got itself in trouble'

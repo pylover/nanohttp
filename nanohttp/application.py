@@ -24,31 +24,15 @@ class Application:
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
-    def _handle_http_exception(self, ex):
-        context.response_encoding = 'utf-8'
-
-        error_page = self._hook('request_error', ex)
-        message = ex.status_text
-        description = ex.render() if settings.debug else ex.info if error_page is None else error_page
-
-        if context.response_content_type == 'application/json':
-            response = ujson.encode(dict(
-                message=message,
-                description=description
-            ))
-        else:
-            context.response_content_type = 'text/plain'
-            response = "%s\n%s" % (message, description)
-
-        def resp():
-            yield response
-
-        return ex.status, resp()
-
     def _handle_exception(self, ex):
+        """This method should return a tuple of (status, resp_generator) and or raise the exception.
+
+        :param ex: The exception to examine
+        :return: status, resp_generator
+        """
         if isinstance(ex, HttpStatus):
-            return self._handle_http_exception(ex)
-        raise NotImplementedError()
+            return ex.status, ex.render()
+        raise ex
 
     def __call__(self, environ, start_response):
         ctx = Context(environ, self)
@@ -72,10 +56,7 @@ class Application:
 
         except Exception as ex:
             self.__logger__.exception('Exception while handling the request.')
-            try:
-                status, resp_generator = self._handle_exception(ex)
-            except NotImplementedError:
-                raise ex
+            status, resp_generator = self._handle_exception(ex)
 
         self._hook('begin_response')
 

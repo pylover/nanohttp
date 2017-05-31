@@ -383,7 +383,7 @@ Hooks
 -----
 
 A few hooks are available in ``Controller`` class: ``begin_request``, ``begin_response``,
-``end_response``, ``request_error``.
+``end_response``.
 
 For example this how I detect JWT token and refresh it if possible:
 
