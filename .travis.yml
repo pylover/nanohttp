@@ -15,7 +15,7 @@ before_install:
 
 install: pip install -ve .
 script: coverage run --source nanohttp $(which nosetests)
-after_success: coveralls
+after_success: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then travis_retry coveralls ; fi
 deploy:
   provider: pypi
   skip_cleanup: true
