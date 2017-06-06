@@ -1,7 +1,9 @@
 
 env:
   global:
+    - COMMIT_AUTHOR_EMAIL: vahid.mardani@gmail.com
     - COVERALLS_REPO_TOKEN: FGLLwIhV7PXv4wX2HPepRtO9DL4DWagzW
+    - ENCRYPTION_LABEL: 1ba779fff1ea
 
 language: python
 
@@ -16,6 +18,7 @@ before_install:
 install: pip install -ve .
 script: coverage run --source nanohttp $(which nosetests)
 after_success: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then travis_retry coveralls ; fi
+after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then ./scripts/travis-gh-pages.sh ; fi
 deploy:
   provider: pypi
   skip_cleanup: true
