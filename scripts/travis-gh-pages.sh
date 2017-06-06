@@ -21,20 +21,20 @@ ssh-add $OUT_KEY
 rm -rf ../${DOC}
 git -C .. clone -b gh-pages ${REPO} ${DOC}
 GIT="git -C ../${DOC}"
+${GIT} config user.name "pylover"
+${GIT} config user.email "$COMMIT_AUTHOR_EMAIL"
 
 # Build in-project documents: docs/html
 cd sphinx
 make html
+cd ..
 
 # Deploy
 $GIT rm \*.\*
-cp -r _build/html/* ../../${DOC}
-echo "nanohttp.org" > ../../${DOC}/CNAME
+cp -r sphinx/_build/html/* ../${DOC}
+echo "nanohttp.org" > ../${DOC}/CNAME
 $GIT add .
 
-
 # Commit & push
-${GIT} config user.name "Travis CI"
-${GIT} config user.email "$COMMIT_AUTHOR_EMAIL"
 ${GIT} commit -am "Deploy to GitHub Pages: ${SHA}"
 ${GIT} push origin gh-pages
