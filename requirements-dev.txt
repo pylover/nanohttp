@@ -4,3 +4,4 @@ coverage
 coveralls
 httplib2
 sphinx
+sphinxjp.themes.basicstrap
