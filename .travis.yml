@@ -9,7 +9,8 @@ language: python
 
 python:
   - 3.5
-  - 3.5-dev
+  - 3.6
+  - nightly
 
 before_install:
   - pip install -U pip setuptools wheel
@@ -17,8 +18,10 @@ before_install:
 
 install: pip install -ve .
 script: coverage run --source nanohttp $(which nosetests)
-after_success: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then travis_retry coveralls ; fi
-after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then ./scripts/travis-gh-pages.sh ; fi
+after_success:
+ - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then travis_retry coveralls ; fi
+ - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then ./scripts/travis-gh-pages.sh ; fi
+#after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then ./scripts/travis-gh-pages.sh ; fi
 deploy:
   provider: pypi
   skip_cleanup: true
