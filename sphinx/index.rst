@@ -33,9 +33,11 @@ Features
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
 - Method(verb) dispatcher.
 
+Contents
+--------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    quickstart
    tutorials/index
