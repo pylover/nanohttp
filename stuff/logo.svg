@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg2"
-   viewBox="0 0 338.6001 44.090004"
-   height="44.090008"
-   width="338.6001"
+   viewBox="0 0 370.6001 76.090005"
+   height="76.090012"
+   width="370.6001"
    inkscape:version="0.91 r13725"
    sodipodi:docname="logo.svg"
    inkscape:export-filename="/mnt/multimedia/personal/justme/encry/projects/-design/nanohttp-logo-transparent-rev.plain.svg.png"
@@ -46,22 +46,22 @@
      units="px"
      borderlayer="false"
      inkscape:zoom="4.3936508"
-     inkscape:cx="214.39212"
-     inkscape:cy="-22.590464"
+     inkscape:cx="230.39212"
+     inkscape:cy="-6.5904875"
      inkscape:window-x="75"
      inkscape:window-y="42"
      inkscape:window-maximized="1"
      inkscape:current-layer="g4199"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-top="16"
+     fit-margin-left="16"
+     fit-margin-right="16"
+     fit-margin-bottom="16">
     <sodipodi:guide
-       position="200.20727,128.10689"
+       position="216.20727,144.10687"
        orientation="1,0"
        id="guide4147" />
     <sodipodi:guide
-       position="-57.294045,50.212751"
+       position="-41.294045,66.212727"
        orientation="0,1"
        id="guide4149" />
   </sodipodi:namedview>
@@ -107,7 +107,7 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-2.4567479e-6,-1008.2722)"
+     transform="translate(15.999998,-992.27219)"
      id="layer1">
     <g
        id="g4199"
