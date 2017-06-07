@@ -172,3 +172,7 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
+
+html_title = 'nanohttp'
+# html_short_title =
+html_show_sourcelink = False
