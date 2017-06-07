@@ -3,8 +3,35 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
+
+.. image:: http://img.shields.io/pypi/v/nanohttp.svg
+     :target: https://pypi.python.org/pypi/nanohttp
+
+.. image:: https://requires.io/github/pylover/nanohttp/requirements.svg?branch=master
+     :target: https://requires.io/github/pylover/nanohttp/requirements/?branch=master
+     :alt: Requirements Status
+
+.. image:: https://travis-ci.org/pylover/nanohttp.svg?branch=master
+     :target: https://travis-ci.org/pylover/nanohttp
+
+.. image:: https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master
+     :target: https://coveralls.io/github/pylover/nanohttp?branch=master
+
+.. image:: https://img.shields.io/gitter/room/pylover/nanohttp.svg
+     :target: https://gitter.im/pylover/nanohttp
+
+.. image:: https://img.shields.io/github/forks/pylover/nanohttp.svg?style=social&label=Fork
+     :target: https://github.com/pylover/nanohttp/fork
+
+.. image:: https://img.shields.io/github/stars/pylover/nanohttp.svg?style=social&label=Star
+     :target: https://github.com/pylover/nanohttp
+
+
 nanohttp
 ========
+
+
 
 ``hello.py``
 
