@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     
-    <title>Welcome to nanohttp’s documentation! &mdash; nanohttp 0.1.13 documentation</title>
+    <title>nanohttp</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -48,7 +48,8 @@
 </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="nanohttp 0.1.13 documentation" href="#" /> 
+    <link rel="top" title="" href="#" />
+    <link rel="next" title="Quick Start" href="quickstart.html" /> 
   </head>
   <body role="document">
     <div id="navbar-top" class="navbar navbar-fixed-top navbar-default" role="navigation" aria-label="top navigation">
@@ -60,7 +61,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">nanohttp 0.1.13 documentation</a>
+          <a class="navbar-brand" href="#"></a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -68,7 +69,11 @@
                 <a role="button" id="localToc" data-toggle="dropdown" data-target="#" href="#">Table Of Contents <b class="caret"></b></a>
                 <ul class="dropdown-menu localtoc sp-localtoc" role="menu" aria-labelledby="localToc">
                 <ul>
-<li><a class="reference internal" href="#">Welcome to nanohttp’s documentation!</a></li>
+<li><a class="reference internal" href="#">nanohttp</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -76,9 +81,9 @@
               </li>
 
             
+              <li><a href="quickstart.html" title="Quick Start" accesskey="N">next </a></li>
               <li><a href="genindex.html" title="General Index" accesskey="I">index </a></li>
             
-            <li class="visible-xs"><a href="_sources/index.rst.txt" rel="nofollow">Show Source</a></li>
 
             <li class="visible-xs">
                 <form class="search form-search form-inline navbar-form navbar-right sp-searchbox" action="search.html" method="get">
@@ -110,19 +115,22 @@
          
 <div class="col-md-3 hidden-xs" id="sidebar-wrapper">
   <div class="sidebar hidden-xs" role="navigation" aria-label="main navigation">
+    <p class="logo"><a href="#">
+      <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    </a></p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to nanohttp’s documentation!</a></li>
+<li><a class="reference internal" href="#">nanohttp</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Quick Start</a></p>
 <div id="searchbox" role="search">
   <h3>Quick search</h3>
   <form class="search form-inline" action="search.html" method="get">
@@ -149,9 +157,48 @@
               <div class="bodywrapper">
                 <div class="body">
                   
-  <div class="section" id="welcome-to-nanohttp-s-documentation">
-<h1>Welcome to nanohttp’s documentation!<a class="headerlink" href="#welcome-to-nanohttp-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="nanohttp">
+<h1>nanohttp<a class="headerlink" href="#nanohttp" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">hello.py</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">text</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="nd">@text</span>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="s1">&#39;Hello World!&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>nanohttp hello
+</pre></div>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Very simple, less-code &amp; fast</li>
+<li>Using object dispatcher instead of regex route dispatcher.</li>
+<li>Url-Encoded, Multipart and JSON form parsing.</li>
+<li>No <code class="docutils literal"><span class="pre">request</span></code> and or <code class="docutils literal"><span class="pre">response</span></code> objects is available, everything is combined in <code class="docutils literal"><span class="pre">nanohttp.context</span></code>.</li>
+<li>A very flexible configuration system: <a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></li>
+<li>Dispatching arguments using the <a class="reference external" href="https://docs.python.org/3/library/typing.html">obj.__annonations__</a></li>
+<li>Method(verb) dispatcher.</li>
+</ul>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#install">Install</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/helloworld.html">Hello World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/blog.html">Simple Blog</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -178,10 +225,11 @@
 <div id="navbar-related" class=" related navbar navbar-default" role="navigation" aria-label="related navigation">
   <div class="navbar-inner">
     <ul class="nav navbar-nav ">
-        <li><a href="#">nanohttp 0.1.13 documentation</a></li>
+        <li><a href="#"></a></li>
     </ul>
 <ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
       
+        <li><a href="quickstart.html" title="Quick Start" >next</a></li>
         <li><a href="genindex.html" title="General Index" >index</a></li>
         <li><a href="#">top</a></li> 
       
