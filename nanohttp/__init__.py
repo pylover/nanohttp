@@ -12,4 +12,4 @@ from .contexts import context, ContextIsNotInitializedError
 from .configuration import settings, configure
 from .application import Application
 
-__version__ = '0.9.9'
+__version__ = '0.9.10'

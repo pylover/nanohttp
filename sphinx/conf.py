@@ -39,7 +39,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinxjp.themes.basicstrap'
+    'sphinxjp.themes.basicstrap',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
