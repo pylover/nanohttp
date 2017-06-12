@@ -63,7 +63,7 @@ def load_controller_from_file(specifier):
         elif class_name == 'Static':
             from .controllers import Static
             controller = Static()
-        else:  # pragma: no coverg
+        else:  # pragma: no cover
             controller = globals()[class_name]()
 
     return controller
