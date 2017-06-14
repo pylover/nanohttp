@@ -4,14 +4,14 @@ import functools
 from .configuration import settings
 
 
-def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
+def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
     def _decorator(func):
         argcount = func.__code__.co_argcount
 
         if inner_decorator is not None:
-            func = inner_decorator(func)
+            func = inner_decorator(func, *args, **kwargs)
 
-        func.__http_methods__ = verbs if verbs else 'any'
+        func.__http_methods__ = verbs
         func.__response_encoding__ = encoding
         func.__argcount__ = argcount
 
@@ -20,15 +20,15 @@ def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
 
         return func
 
-    if verbs and callable(verbs[0]):
-        f = verbs[0]
-        verbs = tuple()
+    if args and callable(args[0]):
+        f = args[0]
+        args = tuple()
         return _decorator(f)
     else:
         return _decorator
 
 
-def jsonify(func):
+def jsonify(func, *a, **kw):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):

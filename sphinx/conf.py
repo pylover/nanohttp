@@ -31,13 +31,16 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc',
+extensions = [
+    'sphinx.ext.autodoc',
     'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages']
+    'sphinx.ext.githubpages',
+    'sphinxjp.themes.basicstrap',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -89,8 +92,13 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
-
+html_theme = 'basicstrap'
+html_theme_options = {
+    'header_inverse': False,
+    'relbar_inverse': False,
+    'inner_theme': True,
+    'inner_theme_name': 'bootswatch-united',
+}
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
@@ -164,3 +172,8 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
+
+html_title = ''
+# html_short_title =
+html_show_sourcelink = False
+html_logo = '../stuff/logo.svg'

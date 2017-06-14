@@ -2,8 +2,6 @@
 import sys
 import logging
 
-import ujson
-
 from nanohttp.contexts import Context, context
 from nanohttp.exceptions import HttpStatus
 from nanohttp.configuration import settings
@@ -25,28 +23,17 @@ class Application:
             return getattr(self, name)(*args, **kwargs)
 
     def _handle_exception(self, ex):
-        context.response_encoding = 'utf-8'
+        """This method should return a tuple of (status, resp_generator) and or raise the exception.
 
+        :param ex: The exception to examine
+        :return: status, resp_generator
+        """
         if isinstance(ex, HttpStatus):
-            error_page = self._hook('request_error', ex)
-            message = ex.status_text
-            description = ex.render() if settings.debug else ex.info if error_page is None else error_page
+            return ex.status, ex.render()
 
-            if context.response_content_type == 'application/json':
-                response = ujson.encode(dict(
-                    message=message,
-                    description=description
-                ))
-            else:
-                context.response_content_type = 'text/plain'
-                response = "%s\n%s" % (message, description)
-
-            def resp():
-                yield response
-
-            return ex.status, resp()
-
-        raise NotImplementedError()
+        self._hook('end_response')
+        context.__exit__(*sys.exc_info())
+        raise ex
 
     def __call__(self, environ, start_response):
         ctx = Context(environ, self)
@@ -69,19 +56,14 @@ class Application:
                 resp_generator = None
 
         except Exception as ex:
-            self.__logger__.exception('Exception while handling the request.')
-            try:
-                status, resp_generator = self._handle_exception(ex)
-            except NotImplementedError:
-                raise ex
+            status, resp_generator = self._handle_exception(ex)
 
-        finally:
-            self._hook('begin_response')
+        self._hook('begin_response')
 
-            if context.response_cookies:
-                for cookie in context.response_cookies:
-                    ctx.response_headers.add_header(*cookie.http_set_cookie())
-            start_response(status, ctx.response_headers.items())
+        if context.response_cookies:
+            for cookie in context.response_cookies:
+                ctx.response_headers.add_header(*cookie.http_set_cookie())
+        start_response(status, ctx.response_headers.items())
 
         def _response():
             try:
@@ -97,6 +79,7 @@ class Application:
             except Exception as ex_:  # pragma: no cover
                 self.__logger__.exception('Exception while serving the response.')
                 if settings.debug:
+                    # FIXME: Proper way to handle exceptions after start_response
                     yield str(ex_).encode()
                 raise ex_
 

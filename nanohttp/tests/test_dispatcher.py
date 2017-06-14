@@ -50,11 +50,11 @@ class DispatcherTestCase(WsgiAppTestCase):
         def index(self):
             yield 'Index'
 
-        @json('post')
+        @json(verbs='post')
         def login(self):
             return ["token"]
 
-        @html('get', 'post')
+        @html(verbs=['get', 'post'])
         def contact(self, contact_id: int=None):
             yield "Contact: %s" % contact_id
 
