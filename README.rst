@@ -225,7 +225,7 @@ Accessing the request cookies:
 
     from nanohttp import context
 
-    counter = context.cookies.get('counter', 0)
+    counter = context.cookies.get('counter')
 
 Setting cookie:
 
@@ -233,7 +233,10 @@ Setting cookie:
 
     from nanohttp import context, HttpCookie
 
-    context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
+    context.cookies['dummy-cookie1'] = 'dummy-value'
+    context.cookies['dummy-cookie1']['http_only'] = True
+
+For more information on how to use cookies, please check the python builtin's `http.cookies<https://docs.python.org/3/library/http.cookies.html>`_.
 
 
 Trailing slashes
