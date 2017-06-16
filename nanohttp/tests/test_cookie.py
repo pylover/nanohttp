@@ -2,7 +2,7 @@
 import unittest
 from http import cookies
 
-from nanohttp import Controller, html, context, HttpCookie
+from nanohttp import Controller, html, context
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -12,23 +12,35 @@ class HttpCookieTestCase(WsgiAppTestCase):
 
         @html
         def index(self):
-            counter = int(context.cookies.get('test-cookie', 0))
-            counter += 1
-            context.response_cookies.append(HttpCookie('test-cookie', value=str(counter), max_age=1))
-            context.response_cookies.append(HttpCookie('dummy-cookie', value=str(counter)))
-            context.response_cookies.append(HttpCookie('dummy-cookie3', value=str(counter), domain='example.com'))
+            if 'test-cookie' not in context.cookies:
+                context.cookies['test-cookie'] = '0'
+
+            counter = context.cookies['test-cookie']
+            context.cookies['test-cookie'] = str(int(counter.value) + 1)
+            context.cookies['test-cookie']['max-age'] = 1
+
+            context.cookies['dummy-cookie'] = counter.value
+
+            context.cookies['dummy-cookie3'] = counter.value
+            context.cookies['dummy-cookie3']['domain'] = 'example.com'
             yield 'Index'
 
         @html
         def secure(self):
-            context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
-            context.response_cookies.append(HttpCookie('dummy-cookie2', value='dummy', domain='example.com'))
-            context.response_cookies.append(HttpCookie('dummy-cookie3', value='dummy', secure=True))
+            context.cookies['dummy-cookie1'] = 'dummy'
+            context.cookies['dummy-cookie1']['httponly'] = True
+
+            context.cookies['dummy-cookie2'] = 'dummy'
+            context.cookies['dummy-cookie2']['domain'] = 'example.com'
+
+            context.cookies['dummy-cookie3'] = 'dummy'
+            context.cookies['dummy-cookie3']['secure'] = True
             yield 'Secure'
 
         @html
         def clear(self):
-            context.response_cookies.append(HttpCookie.delete('dummy-cookie'))
+            context.cookies['dummy-cookie'] = ''
+            context.cookies['dummy-cookie']['expires'] = 'Sat, 01 Jan 2000 00:00:01 GMT'
             yield 'remove'
 
     def test_cookie(self):
@@ -48,14 +60,12 @@ class HttpCookieTestCase(WsgiAppTestCase):
         self.assertNotIn('dummy-cookie1', cookies_)
         self.assertNotIn('dummy-cookie2', cookies_)
         self.assertNotIn('dummy-cookie3', cookies_)
-
+    #
         response, content = self.assert_get('/clear')
         cookies_ = cookies.SimpleCookie(response['set-cookie'])
         self.assertIn('dummy-cookie', cookies_)
         self.assertEqual(cookies_['dummy-cookie']['expires'], 'Sat, 01 Jan 2000 00:00:01 GMT')
-
-    def test_cookie_errors(self):
-        self.assert_get('/', cookies='Invalid; token; data', status=400)
+        self.assertEqual(cookies_['dummy-cookie'].value, '')
 
 
 if __name__ == '__main__':  # pragma: no cover

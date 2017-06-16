@@ -31,6 +31,7 @@ class Application:
         if isinstance(ex, HttpStatus):
             return ex.status, ex.render()
 
+        self.__logger__.exception('Internal Server Error', exc_info=True)
         self._hook('end_response')
         context.__exit__(*sys.exc_info())
         raise ex
@@ -60,9 +61,12 @@ class Application:
 
         self._hook('begin_response')
 
-        if context.response_cookies:
-            for cookie in context.response_cookies:
-                ctx.response_headers.add_header(*cookie.http_set_cookie())
+        # Setting cookies in response headers
+        cookie = ctx.cookies.output()
+        if cookie:
+            for line in cookie.split('\r\n'):
+                ctx.response_headers.add_header(*line.split(': ', 1))
+
         start_response(status, ctx.response_headers.items())
 
         def _response():
