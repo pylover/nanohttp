@@ -1,6 +1,7 @@
 
 from os.path import isdir, join
 import threading
+from email.header import decode_header
 
 import pymlconf
 
@@ -105,3 +106,14 @@ def quickstart(controller=None, application=None, host='localhost',  port=8080, 
             t.join()
 
         return shutdown
+
+
+def decode_rfc2047_text(value):
+    r"""Decode :rfc:`2047` TEXT (e.g. "=?utf-8?q?f=C3=BCr?=" -> "f\xfcr")."""
+    atoms = decode_header(value)
+    decodedvalue = ''
+    for atom, charset in atoms:
+        if charset is not None:
+            atom = atom.decode(charset)
+        decodedvalue += atom
+    return decodedvalue

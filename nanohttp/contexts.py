@@ -4,6 +4,7 @@ import cgi
 import wsgiref.util
 import wsgiref.headers
 from urllib.parse import parse_qs
+from http.cookies import SimpleCookie
 
 import ujson
 
@@ -26,7 +27,6 @@ class Context(object):
         self.environ = environ
         self.application = application
         self.response_headers = wsgiref.headers.Headers()
-        self.response_cookies = []
 
     def __enter__(self):
         self.thread_local.nanohttp_context = self
@@ -128,13 +128,10 @@ class Context(object):
 
     @LazyAttribute
     def cookies(self):
+        result = SimpleCookie()
         if 'HTTP_COOKIE' in self.environ:
-            try:
-                return dict([pair.split('=', 1) for pair in self.environ['HTTP_COOKIE'].split('; ')]) or {}
-            except ValueError:
-                raise exceptions.HttpBadRequest()
-        else:
-            return {}
+            result.load(self.environ['HTTP_COOKIE'])
+        return result
 
     def encode_response(self, buffer):
         try:
