@@ -49,7 +49,12 @@ class Application:
             if self.__root__.__remove_trailing_slash__:
                 ctx.path = ctx.path.rstrip('/')
 
-            result = self.__root__(*ctx.path.split('?')[0][1:].split('/'))
+            remaining_paths = ctx.path.split('?')[0][1:].split('/')
+            if remaining_paths and not remaining_paths[0]:
+                result = self.__root__()
+            else:
+                result = self.__root__(*remaining_paths)
+
             if result:
                 resp_generator = iter(result)
                 buffer = next(resp_generator)
