@@ -231,7 +231,7 @@ Setting cookie:
 
 ..  code-block:: python
 
-    from nanohttp import context, HttpCookie
+    from nanohttp import context
 
     context.cookies['dummy-cookie1'] = 'dummy-value'
     context.cookies['dummy-cookie1']['http_only'] = True
