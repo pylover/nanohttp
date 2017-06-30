@@ -30,7 +30,7 @@ make html
 cd ..
 
 # Deploy
-$GIT rm \*.\*
+$GIT rm *.*
 cp -r sphinx/_build/html/* ../${DOC}/docs
 cp -r sphinx/_build/html/.nojekyll ../${DOC}
 cp -r sphinx/_build/html/.buildinfo ../${DOC}
