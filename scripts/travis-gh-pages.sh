@@ -34,7 +34,7 @@ $GIT rm *.*
 cp -r sphinx/_build/html/* ../${DOC}/docs
 cp -r sphinx/_build/html/.nojekyll ../${DOC}
 cp -r sphinx/_build/html/.buildinfo ../${DOC}
-echo "nanohttp.org" > ../${DOC}/CNAME
+echo "docs.nanohttp.org" > ../${DOC}/CNAME
 $GIT add .
 
 # Commit & push
