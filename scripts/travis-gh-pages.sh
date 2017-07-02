@@ -24,14 +24,13 @@ GIT="git -C ../${DOC}"
 ${GIT} config user.name "pylover"
 ${GIT} config user.email "$COMMIT_AUTHOR_EMAIL"
 
-# Build in-project documents: docs/html
 cd sphinx
 make html
 cd ..
 
 # Deploy
 $GIT rm *.*
-cp -r sphinx/_build/html/* ../${DOC}/docs
+cp -r sphinx/_build/html/* ../${DOC}
 cp -r sphinx/_build/html/.nojekyll ../${DOC}
 cp -r sphinx/_build/html/.buildinfo ../${DOC}
 echo "docs.nanohttp.org" > ../${DOC}/CNAME
