@@ -38,7 +38,7 @@ class Context(object):
     @LazyAttribute
     def request_content_length(self):
         v = self.environ.get('CONTENT_LENGTH')
-        return None if v is None else int(v)
+        return None if not v or not v.strip() else int(v)
 
     @LazyAttribute
     def request_content_type(self):
@@ -92,7 +92,7 @@ class Context(object):
     def form(self):
         result = {}
 
-        if self.request_content_type == 'application/json':
+        if self.request_content_length and self.request_content_type == 'application/json':
             fp = self.environ['wsgi.input']
             data = fp.read(self.request_content_length)
             return ujson.decode(data)
@@ -108,7 +108,7 @@ class Context(object):
             raise exceptions.HttpBadRequest('Cannot parse the request.')
 
         if storage.list is None or not len(storage.list):
-            return {}
+            return result
 
         def get_value(f):
             # noinspection PyProtectedMember
@@ -116,7 +116,6 @@ class Context(object):
                               or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
 
         for k in storage:
-
             v = storage[k]
 
             if isinstance(v, list):
