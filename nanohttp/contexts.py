@@ -141,6 +141,16 @@ class Context(object):
         except AttributeError:  # pragma: no cover
             raise TypeError('The returned response should has the `encode` attribute, such as `str`.')
 
+    def expired(self, etag, force=False):
+        none_match = self.environ.get('HTTP_IF_NONE_MATCH')
+        match = self.environ.get('HTTP_IF_MATCH')
+        expired = etag not in (none_match, match)
+
+        if force and not expired:
+            raise exceptions.HttpNotModified()
+
+        return expired
+
 
 class ContextProxy(Context):
 

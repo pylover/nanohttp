@@ -1,3 +1,5 @@
+import unittest
+
 from nanohttp import Controller, action, text, HttpMovedPermanently, HttpFound
 from nanohttp.tests.helpers import WsgiAppTestCase
 
@@ -18,3 +20,6 @@ class HttpRedirectTestCase(WsgiAppTestCase):
         self.assert_get('/', status=301, expected_headers={'Location': '/new/address'})
         self.assert_get('/about', status=302, expected_headers={'Location': '/new/address'})
 
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()

@@ -4,7 +4,7 @@ from .exceptions import HttpStatus, HttpBadRequest, HttpUnauthorized, HttpForbid
     HttpMethodNotAllowed, HttpConflict, HttpGone, HttpRedirect, HttpMovedPermanently, HttpFound, \
     HttpInternalServerError
 from .controllers import Controller, RestController, Static
-from .decorators import action, html, json, xml, binary, text
+from .decorators import action, html, json, xml, binary, text, must_revalidate
 from .helpers import quickstart, LazyAttribute
 from .cli import main
 from .contexts import context, ContextIsNotInitializedError

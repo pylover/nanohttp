@@ -2,6 +2,7 @@ import ujson
 import functools
 
 from .configuration import settings
+from .contexts import context
 
 
 def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
@@ -48,3 +49,16 @@ text = functools.partial(action, content_type='text/plain')
 json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
 xml = functools.partial(action, content_type='application/xml')
 binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
+
+
+def must_revalidate(etag):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            etag_ = etag() if callable(etag) else etag
+            context.expired(etag_, force=True)
+            context.response_headers.add_header('Cache-Control', 'must-revalidate')
+            context.response_headers.add_header('ETag', etag_)
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator

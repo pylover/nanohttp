@@ -71,11 +71,15 @@ class HttpRedirect(HttpStatus):
 
 
 class HttpMovedPermanently(HttpRedirect):
-    status_code, status_text, info = 301, 'Moved Permanently', 'Object moved permanently -- see URI list'
+    status_code, status_text, info = 301, 'Moved Permanently', 'Object moved permanently'
 
 
 class HttpFound(HttpRedirect):
-    status_code, status_text, info = 302, 'Found', 'Object moved temporarily -- see URI list'
+    status_code, status_text, info = 302, 'Found', 'Object moved temporarily'
+
+
+class HttpNotModified(HttpStatus):
+    status_code, status_text, info = 304, 'Not Modified', 'Resource is not modified'
 
 
 class HttpInternalServerError(HttpStatus):
