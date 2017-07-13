@@ -63,6 +63,10 @@ class HttpGone(HttpStatus):
     status_code, status_text, info = 410, 'Gone', 'URI no longer exists and has been permanently removed'
 
 
+class HttpPreconditionFailed(HttpStatus):
+    status_code, status_text, info = 412, 'Precondition Failed', 'Request cannot be fulfilled'
+
+
 class HttpRedirect(HttpStatus):
 
     def __init__(self, location, *args, **kw):

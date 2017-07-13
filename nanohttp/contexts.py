@@ -151,6 +151,29 @@ class Context(object):
 
         return expired
 
+    def must_revalidate(self, etag, match, throw=True, add_headers=True):
+        ok = match(etag)
+
+        if not ok and throw:
+            raise (throw if not isinstance(throw, bool) else exceptions.HttpPreconditionFailed)()
+
+        if add_headers:
+            self.response_headers.add_header('Cache-Control', 'must-revalidate')
+            self.response_headers.add_header('ETag', etag)
+
+        return ok
+
+    def etag_match(self, etag, **kwargs):
+        return self.must_revalidate(etag, lambda t: self.environ.get('HTTP_IF_MATCH') == t, **kwargs)
+
+    def etag_none_match(self, etag, throw=True, **kwargs):
+        return self.must_revalidate(
+            etag,
+            lambda t: self.environ.get('HTTP_IF_NONE_MATCH') != t,
+            throw=exceptions.HttpNotModified if throw is True else throw,
+            **kwargs
+        )
+
 
 class ContextProxy(Context):
 

@@ -1,6 +1,6 @@
 import unittest
 
-from nanohttp import Controller, text, must_revalidate
+from nanohttp import Controller, text, ifnonematch, ifmatch, context
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -12,16 +12,19 @@ class CachingTestCase(WsgiAppTestCase):
     class Root(Controller):
 
         @text()
-        @must_revalidate(etag=lambda: _etag)
+        @ifnonematch(etag=lambda: _etag)
         def index(self):
             yield 'Something'
 
-        @text()
+        @text(verbs='put')
+        @ifmatch(etag=lambda: _etag)
         def about(self):
-            yield 'about'
+            yield 'About is Modified'
 
-    def test_caching_header(self):
+    def test_if_none_match_header(self):
         global _etag
+        _etag = '1'
+
         self.assert_get('/', expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag})
 
         # Fetching again with etag header
@@ -30,7 +33,7 @@ class CachingTestCase(WsgiAppTestCase):
 
         _old_etag = _etag
         _etag = '2'
-        # Fetching again with etag header
+        # Fetching with If-None-Match header
         ___, body = self.assert_get(
             '/',
             headers={'If-None-Match': _old_etag},
@@ -38,6 +41,27 @@ class CachingTestCase(WsgiAppTestCase):
             expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag}
         )
         self.assertEqual(body, b'Something')
+
+    def test_if_match_header(self):
+        global _etag
+        _etag = '1'
+
+        # Putting without the header
+        self.assert_put('/about', status=412)
+
+        # Putting with expired If-Match header
+        _old_etag = _etag
+        _etag = '2'
+        self.assert_put('/about', headers={'If-Match': _old_etag}, status=412)
+
+        # Putting with valid If-Match header
+        ___, body = self.assert_put(
+            '/about',
+            headers={'If-Match': _etag},
+            status=200,
+            expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag}
+        )
+        self.assertEqual(body, b'About is Modified')
 
 
 if __name__ == '__main__':  # pragma: no cover
