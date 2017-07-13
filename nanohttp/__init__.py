@@ -11,4 +11,4 @@ from .contexts import context, ContextIsNotInitializedError
 from .configuration import settings, configure
 from .application import Application
 
-__version__ = '0.14.2'
+__version__ = '0.15.0'
