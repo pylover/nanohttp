@@ -12,12 +12,12 @@ class CachingTestCase(WsgiAppTestCase):
     class Root(Controller):
 
         @text()
-        @ifnonematch(etag=lambda: _etag)
+        @ifnonematch(tag=lambda: _etag)
         def index(self):
             yield 'Something'
 
         @text(verbs='put')
-        @ifmatch(etag=lambda: _etag)
+        @ifmatch(tag=lambda: _etag)
         def about(self):
             yield 'About is Modified'
 

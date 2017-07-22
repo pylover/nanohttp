@@ -5,6 +5,7 @@ import logging
 from nanohttp.contexts import Context, context
 from nanohttp.exceptions import HttpStatus
 from nanohttp.configuration import settings
+from nanohttp.constants import NO_CONTENT_STATUSES
 
 
 logger = logging.getLogger('nanohttp')
@@ -72,7 +73,13 @@ class Application:
             for line in cookie.split('\r\n'):
                 ctx.response_headers.add_header(*line.split(': ', 1))
 
-        start_response(status, ctx.response_headers.items())
+        if status[:3] in NO_CONTENT_STATUSES:
+            del ctx.response_headers['Content-Type']
+            start_response(status, ctx.response_headers.items())
+            # This is only header, and body should not be transferred.
+            return []
+        else:
+            start_response(status, ctx.response_headers.items())
 
         def _response():
             try:

@@ -6,7 +6,7 @@ from .contexts import context
 
 
 def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
-    def _decorator(func):
+    def decorator(func):
         argcount = func.__code__.co_argcount
 
         if inner_decorator is not None:
@@ -24,12 +24,12 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decora
     if args and callable(args[0]):
         f = args[0]
         args = tuple()
-        return _decorator(f)
-    else:
-        return _decorator
+        return decorator(f)
+
+    return decorator
 
 
-def jsonify(func, *a, **kw):
+def jsonify(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -51,21 +51,34 @@ xml = functools.partial(action, content_type='application/xml')
 binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
 
 
-def ifmatch(etag):
+def ifmatch(tag):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            context.etag_match(etag() if callable(etag) else etag)
+            context.etag_match(tag() if callable(tag) else tag)
             return func(*args, **kwargs)
         return wrapper
     return decorator
 
 
-def ifnonematch(etag):
+def etag(*args, tag=None):
     def decorator(func):
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            context.etag_none_match(etag() if callable(etag) else etag)
-            return func(*args, **kwargs)
+        def wrapper(*a, **kw):
+            _etag = tag() if callable(tag) else tag
+            if _etag is not None:
+                context.etag_none_match(_etag)
+                return func(*a, **kw)
+            else:
+                result = func(*a, **kw)
+                if hasattr(result, '__etag__'):
+                    _etag = result.__etag__
+                if _etag:
+                    context.etag_none_match(_etag)
+                return result
         return wrapper
+
+    if args and callable(args[0]):
+        return decorator(args[0])
+
     return decorator

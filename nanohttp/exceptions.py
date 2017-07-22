@@ -83,7 +83,7 @@ class HttpFound(HttpRedirect):
 
 
 class HttpNotModified(HttpStatus):
-    status_code, status_text, info = 304, 'Not Modified', 'Resource is not modified'
+    status_code, status_text, info = 304, 'Not Modified', ''  # 304 is only header
 
 
 class HttpInternalServerError(HttpStatus):
