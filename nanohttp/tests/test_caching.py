@@ -1,6 +1,6 @@
 import unittest
 
-from nanohttp import Controller, text, ifnonematch, ifmatch, context
+from nanohttp import Controller, text, ifmatch, context, etag
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -12,7 +12,7 @@ class CachingTestCase(WsgiAppTestCase):
     class Root(Controller):
 
         @text()
-        @ifnonematch(tag=lambda: _etag)
+        @etag(tag=lambda: _etag)
         def index(self):
             yield 'Something'
 
