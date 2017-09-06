@@ -39,7 +39,7 @@ def jsonify(func):
         elif not isinstance(result, (list, dict, int, str)):
             raise ValueError('Cannot encode to json: %s' % type(result))
 
-        return ujson.dumps(result, indent=settings.json.indent)
+        yield ujson.dumps(result, indent=settings.json.indent)
 
     return wrapper
 
