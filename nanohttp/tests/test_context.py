@@ -69,13 +69,13 @@ class ContextTestCase(WsgiAppTestCase):
         )
 
     def test_stack(self):
-        with Context() as parent:
+        with Context({}) as parent:
             context.field1 = 'parent value'
 
-            with Context() as child:
+            with Context({}) as child:
                 context.field1 = 'child value'
                 self.assertEqual(context.field1, 'child value')
-                self.assertIs(Context.get_current(), parent)
+                self.assertIs(Context.get_current(), child)
 
             self.assertEqual(context.field1, 'parent value')
             self.assertIs(Context.get_current(), parent)

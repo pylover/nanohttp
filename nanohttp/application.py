@@ -77,6 +77,8 @@ class Application:
             del ctx.response_headers['Content-Type']
             start_response(status, ctx.response_headers.items())
             # This is only header, and body should not be transferred.
+            # So the context is also should be destroyed
+            context.__exit__(*sys.exc_info())
             return []
         else:
             start_response(status, ctx.response_headers.items())
