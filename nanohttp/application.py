@@ -1,5 +1,6 @@
 
 import sys
+import types
 import logging
 
 from nanohttp.contexts import Context, context
@@ -38,41 +39,63 @@ class Application:
         raise ex
 
     def __call__(self, environ, start_response):
+        # Entering the context
         ctx = Context(environ, self)
         ctx.__enter__()
-        # start_response("200 OK", [('Content-Type', 'text/plain; charset=utf-8')])
 
+        # Preparing some variables
         status = '200 OK'
         buffer = None
+        response_iterable = None
 
         try:
             self._hook('begin_request')
+
+            # Removing the trailing slash in-place, if exists
             if self.__root__.__remove_trailing_slash__:
                 ctx.path = ctx.path.rstrip('/')
 
-            remaining_paths = ctx.path.split('?')[0][1:].split('/')
-            if remaining_paths and not remaining_paths[0]:
-                result = self.__root__()
-            else:
-                result = self.__root__(*remaining_paths)
+            # Removing the heading slash, and query string anyway
+            path = ctx.path[1:].split('?')[0]
 
-            if result:
-                resp_generator = iter(result)
-                buffer = next(resp_generator)
-            else:
-                resp_generator = None
+            # Splitting the path by slash(es) if any
+            remaining_paths = path.split('/') if path else []
+
+            # Calling the controller, actually this will be serve our request
+            response_body = self.__root__(*remaining_paths)
+
+            if response_body:
+                # The goal is to yield an iterable, to encode and iter over it at the end of this method.
+                if isinstance(response_body, types.GeneratorType):
+                    # Generators are iterable !
+                    response_iterable = response_body
+                    # Trying to get at least one element from the generator, to force the method call till the second
+                    # `yield` statement
+                    buffer = next(response_iterable)
+                elif isinstance(response_body, (str, bytes)):
+                    # Mocking the body inside an iterable to prevent the iteration over the str character by character
+                    # For more info check the pull-request #34, https://github.com/pylover/nanohttp/pull/34
+                    response_iterable = (response_body, )
+                else:
+                    # Assuming the body is an iterable.
+                    response_iterable = response_body
 
         except Exception as ex:
-            status, resp_generator = self._handle_exception(ex)
+            # the self._handle_exception may raise the error again, if the error is not subclass of the HttpStatus,
+            # Otherwise, a tuple of the status code and response body will be returned.
+            status, response_body = self._handle_exception(ex)
+            buffer = None
+            response_iterable = (response_body, )
 
         self._hook('begin_response')
 
-        # Setting cookies in response headers
+        # Setting cookies in response headers, if any
         cookie = ctx.cookies.output()
         if cookie:
             for line in cookie.split('\r\n'):
                 ctx.response_headers.add_header(*line.split(': ', 1))
 
+        # Sometimes don't need to transfer any body, for example the 304 case.
         if status[:3] in NO_CONTENT_STATUSES:
             del ctx.response_headers['Content-Type']
             start_response(status, ctx.response_headers.items())
@@ -83,14 +106,15 @@ class Application:
         else:
             start_response(status, ctx.response_headers.items())
 
+        # It seems we have to transfer a body, so this function should yield a generator of the body chunks.
         def _response():
             try:
                 if buffer is not None:
                     yield ctx.encode_response(buffer)
 
-                if resp_generator:
+                if response_iterable:
                     # noinspection PyTypeChecker
-                    for chunk in resp_generator:
+                    for chunk in response_iterable:
                         yield ctx.encode_response(chunk)
                 else:
                     yield b''

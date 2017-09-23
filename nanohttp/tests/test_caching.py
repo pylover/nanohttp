@@ -1,6 +1,6 @@
 import unittest
 
-from nanohttp import Controller, text, ifmatch, context, etag
+from nanohttp import Controller, text, ifmatch, etag
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
