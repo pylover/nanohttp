@@ -16,24 +16,40 @@ class ContextIsNotInitializedError(Exception):
     pass
 
 
+class ContextStack(list):
+
+    def push(self, item):
+        self.append(item)
+
+    @property
+    def hasitem(self):
+        return self
+
+
 # FIXME: use __slots__
-class Context(object):
+class Context:
     response_encoding = None
     thread_local = threading.local()
     application = None
+    __stack__ = ContextStack()
 
     def __init__(self, environ, application=None):
-        super(Context, self).__init__()
         self.environ = environ
         self.application = application
         self.response_headers = wsgiref.headers.Headers()
 
     def __enter__(self):
+        # Backing up the current context
+        if hasattr(self.thread_local, 'nanohttp_context'):
+            self.__stack__.push(self.thread_local.nanohttp_context)
+
         self.thread_local.nanohttp_context = self
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del self.thread_local.nanohttp_context
+        if self.__stack__.hasitem:
+            self.thread_local.nanohttp_context = self.__stack__.pop()
 
     @LazyAttribute
     def request_content_length(self):

@@ -68,6 +68,18 @@ class ContextTestCase(WsgiAppTestCase):
             expected_response='example'
         )
 
+    def test_stack(self):
+        with Context() as parent:
+            context.field1 = 'parent value'
+
+            with Context() as child:
+                context.field1 = 'child value'
+                self.assertEqual(context.field1, 'child value')
+                self.assertIs(Context.get_current(), parent)
+
+            self.assertEqual(context.field1, 'parent value')
+            self.assertIs(Context.get_current(), parent)
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
