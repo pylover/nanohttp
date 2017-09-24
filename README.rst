@@ -110,8 +110,9 @@ Or
 
 ..  code-block:: python
     
-    from nanohttp import quickstart
+    from nanohttp import quickstart, configure
 
+    configure()
     quickstart(Root())
 
 
