@@ -41,7 +41,6 @@ class WsgiTester(httplib2.Http):
 
     def __init__(self, app_factory, host='nanohttp.org', port=80, **kw):
         super(WsgiTester, self).__init__()
-        self.force_exception_to_status_code
         self.interceptor = Httplib2Interceptor(app_factory, host=host, port=port, **kw)
 
     def __enter__(self):
