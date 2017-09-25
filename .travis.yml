@@ -2,7 +2,7 @@
 env:
   global:
     - COMMIT_AUTHOR_EMAIL: vahid.mardani@gmail.com
-    - COVERALLS_REPO_TOKEN: FGLLwIhV7PXv4wX2HPepRtO9DL4DWagzW
+    - COVERALLS_REPO_TOKEN: 8sPM12kzXz9F8YsHemK7XTsiz915meUfz
     - ENCRYPTION_LABEL: 1ba779fff1ea
 
 language: python
