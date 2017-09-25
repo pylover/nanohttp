@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg4153"
+   viewBox="0 0 57.904397 64.999992"
+   height="18.344442mm"
+   width="16.341908mm">
+  <defs
+     id="defs4155" />
+  <metadata
+     id="metadata4158">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(1354.6665,-97.005066)"
+     id="layer1">
+    <path
+       d="m -1296.7621,145.75509 -28.9522,16.24997 -28.9522,-16.24997 0,-32.49999 28.9522,-16.250034 28.9522,16.250034 z"
+       id="path4144"
+       style="opacity:1;fill:#ff0066;fill-opacity:1;stroke:none;stroke-width:0.12318316;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       d="m -1332.3905,142.63006 4.7797,0 0,-21.3027 q 0,-4.6973 -5.851,-4.6973 l -10.8368,0 q -5.851,0 -5.851,4.6973 l 0,21.3027 4.7385,0 0,-20.47861 q 0,-0.74166 1.5658,-0.74166 l 9.889,0 q 1.5658,0 1.5658,0.74166 l 0,20.47861 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:47.75328445px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:2.38766432px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path4224-6" />
+    <path
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.76984596px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:-3.43325996px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -1301.4886,142.62538 -0.012,0 0,-25.99478 -4.7116,0 0,10.58885 -12.6255,0 0,-10.58885 -4.5171,0 0,25.99946 4.5171,0 0,-10.58885 12.6255,0 0,10.58885 4.7156,0 0,-0.005 z"
+       id="path4212" />
+  </g>
+</svg>

@@ -61,4 +61,4 @@ class Root(Controller):
 
 if __name__ == '__main__':
     from nanohttp import quickstart
-    quickstart(Root())
+    quickstart(Root(), config='<sfsfsd>')
