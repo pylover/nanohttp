@@ -29,7 +29,7 @@ setup(
             'nanohttp = nanohttp:main'
         ]
     },
-    license='WTFPL',
+    license='MIT',
     classifiers=[
         'Environment :: Console',
         'Environment :: Web Environment',
