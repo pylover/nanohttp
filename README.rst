@@ -1,21 +1,21 @@
 nanohttp
 ========
 
+.. image:: https://badges.gitter.im/Carrene/nanohttp.svg
+   :alt: Join the chat at https://gitter.im/Carrene/nanohttp
+   :target: https://gitter.im/Carrene/nanohttp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 .. image:: http://img.shields.io/pypi/v/nanohttp.svg
      :target: https://pypi.python.org/pypi/nanohttp
 
-.. image:: https://requires.io/github/pylover/nanohttp/requirements.svg?branch=master
-     :target: https://requires.io/github/pylover/nanohttp/requirements/?branch=master
-     :alt: Requirements Status
+.. image:: https://travis-ci.org/Carrene/nanohttp.svg?branch=master
+     :target: https://travis-ci.org/Carrene/nanohttp
 
-.. image:: https://travis-ci.org/pylover/nanohttp.svg?branch=master
-     :target: https://travis-ci.org/pylover/nanohttp
+.. image:: https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master
+     :target: https://coveralls.io/github/Carrene/nanohttp?branch=master
 
-.. image:: https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master
-     :target: https://coveralls.io/github/pylover/nanohttp?branch=master
-
-.. image:: https://img.shields.io/gitter/room/pylover/nanohttp.svg
-     :target: https://gitter.im/pylover/nanohttp
+.. image:: https://img.shields.io/gitter/room/Carrene/nanohttp.svg
+     :target: https://gitter.im/Carrene/nanohttp
 
 A very micro HTTP framework.
 
@@ -24,13 +24,11 @@ Features
 
 - Very simple, less-code & fast
 - Using object dispatcher instead of regex route dispatcher.
-- Url-Encoded & Multipart form parsing.
+- Url-Encoded, Multipart and JSON form parsing.
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
-- You can use `maryjane <https://github.com/pylover/maryjane>`_ to observe the changes in your project directory and reload
-  the development server if desired.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
-
+- Method(verb) dispatcher.
 
 Roadmap
 -------
@@ -112,8 +110,9 @@ Or
 
 ..  code-block:: python
     
-    from nanohttp import quickstart
+    from nanohttp import quickstart, configure
 
+    configure()
     quickstart(Root())
 
 
@@ -126,10 +125,10 @@ Do you need a ``WSGI`` application?
 
 ..  code-block:: python
 
-    from nanohttp import configure
+    from nanohttp import configure, Application
 
-    configure(config='<yaml config string>', config_files='path/to/config.file')
-    app = Root().load_app()
+    configure(init_value='<yaml config string>', files=['path/to/config.file', '...'], dirs=['path/to/config/directory', '...'])
+    app = Application(root=Root())
     # Pass the ``app`` to any ``WSGI`` server you want.
 
 
@@ -183,7 +182,7 @@ Passing the config file(s) Using python:
 
     from nanohttp import quickstart
 
-    quickstart(Root(), config_files=['file1', 'file2'])
+    quickstart(Root(), config='<YAML config string>')
 
 
 Command Line Interface
@@ -227,21 +226,24 @@ Accessing the request cookies:
 
     from nanohttp import context
 
-    counter = context.cookies.get('counter', 0)
+    counter = context.cookies.get('counter')
 
 Setting cookie:
 
 ..  code-block:: python
 
-    from nanohttp import context, HttpCookie
+    from nanohttp import context
 
-    context.response_cookies.append(HttpCookie('dummy-cookie1', value='dummy', http_only=True))
+    context.cookies['dummy-cookie1'] = 'dummy-value'
+    context.cookies['dummy-cookie1']['http_only'] = True
+
+For more information on how to use cookies, please check the python builtin's `http.cookies<https://docs.python.org/3/library/http.cookies.html>`_.
 
 
 Trailing slashes
 ----------------
 
-All trailing slashes are ignored.
+If the ``Controller.__remove_trailing_slash__`` is ``True``, then all trailing slashes are ignored.
 
 ..  code-block:: python
 
@@ -298,7 +300,7 @@ Of-course, you can set the response content type using:
 
     context.response_content_type = 'application/pdf'
 
-But you define your very own decorator to make it DRY:
+Of-course, you can define your very own decorator to make your code DRY:
 
 ..  code-block:: python
 
@@ -361,13 +363,15 @@ recursively to find specific callable to handle request.
 
 ..  code-block:: python
 
-    class Nested(Controller):
+    from nanohttp import RestController
+
+    class Nested(RestController):
         pass
 
     class Root()
         children = Nested()
 
-Then you can access methods on nested controller using: ``http://host:port/nesteds/{method-name}``
+Then you can access methods on nested controller using: ``http://host:port/children``
 
 On the ``RestController`` dispatcher tries to dispatch request using HTTP method(verb) at first.
 
@@ -382,16 +386,17 @@ The ``context`` object is a proxy to an instance of ``nanohttp.Context`` which i
 Hooks
 -----
 
-A few hooks are available in ``Controller`` class: ``app_load``, ``begin_request``, ``begin_response``,
-``end_response``, ``request_error``.
+A few hooks are available in ``Controller`` class: ``begin_request``, ``begin_response``,
+``end_response``.
 
 For example this how I detect JWT token and refresh it if possible:
 
 
 ..  code-block:: python
 
+    from nanohttp import Application, Controller, context
 
-    class JwtController(Controller):
+    class JwtApplication(Application):
         token_key = 'HTTP_AUTHORIZATION'
         refresh_token_cookie_key = 'refresh-token'
 
@@ -415,3 +420,77 @@ For example this how I detect JWT token and refresh it if possible:
 
             if not hasattr(context, 'identity'):
                 context.identity = None
+
+Rendering templates
+-------------------
+
+This is how to use mako template engine with the nanohttp:
+
+
+main.py
+
+
+..  code-block:: python
+
+    import functools
+    from os.path import dirname, abspath, join
+
+    from mako.lookup import TemplateLookup
+
+    from nanohttp import Controller, context, Static, settings, action
+
+
+    here = abspath(dirname(__file__))
+    lookup = TemplateLookup(directories=[join(here, 'templates')])
+
+
+    def render_template(func, template_name):
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+
+            result = func(*args, **kwargs)
+            if hasattr(result, 'to_dict'):
+                result = result.to_dict()
+            elif not isinstance(result, dict):
+                raise ValueError('The result must be an instance of dict, not: %s' % type(result))
+
+            template_ = lookup.get_template(template_name)
+            return template_.render(**result)
+
+        return wrapper
+
+
+    template = functools.partial(action, content_type='text/html', inner_decorator=render_template)
+
+
+    class Root(Controller):
+        static = Static(here)
+
+        @template('index.mak')
+        def index(self):
+            return dict(
+                settings=settings,
+                environ=context.environ
+            )
+
+
+
+templates/index.html
+
+..  code-block:: html
+
+    <html>
+    <head>
+        <title>nanohttp mako example</title>
+    </head>
+    <body>
+        <h1>WSGI environ</h1>
+        <ul>
+        %for key, value in environ.items():
+          <li><b>${key}:</b> ${value}</li>
+        %endfor
+        </ul>
+    </body>
+    </html>
+
