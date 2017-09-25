@@ -8,10 +8,6 @@
 .. image:: http://img.shields.io/pypi/v/nanohttp.svg
      :target: https://pypi.python.org/pypi/nanohttp
 
-.. image:: https://requires.io/github/Carrene/nanohttp/requirements.svg?branch=master
-     :target: https://requires.io/github/Carrene/nanohttp/requirements/?branch=master
-     :alt: Requirements Status
-
 .. image:: https://travis-ci.org/Carrene/nanohttp.svg?branch=master
      :target: https://travis-ci.org/Carrene/nanohttp
 
