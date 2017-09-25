@@ -19,7 +19,7 @@ setup(
     version=package_version,
     author='Vahid Mardani',
     author_email='vahid.mardani@gmail.com',
-    url='http://github.com/pylover/nanohttp',
+    url='http://github.com/Carrene/nanohttp',
     description='A very micro http framework.',
     long_description=open('README.rst').read(),
     install_requires=dependencies,

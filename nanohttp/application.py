@@ -74,7 +74,7 @@ class Application:
                     buffer = next(response_iterable)
                 elif isinstance(response_body, (str, bytes)):
                     # Mocking the body inside an iterable to prevent the iteration over the str character by character
-                    # For more info check the pull-request #34, https://github.com/pylover/nanohttp/pull/34
+                    # For more info check the pull-request #34, https://github.com/Carrene/nanohttp/pull/34
                     response_iterable = (response_body, )
                 else:
                     # Assuming the body is an iterable.

@@ -4,18 +4,18 @@ nanohttp
 .. image:: http://img.shields.io/pypi/v/nanohttp.svg
      :target: https://pypi.python.org/pypi/nanohttp
 
-.. image:: https://requires.io/github/pylover/nanohttp/requirements.svg?branch=master
-     :target: https://requires.io/github/pylover/nanohttp/requirements/?branch=master
+.. image:: https://requires.io/github/Carrene/nanohttp/requirements.svg?branch=master
+     :target: https://requires.io/github/Carrene/nanohttp/requirements/?branch=master
      :alt: Requirements Status
 
-.. image:: https://travis-ci.org/pylover/nanohttp.svg?branch=master
-     :target: https://travis-ci.org/pylover/nanohttp
+.. image:: https://travis-ci.org/Carrene/nanohttp.svg?branch=master
+     :target: https://travis-ci.org/Carrene/nanohttp
 
-.. image:: https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master
-     :target: https://coveralls.io/github/pylover/nanohttp?branch=master
+.. image:: https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master
+     :target: https://coveralls.io/github/Carrene/nanohttp?branch=master
 
-.. image:: https://img.shields.io/gitter/room/pylover/nanohttp.svg
-     :target: https://gitter.im/pylover/nanohttp
+.. image:: https://img.shields.io/gitter/room/Carrene/nanohttp.svg
+     :target: https://gitter.im/Carrene/nanohttp
 
 A very micro HTTP framework.
 

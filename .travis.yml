@@ -30,5 +30,5 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: pylover/nanohttp
+    repo: Carrene/nanohttp
     all_branches: true
