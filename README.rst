@@ -10,8 +10,9 @@ nanohttp
 .. image:: https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master
      :target: https://coveralls.io/github/Carrene/nanohttp?branch=master
 
-.. image:: https://img.shields.io/gitter/room/Carrene/nanohttp.svg
-     :target: https://gitter.im/Carrene/nanohttp
+.. image:: https://badges.gitter.im/Carrene/nanohttp.svg
+   :alt: Join the chat at https://gitter.im/Carrene/nanohttp
+   :target: https://gitter.im/Carrene/nanohttp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 A very micro HTTP framework.
 
