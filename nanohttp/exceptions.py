@@ -68,6 +68,9 @@ class HttpPreconditionFailed(HttpStatus):
 
 
 class HttpRedirect(HttpStatus):
+    """
+    This is an abstract class for all redirects.
+    """
 
     def __init__(self, location, *args, **kw):
         context.response_headers.add_header('Location', location)
