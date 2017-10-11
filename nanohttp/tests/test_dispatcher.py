@@ -39,6 +39,10 @@ class ArticleController(RestController):
     def disallowed(self):  # pragma: no cover
         yield 'bad'
 
+    @text
+    def remove(self, id_: int):
+        yield 'Removing, %s' % id_
+
 
 class DispatcherTestCase(WsgiAppTestCase):
 
@@ -121,6 +125,9 @@ class DispatcherTestCase(WsgiAppTestCase):
             },
             expected_response='PUT Article: 23'
         )
+
+    def test_positional_argument_dispatch(self):
+        self.assert_request('/articles/23', 'remove', expected_response='Removing, 23')
 
 
 if __name__ == '__main__':  # pragma: no cover
