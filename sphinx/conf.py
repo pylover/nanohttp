@@ -20,6 +20,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
+import sphinx_rtd_theme
 
 
 # -- General configuration ------------------------------------------------
@@ -39,7 +40,6 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinxjp.themes.basicstrap',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -92,12 +92,10 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'basicstrap'
+html_theme = 'sphinx_rtd_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 html_theme_options = {
-    'header_inverse': False,
-    'relbar_inverse': False,
-    'inner_theme': True,
-    'inner_theme_name': 'bootswatch-united',
+    'logo_only': True
 }
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -163,12 +161,9 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'nanohttp', 'nanohttp Documentation',
-     author, 'nanohttp', 'One line description of project.',
+     author, 'nanohttp', 'A very micro HTTP framework.',
      'Miscellaneous'),
 ]
-
-
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
