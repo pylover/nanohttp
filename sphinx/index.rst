@@ -23,32 +23,10 @@
 .. image:: https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&label=Star
      :target: https://github.com/Carrene/nanohttp
 
-
-nanohttp
-========
-
-
-
-``hello.py``
-
-.. code-block:: python
-
-   from nanohttp import Controller, text
-
-   class Root(Controller):
-       @text
-       def index(self):
-           yield 'Hello World!'
-
-.. code-block:: shell
-
-   nanohttp hello
-
-
 Features
 --------
 
-- Very simple, less-code & fast
+- Very simple, less-code & fast.
 - Using object dispatcher instead of regex route dispatcher.
 - Url-Encoded, Multipart and JSON form parsing.
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
@@ -62,9 +40,13 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   quickstart
+   installation/index
+   guide/index
    tutorials/index
-   api
+   api/index
+   development/index
+   more/index
+
 
 
 Indices and tables

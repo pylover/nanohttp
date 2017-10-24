@@ -4,5 +4,5 @@ coverage
 coveralls
 httplib2
 sphinx
-sphinxjp.themes.basicstrap
+sphinx_rtd_theme
 sphinx-autobuild

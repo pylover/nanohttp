@@ -1,8 +1,0 @@
-
-
-Quick Start
-===========
-
-Install
--------
-
