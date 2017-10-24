@@ -60,7 +60,6 @@ class Controller(object):
 
 
 class RestController(Controller):
-    __detect_verb_by_header__ = False
 
     def _dispatch(self, *remaining_paths):
         handler = None
@@ -72,9 +71,7 @@ class RestController(Controller):
 
         if handler is None:
 
-            if self.__detect_verb_by_header__ and context.environ.get(self.__detect_verb_by_header__):
-                handler = getattr(self, context.environ.get(self.__detect_verb_by_header__).lower())
-            elif not hasattr(self, context.method):
+            if not hasattr(self, context.method):
                 raise HttpMethodNotAllowed()
             else:
                 handler = getattr(self, context.method)
