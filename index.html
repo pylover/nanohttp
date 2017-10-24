@@ -1,177 +1,186 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Features</title>
-  
 
-  
-  
-  
-  
 
-  
 
-  
-  
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    
+    <title>nanohttp</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     
 
-  
+<link rel="stylesheet" href="_static/css/basicstrap-base.css" type="text/css" />
+<link rel="stylesheet" id="current-theme" href="_static/css/bootstrap3/bootswatch-united.css" type="text/css" />
+<link rel="stylesheet" id="current-adjust-theme" href="_static/css/adjust_theme/bootswatch-united.css" type="text/css" />
 
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
+<link rel="stylesheet" href="_static/css/font-awesome.min.css">
 
-  
+<style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+</style>
 
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="" href="#"/>
-        <link rel="next" title="Installation" href="installation/index.html"/>
-    <link href="_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-   
-  <div class="wy-grid-for-nav">
-
+<link rel="stylesheet" href="_static/css/basicstrap.css" type="text/css" />
+<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
-          
-
-          
-            <a href="#">
-          
-
-          
-            
-            <img src="_static/logo.svg" class="logo" />
-          
-          </a>
-
-          
-            
-            
-              <div class="version">
-                0.1.13
-              </div>
-            
-          
-
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-
-          
+<script type="text/javascript">
+  var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:    './',
+            VERSION:     '0.1.13',
+            COLLAPSE_INDEX: false,
+            FILE_SUFFIX: '.html',
+            HAS_SOURCE:  true
+  };
+</script>
+    <script type="text/javascript" src="_static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/bootstrap3.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="_static/js/basicstrap.js"></script>
+<script type="text/javascript">
+</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="" href="#" />
+    <link rel="next" title="Quick Start" href="quickstart.html" /> 
+  </head>
+  <body role="document">
+    <div id="navbar-top" class="navbar navbar-fixed-top navbar-default" role="navigation" aria-label="top navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"></a>
         </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="more/index.html">More</a></li>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown visible-xs">
+                <a role="button" id="localToc" data-toggle="dropdown" data-target="#" href="#">Table Of Contents <b class="caret"></b></a>
+                <ul class="dropdown-menu localtoc sp-localtoc" role="menu" aria-labelledby="localToc">
+                <ul>
+<li><a class="reference internal" href="#">nanohttp</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+                </ul>
+              </li>
+
             
-          
+              <li><a href="quickstart.html" title="Quick Start" accesskey="N">next </a></li>
+              <li><a href="genindex.html" title="General Index" accesskey="I">index </a></li>
+            
+
+            <li class="visible-xs">
+                <form class="search form-search form-inline navbar-form navbar-right sp-searchbox" action="search.html" method="get">
+                  <div class="input-append input-group">
+                    <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn" value="Go" />
+                    </span>
+                  </div>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </li>
+
+            
+
+          </ul>
+
         </div>
       </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">nanohttp</a>
-        
-      </nav>
-
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
+    </div>
     
-      <li><a href="#">Docs</a> &raquo;</li>
-        
-      <li>Features</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-            
-        
-      </li>
-    
-  </ul>
 
-  
-  <hr/>
+    <!-- container -->
+    <div class="container-fluid">
+
+      <!-- row -->
+      <div class="row">
+         
+<div class="col-md-3 hidden-xs" id="sidebar-wrapper">
+  <div class="sidebar hidden-xs" role="navigation" aria-label="main navigation">
+    <p class="logo"><a href="#">
+      <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    </a></p>
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nanohttp</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Quick Start</a></p>
+<div id="searchbox" role="search">
+  <h3>Quick search</h3>
+  <form class="search form-inline" action="search.html" method="get">
+      <div class="input-append input-group">
+        <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+        <span class="input-group-btn">
+        <input type="submit" class="btn" value="Go" />
+        </span>
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
+  </div>
+</div> 
+        
+
+        <div class="col-md-9" id="content-wrapper">
+          <div class="document" role="main">
+            <div class="documentwrapper">
+              <div class="bodywrapper">
+                <div class="body">
+                  
   <a class="reference external image-reference" href="https://pypi.python.org/pypi/nanohttp"><img alt="http://img.shields.io/pypi/v/nanohttp.svg" src="http://img.shields.io/pypi/v/nanohttp.svg" /></a>
 <a class="reference external image-reference" href="https://travis-ci.org/Carrene/nanohttp"><img alt="https://travis-ci.org/Carrene/nanohttp.svg?branch=master" src="https://travis-ci.org/Carrene/nanohttp.svg?branch=master" /></a>
 <a class="reference external image-reference" href="https://coveralls.io/github/Carrene/nanohttp?branch=master"><img alt="https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master" src="https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master" /></a>
 <a class="reference external image-reference" href="https://gitter.im/Carrene/nanohttp"><img alt="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" src="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/Carrene/nanohttp/fork"><img alt="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" src="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" /></a>
 <a class="reference external image-reference" href="https://github.com/Carrene/nanohttp"><img alt="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" src="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" /></a>
+<div class="section" id="nanohttp">
+<h1>nanohttp<a class="headerlink" href="#nanohttp" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">hello.py</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">text</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="nd">@text</span>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="s1">&#39;Hello World!&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>nanohttp hello
+</pre></div>
+</div>
 <div class="section" id="features">
-<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Very simple, less-code &amp; fast.</li>
+<li>Very simple, less-code &amp; fast</li>
 <li>Using object dispatcher instead of regex route dispatcher.</li>
 <li>Url-Encoded, Multipart and JSON form parsing.</li>
 <li>No <code class="docutils literal"><span class="pre">request</span></code> and or <code class="docutils literal"><span class="pre">response</span></code> objects is available, everything is combined in <code class="docutils literal"><span class="pre">nanohttp.context</span></code>.</li>
@@ -181,24 +190,11 @@
 </ul>
 </div>
 <div class="section" id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#pypi">PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#from-source">From Source</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guide/quickstart.html">Quickstart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/configuration.html">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/application.html">Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/routing.html">Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/requests.html">Requests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/cookies.html">Cookies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/wsgi.html">WSGI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/exceptions.html">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#install">Install</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
@@ -206,102 +202,57 @@
 <li class="toctree-l2"><a class="reference internal" href="tutorials/blog.html">Simple Blog</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="development/contribution.html">Contribution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development/changelog.html">Changelog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="development/contributor_covenant.html">Contributor Covenant Code of Conduct</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="more/index.html">More</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="more/examples.html">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/templates.html">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/testing.html">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/deploy.html">Deploy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/faq.html">FAQ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/beginners.html">Beginners</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
 </div>
+</div>
+</div>
 <div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
-</div>
 
 
-           </div>
-           <div class="articleComments">
-            
-           </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="installation/index.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
-  
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &copy; Copyright 2017, Vahid Mardani.
-
-    </p>
-  </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
-
         </div>
-      </div>
+        
+        
+      </div><!-- /row -->
 
-    </section>
-
+      <!-- row -->
+      <div class="row footer-relbar">
+<div id="navbar-related" class=" related navbar navbar-default" role="navigation" aria-label="related navigation">
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav ">
+        <li><a href="#"></a></li>
+    </ul>
+<ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
+      
+        <li><a href="quickstart.html" title="Quick Start" >next</a></li>
+        <li><a href="genindex.html" title="General Index" >index</a></li>
+        <li><a href="#">top</a></li> 
+      
+    </ul>
   </div>
-  
+</div>
+      </div><!-- /row -->
 
+      <!-- footer -->
+      <footer role="contentinfo">
+          &copy; Copyright 2017, Vahid Mardani.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5.
+      </footer>
+      <!-- /footer -->
 
-  
+    </div>
+    <!-- /container -->
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1.13',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
-      });
-  </script>
-   
-
-</body>
+  </body>
 </html>
