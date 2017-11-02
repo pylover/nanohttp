@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tutorials</title>
+  <title>Configuration</title>
   
 
   
@@ -36,8 +36,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="" href="../index.html"/>
-        <link rel="next" title="Hello World" href="helloworld.html"/>
-        <link rel="prev" title="Exceptions" href="../guide/exceptions.html"/>
+        <link rel="up" title="Guide" href="index.html"/>
+        <link rel="next" title="Application" href="application.html"/>
+        <link rel="prev" title="Quickstart" href="quickstart.html"/>
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -97,12 +98,18 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="helloworld.html">Hello World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="blog.html">Simple Blog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="routing.html">Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requests.html">Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../more/index.html">More</a></li>
@@ -150,7 +157,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tutorials</li>
+          <li><a href="index.html">Guide</a> &raquo;</li>
+        
+      <li>Configuration</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,13 +176,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="helloworld.html">Hello World</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blog.html">Simple Blog</a></li>
-</ul>
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>nanohttp have a great human-friendly configuration system with help of
+<a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a> and <a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a>.</p>
+<p>Create a <code class="docutils literal"><span class="pre">demo.yml</span></code> file. The file below is same as the default configuration.</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="l l-Scalar l-Scalar-Plain">domain</span><span class="p p-Indicator">:</span>
+
+<span class="l l-Scalar l-Scalar-Plain">cookie</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">http_only</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="l l-Scalar l-Scalar-Plain">secure</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>You may use <code class="docutils literal"><span class="pre">nanohttp.settings</span></code> anywhere to access the config values.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">settings</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+
+    <span class="nd">@html</span>
+    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="s1">&#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;nanohttp demo&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&#39;</span>
+        <span class="k">yield</span> <span class="s1">&#39;&lt;h2&gt;debug flag is: </span><span class="si">%s</span><span class="s1">&lt;/h2&gt;&#39;</span> <span class="o">%</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span>
+        <span class="k">yield</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
+</pre></div>
+</div>
+<p>Passing the config file(s) Using python:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>from nanohttp import quickstart
+
+quickstart<span class="o">(</span>Root<span class="o">()</span>, <span class="nv">config</span><span class="o">=</span><span class="s1">&#39;&lt;YAML config string&gt;&#39;</span><span class="o">)</span>
+</pre></div>
 </div>
 </div>
 
@@ -187,10 +220,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="helloworld.html" class="btn btn-neutral float-right" title="Hello World" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="application.html" class="btn btn-neutral float-right" title="Application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../guide/exceptions.html" class="btn btn-neutral" title="Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

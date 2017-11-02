@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tutorials</title>
+  <title>Installation</title>
   
 
   
@@ -36,8 +36,8 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="" href="../index.html"/>
-        <link rel="next" title="Hello World" href="helloworld.html"/>
-        <link rel="prev" title="Exceptions" href="../guide/exceptions.html"/>
+        <link rel="next" title="Guide" href="../guide/index.html"/>
+        <link rel="prev" title="Features" href="../index.html"/>
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -96,13 +96,14 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="helloworld.html">Hello World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="blog.html">Simple Blog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pypi">PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#from-source">From Source</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../more/index.html">More</a></li>
@@ -150,7 +151,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Tutorials</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,13 +168,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="helloworld.html">Hello World</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blog.html">Simple Blog</a></li>
-</ul>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>nanohttp supports python versions greater than 3.5.x and no have any external requirements,
+every things defined in <code class="docutils literal"><span class="pre">setup.py</span></code> and automatically installing
+through the <a class="reference external" href="https://packaging.python.org">python packaging tool</a>.</p>
+</div>
+<div class="section" id="pypi">
+<h2>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install nanohttp
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-source">
+<h2>From Source<a class="headerlink" href="#from-source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> path/to/nanohttp
+$ pip install -e .
+</pre></div>
+</div>
+<p>If you want to be a contributor or run nanohttp tests, should to install through:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -r requirements-dev.txt
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Also you can find <a class="reference external" href="https://github.com/Carrene/nanohttp/blob/master/.travis.yml">CI configuration</a>
+on repository to more environment details.</p>
+</div>
 </div>
 </div>
 
@@ -187,10 +210,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="helloworld.html" class="btn btn-neutral float-right" title="Hello World" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../guide/index.html" class="btn btn-neutral float-right" title="Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../guide/exceptions.html" class="btn btn-neutral" title="Exceptions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral" title="Features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

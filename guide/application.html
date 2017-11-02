@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Application</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="" href="../index.html"/>
+        <link rel="up" title="Guide" href="index.html"/>
+        <link rel="next" title="Routing" href="routing.html"/>
+        <link rel="prev" title="Configuration" href="configuration.html"/>
+    <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/logo.svg" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.13
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#life-cycle">Life cycle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hooks">Hooks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="routing.html">Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="requests.html">Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../more/index.html">More</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">nanohttp</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Guide</a> &raquo;</li>
+        
+      <li>Application</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="application">
+<h1>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h1>
+<p>Everything in nanohttp start from an application.
+You should define your root controller in application.
+for more information and samples see <a class="reference internal" href="wsgi.html"><span class="doc">WSGI</span></a>.</p>
+<div class="section" id="life-cycle">
+<h2>Life cycle<a class="headerlink" href="#life-cycle" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="https://www.websequencediagrams.com/?lz=dGl0bGUgbmFub2h0dHAKCkFwcC0-KkNvbnRleHQ6IG5ldwANBgAJCWVudGVyACIFLT5BcHA6IGJlZ2luIHJlcXVlc3QKbm90ZSByaWdodCBvZiAAHAVob29rAFIGAAkGYW5kbGUgdHJhaWxpbmcgc2xhc2gAFQtzcGxpdCBwYXRoAEcGbGVmAEIKU3BsaXR0aW5nIHRoZQAgBSBieQA9BiBgL2AKCmFsdCB0cnkKICAgIACBMAlyb2xsZXI6IGNhbGwAFQUACwoAEw5kaXNwYXRjaAAIHXNlcnZlAIFAB3IKZWxzZSBleGNlcHQAaworAIFeDAAXBmlvbgCBDAktPi0AgjYFAIIuB19lcnJvcgCBLgUAgicYZW5kAIMWBgCCZg9zcG9uc2UAglMjcHJvY2VzcyBjb29raWVzAIMFC2VuY29kZQBCCgCDUAtlbmQAPiYAhBQMeGl0CmRlc3Ryb3kAgmMFZXh0CgoKCgo&amp;s=napkin"><img alt="nanohttp life cycle" src="../_images/application-life-cycle.png" /></a>
+</div>
+<div class="section" id="hooks">
+<h2>Hooks<a class="headerlink" href="#hooks" title="Permalink to this headline">¶</a></h2>
+<p>Hooks is part of your application life-cycle and calling when they are need.</p>
+<p>A few hooks are available:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">app_init</span></code>: After application initialized.</li>
+<li><code class="docutils literal"><span class="pre">begin_request</span></code>: Before start to processing request.</li>
+<li><code class="docutils literal"><span class="pre">begin_response</span></code>: After processing request and preparing the response.</li>
+<li><code class="docutils literal"><span class="pre">end_response</span></code>: Response is ready to send to client.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">context</span>
+
+<span class="k">class</span> <span class="nc">JwtApplication</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
+    <span class="n">token_key</span> <span class="o">=</span> <span class="s1">&#39;HTTP_AUTHORIZATION&#39;</span>
+    <span class="n">refresh_token_cookie_key</span> <span class="o">=</span> <span class="s1">&#39;refresh-token&#39;</span>
+
+    <span class="k">def</span> <span class="nf">begin_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">token_key</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">encoded_token</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">token_key</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">JwtPrincipal</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded_token</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">itsdangerous</span><span class="o">.</span><span class="n">SignatureExpired</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="n">refresh_token_encoded</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">refresh_token_cookie_key</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">refresh_token_encoded</span><span class="p">:</span>
+                    <span class="c1"># Extracting session_id</span>
+                    <span class="n">session_id</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sessionId&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">session_id</span><span class="p">:</span>
+                        <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="n">new_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh_jwt_token</span><span class="p">(</span><span class="n">refresh_token_encoded</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">new_token</span><span class="p">:</span>
+                            <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;X-New-JWT-Token&#39;</span><span class="p">,</span> <span class="n">new_token</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+            <span class="k">except</span> <span class="n">itsdangerous</span><span class="o">.</span><span class="n">BadData</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="s1">&#39;identity&#39;</span><span class="p">):</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">[Pro-tip] in some cases, you can override <code class="docutils literal"><span class="pre">Application._handle_exception</span></code> to
+handle exception for all requests.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="routing.html" class="btn btn-neutral float-right" title="Routing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configuration.html" class="btn btn-neutral" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Vahid Mardani.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.13',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
