@@ -157,7 +157,7 @@ class RegexDispatchController(Controller):
         self.routes = routes
 
     def _dispatch(self, *remaining_paths):
-        path = f'/{"/".join(remaining_paths)}'
+        path = '/' + '/'.join(remaining_paths)
         for pattern, handler in self.routes:
             match = pattern.match(path)
             if match:
