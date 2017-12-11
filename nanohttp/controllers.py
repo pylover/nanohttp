@@ -131,3 +131,35 @@ class Static(Controller):
 
         except OSError:
             raise HttpNotFound()
+
+
+class RegexDispatchController(Controller):
+    """
+    This is how to use it:
+
+    class Root(RegexDispatchController):
+
+        def __init__(self):
+            super().__init__((
+                (re.compile('/installations/(?P<installation_id>\d+)/access_tokens'), self.access_tokens),
+            ))
+
+        @json
+        def access_tokens(self, installation_id: int):
+            return dict(
+                installationId=installation_id
+            )
+
+
+    """
+
+    def __init__(self, routes):
+        self.routes = routes
+
+    def _dispatch(self, *remaining_paths):
+        path = f'/{"/".join(remaining_paths)}'
+        for pattern, handler in self.routes:
+            match = pattern.match(path)
+            if match:
+                return handler, match.groups()
+        raise HttpNotFound()
