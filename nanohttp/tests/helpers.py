@@ -117,7 +117,7 @@ class WsgiAppTestCase(unittest.TestCase):
 
         # if response.status == 500:
         #     print(content.decode(), file=sys.stderr)
-        self.assertEqual(response.status, status)
+        self.assertEqual(status, response.status)
 
         if expected_response is not None:
             if isinstance(expected_response, str):
