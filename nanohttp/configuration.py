@@ -11,8 +11,6 @@ domain:
 cookie:
   http_only: false
   secure: false
-json:
-  indent: 4
 """
 
 

@@ -1,7 +1,6 @@
 import ujson
 import functools
 
-from .configuration import settings
 from .contexts import context
 
 
@@ -39,7 +38,7 @@ def jsonify(func):
         elif not isinstance(result, (list, dict, int, str)):
             raise ValueError('Cannot encode to json: %s' % type(result))
 
-        return ujson.dumps(result, indent=settings.json.indent)
+        return ujson.dumps(result)
 
     return wrapper
 
