@@ -1,4 +1,5 @@
 
+import re
 import time
 import os
 import logging
@@ -141,7 +142,7 @@ class RegexDispatchController(Controller):
 
         def __init__(self):
             super().__init__((
-                (re.compile('/installations/(?P<installation_id>\d+)/access_tokens'), self.access_tokens),
+                ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
             ))
 
         @json
@@ -154,7 +155,9 @@ class RegexDispatchController(Controller):
     """
 
     def __init__(self, routes):
-        self.routes = routes
+        self.routes = []
+        for pattern, handler in routes:
+            self.routes.append((re.compile(pattern), handler))
 
     def _dispatch(self, *remaining_paths):
         path = '/' + '/'.join(remaining_paths)
