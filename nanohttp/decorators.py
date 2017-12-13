@@ -27,8 +27,8 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decora
             verbs=verbs,
             encoding=encoding,
             content_type=content_type,
-            optional_arguments=optional_arguments,
             positional_arguments=positional_arguments,
+            optional_arguments=optional_arguments,
             default_action='index'
         )
 

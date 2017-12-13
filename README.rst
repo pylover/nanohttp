@@ -24,7 +24,6 @@ Features
 - Url-Encoded, Multipart and JSON form parsing.
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
-- Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
 - Method(verb) dispatcher.
 
 Roadmap

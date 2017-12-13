@@ -61,7 +61,7 @@ class Application:
             remaining_paths = path.split('/') if path else []
 
             # Calling the controller, actually this will be serve our request
-            response_body = self.__root__(remaining_paths)
+            response_body = self.__root__(*remaining_paths)
 
             if response_body:
                 # The goal is to yield an iterable, to encode and iter over it at the end of this method.

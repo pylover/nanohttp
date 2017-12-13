@@ -72,7 +72,10 @@ class Context:
 
     @response_content_type.setter
     def response_content_type(self, v):
-        self.response_headers['Content-Type'] = '%s; charset=%s' % (v, self.response_encoding)
+        if v is None:
+            del self.response_headers['Content-Type']
+        else:
+            self.response_headers['Content-Type'] = '%s; charset=%s' % (v, self.response_encoding)
 
     @classmethod
     def get_current(cls):
