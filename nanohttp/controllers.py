@@ -14,37 +14,27 @@ logging.basicConfig(level=logging.INFO)
 
 
 class Controller(object):
-    __http_methods__ = 'any'
-    __response_encoding__ = 'utf8'
-    __default_action__ = 'index'
-    __remove_trailing_slash__ = True
+    __nanohttp__ = dict(
+        verbs='any',
+        encoding='utf8',
+        default_action='index'
+    )
 
-    # noinspection PyMethodMayBeStatic
-    def _serve_handler(self, handler, *remaining_paths):
-        if hasattr(handler, '__response_encoding__'):
-            context.response_encoding = handler.__response_encoding__
-
-        if hasattr(handler, '__content_type__'):
-            context.response_content_type = handler.__content_type__
-
-        return handler(*remaining_paths)
-
-    def _dispatch(self, *remaining_paths):
-        if not len(remaining_paths):
-            path = self.__default_action__
+    def _dispatch(self, remaining_paths):
+        if len(remaining_paths) == 0:
+            path = self.__nanohttp__['default_action']
         else:
-            path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
-            remaining_paths = remaining_paths[1:]
+            path = remaining_paths.pop(0)
 
         # Ensuring the handler
         handler = getattr(self, path, None)
         if handler is None:
-            handler = getattr(self, self.__default_action__, None)
+            handler = getattr(self, self.__nanohttp__['default_action'], None)
             if handler is not None:
                 remaining_paths = (path, ) + remaining_paths
 
         args_count = len(remaining_paths)
-        if (handler is None or not hasattr(handler, '__http_methods__')) \
+        if (handler is None or not hasattr(handler, '__nanohttp__')) \
                 or (hasattr(handler, '__argcount__') and handler.__argcount__ < args_count) \
                 or (hasattr(handler, '__annotations__') and len(handler.__annotations__) < args_count):
             raise HttpNotFound()
@@ -54,9 +44,15 @@ class Controller(object):
 
         return handler, remaining_paths
 
-    def __call__(self, *remaining_paths):
-        handler, remaining_paths = self._dispatch(*remaining_paths)
-        return self._serve_handler(handler, *remaining_paths)
+    # noinspection PyMethodMayBeStatic
+    def _serve_handler(self, handler, remaining_paths):
+        context.response_encoding = handler.__nanohttp__['encoding']
+        context.response_content_type = handler.__nanohttp__['content_type']
+        return handler(*remaining_paths)
+
+    def __call__(self, remaining_paths):
+        handler, remaining_paths = self._dispatch(remaining_paths)
+        return self._serve_handler(handler, remaining_paths)
 
 
 class RestController(Controller):

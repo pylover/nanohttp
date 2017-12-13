@@ -1,7 +1,13 @@
-import json as js
 import functools
 import inspect
 import nanohttp
+
+
+def dummy(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
 
 
 class ControllerMeta(type):
@@ -9,25 +15,19 @@ class ControllerMeta(type):
     def __new__(mcs, name, parents, members):
         index = members['index']
         signature = inspect.signature(index)
-        print(index.__http_methods__)
+        for name, parameter in signature.parameters.items():
+            print(name, parameter)
         print(signature.parameters)
-        return type.__new__(mcs, name, parents, members)
-
-
-def json(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        return js.dumps(result)
-    return wrapper
+        new_type = type.__new__(mcs, name, parents, members)
+        return new_type
 
 
 class Controller(metaclass=ControllerMeta):
 
     @nanohttp.json
-    @json
-    def index(self, identifier: int):
-        return {'id': identifier}
+    @dummy
+    def index(self, identifier: int, *, option1=None, option2: int=3):
+        return {'id': identifier, 'option1': option1, 'option2': option2}
 
 
 if __name__ == '__main__':

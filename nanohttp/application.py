@@ -52,8 +52,7 @@ class Application:
             self._hook('begin_request')
 
             # Removing the trailing slash in-place, if exists
-            if self.__root__.__remove_trailing_slash__:
-                ctx.path = ctx.path.rstrip('/')
+            ctx.path = ctx.path.rstrip('/')
 
             # Removing the heading slash, and query string anyway
             path = ctx.path[1:].split('?')[0]
@@ -62,7 +61,7 @@ class Application:
             remaining_paths = path.split('/') if path else []
 
             # Calling the controller, actually this will be serve our request
-            response_body = self.__root__(*remaining_paths)
+            response_body = self.__root__(remaining_paths)
 
             if response_body:
                 # The goal is to yield an iterable, to encode and iter over it at the end of this method.

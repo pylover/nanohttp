@@ -1,22 +1,36 @@
 import ujson
 import functools
+import inspect
 
 from .contexts import context
 
 
 def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
     def decorator(func):
-        argcount = func.__code__.co_argcount
 
         if inner_decorator is not None:
             func = inner_decorator(func, *args, **kwargs)
 
-        func.__http_methods__ = verbs
-        func.__response_encoding__ = encoding
-        func.__argcount__ = argcount
+        # Examining the signature, and counting the optional and positional arguments.
+        positional_arguments, optional_arguments = 0, 0
+        signature = inspect.signature(func)
+        for name, parameter in signature.parameters.items():
+            if name == 'self':
+                continue
 
-        if content_type:
-            func.__content_type__ = content_type
+            if parameter.default is inspect.Parameter.empty:
+                positional_arguments += 1
+            else:
+                optional_arguments += 1
+
+        func.__nanohttp__ = dict(
+            verbs=verbs,
+            encoding=encoding,
+            content_type=content_type,
+            optional_arguments=optional_arguments,
+            positional_arguments=positional_arguments,
+            default_action='index'
+        )
 
         return func
 
