@@ -99,3 +99,7 @@ class HttpInternalServerError(HttpStatus):
         if settings.debug:
             return traceback.format_exc()
         return 'Server got itself in trouble'
+
+
+class HttpBadGatewayError(HttpStatus):
+    status_code, status_text = 502, 'Bad Gateway'
