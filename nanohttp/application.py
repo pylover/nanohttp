@@ -129,3 +129,6 @@ class Application:
                 context.__exit__(*sys.exc_info())
 
         return _response()
+
+    def shutdown(self):
+        pass
