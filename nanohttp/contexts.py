@@ -101,6 +101,9 @@ class Context:
 
     @LazyAttribute
     def query_string(self):
+        if 'QUERY_STRING' not in self.environ:
+            return {}
+
         return {k: v[0] if len(v) == 1 else v for k, v in parse_qs(
             self.environ['QUERY_STRING'],
             keep_blank_values=True,

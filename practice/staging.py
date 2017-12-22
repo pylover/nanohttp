@@ -16,7 +16,7 @@ class ControllerMeta(type):
         index = members['index']
         signature = inspect.signature(index)
         for name, parameter in signature.parameters.items():
-            print(name, parameter)
+            print(name, parameter.kind, parameter)
         print(signature.parameters)
         new_type = type.__new__(mcs, name, parents, members)
         return new_type

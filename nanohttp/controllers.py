@@ -14,6 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 UNLIMITED = -1
 
+
 class Controller(object):
     __nanohttp__ = dict(
         verbs='any',
@@ -43,13 +44,18 @@ class Controller(object):
 
         # noinspection PyUnresolvedReferences
         manifest = handler.__nanohttp__
-        positionals = manifest.get('positional_arguments', UNLIMITED)
-        optionals = manifest.get('optional_arguments', UNLIMITED)
+
+        positionals = manifest.get('positional_arguments', None)
+        positionals_length = len(positionals) if positionals is not None else UNLIMITED
+
+        optionals = manifest.get('optional_arguments', None)
+        optionals_length = len(optionals) if optionals is not None else UNLIMITED
+
         available_arguments = len(remaining_paths)
         verbs = manifest.get('verbs', 'any')
 
-        if UNLIMITED not in (optionals, positionals) and \
-                (positionals > available_arguments or available_arguments > (positionals + optionals)):
+        if UNLIMITED not in (optionals_length, positionals_length) and \
+                (positionals_length > available_arguments or available_arguments > (positionals_length + optionals_length)):
             raise HttpNotFound()
 
         if verbs is not 'any' and context.method not in verbs:
@@ -61,7 +67,14 @@ class Controller(object):
     def _serve_handler(self, handler, remaining_paths):
         context.response_encoding = handler.__nanohttp__.get('encoding', None)
         context.response_content_type = handler.__nanohttp__.get('content_type', None)
-        return handler(*remaining_paths)
+
+        kwargs = {}
+        for k, v in handler.__nanohttp__.get('keywordonly_arguments', []):
+            value = context.query_string.get(k)
+            if value:
+                kwargs[k] = value
+
+        return handler(*remaining_paths, **kwargs)
 
     def __call__(self, *remaining_paths):
         handler, remaining_paths = self._find_handler(list(remaining_paths))

@@ -1,6 +1,6 @@
 import ujson
 import functools
-import inspect
+from inspect import signature, Parameter
 
 from .contexts import context
 
@@ -12,16 +12,18 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decora
             func = inner_decorator(func, *args, **kwargs)
 
         # Examining the signature, and counting the optional and positional arguments.
-        positional_arguments, optional_arguments = 0, 0
-        signature = inspect.signature(func)
-        for name, parameter in signature.parameters.items():
+        positional_arguments, optional_arguments, keywordonly_arguments = [], [], []
+        action_signature = signature(func)
+        for name, parameter in action_signature.parameters.items():
             if name == 'self':
                 continue
 
-            if parameter.default is inspect.Parameter.empty:
-                positional_arguments += 1
+            if parameter.kind == Parameter.KEYWORD_ONLY:
+                keywordonly_arguments.append((parameter.name, parameter.default))
+            elif parameter.default is Parameter.empty:
+                positional_arguments.append(parameter.name)
             else:
-                optional_arguments += 1
+                optional_arguments.append((parameter.name, parameter.default))
 
         func.__nanohttp__ = dict(
             verbs=verbs,
@@ -29,6 +31,7 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decora
             content_type=content_type,
             positional_arguments=positional_arguments,
             optional_arguments=optional_arguments,
+            keywordonly_arguments=keywordonly_arguments,
             default_action='index'
         )
 

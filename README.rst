@@ -25,6 +25,7 @@ Features
 - No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Method(verb) dispatcher.
+- Use Python's `keywordonly` arguments for query strings >= `0.24.0`
 
 Roadmap
 -------

@@ -63,8 +63,12 @@ class DispatcherTestCase(WsgiAppTestCase):
 
         @html
         def users(self, user_id: int=None, attr: str=None):
-            yield 'User: %s\n' % user_id
-            yield 'Attr: %s\n' % attr
+            yield f'User: {user_id}\n'
+            yield f'Attr: {attr}\n'
+
+        @html
+        def books(self, name=None, *, sort='user_id', filters=None):
+            yield f'name: {name} sort: {sort} filters: {filters}'
 
         @html
         def bad(self):
@@ -118,6 +122,15 @@ class DispatcherTestCase(WsgiAppTestCase):
 
     def test_positional_argument_dispatch(self):
         self.assert_request('/articles/23', 'remove', expected_response='Removing, 23')
+
+    def test_dispatch_query_string(self):
+        self.assert_get('/books', expected_response='name: None sort: user_id filters: None')
+        self.assert_get('/books/C++', expected_response='name: C++ sort: user_id filters: None')
+        self.assert_get('/books?sort=title', expected_response='name: None sort: title filters: None')
+        self.assert_get(
+            '/books/?filters=a>1&filters=b<3',
+            expected_response='name: None sort: user_id filters: [\'a>1\', \'b<3\']'
+        )
 
 
 if __name__ == '__main__':  # pragma: no cover
