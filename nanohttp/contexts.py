@@ -135,7 +135,7 @@ class Context:
         def get_value(f):
             # noinspection PyProtectedMember
             return f.value if isinstance(f,  cgi.MiniFieldStorage) \
-                              or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
+                or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
 
         for k in storage:
             v = storage[k]
