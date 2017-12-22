@@ -4,6 +4,7 @@ import base64
 import mimetypes
 import socket
 import io
+import traceback
 from hashlib import md5
 from os import path, urandom
 from urllib.parse import urlencode
@@ -75,7 +76,7 @@ class WsgiTester(httplib2.Http):
                 **kw
             )
         except WSGIAppError as e:
-            content = b"Internal server error."
+            content = traceback.format_exc().encode()
             response = httplib2.Response({
                 "content-type": "text/plain",
                 "status": "408",
@@ -115,8 +116,8 @@ class WsgiAppTestCase(unittest.TestCase):
 
         response, content = self.client.request(uri, method=method, **kw)
 
-        # if response.status == 500:
-        #     print(content.decode(), file=sys.stderr)
+        if response.status == 500:
+            print(content.decode(), file=sys.stderr)
         self.assertEqual(status, response.status)
 
         if expected_response is not None:
