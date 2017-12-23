@@ -150,10 +150,9 @@ def parse_any_form(environ, content_length=None, content_type=None):
     except TypeError:
         raise exceptions.HttpBadRequest('Cannot parse the request.')
 
-    if storage.list is None or not len(storage.list):
-        return {}
-
     result = {}
+    if storage.list is None or not len(storage.list):
+        return result
 
     for k in storage:
         v = storage[k]
