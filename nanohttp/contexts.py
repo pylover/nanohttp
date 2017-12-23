@@ -1,15 +1,12 @@
 
 import threading
-import cgi
 import wsgiref.util
 import wsgiref.headers
 from urllib.parse import parse_qs
 from http.cookies import SimpleCookie
 
-import ujson
-
 from nanohttp import exceptions
-from .helpers import LazyAttribute
+from .helpers import LazyAttribute, parse_any_form
 
 
 class ContextIsNotInitializedError(Exception):
@@ -112,40 +109,11 @@ class Context:
 
     @LazyAttribute
     def form(self):
-        result = {}
-
-        if self.request_content_length and self.request_content_type == 'application/json':
-            fp = self.environ['wsgi.input']
-            data = fp.read(self.request_content_length)
-            return ujson.decode(data)
-
-        try:
-            storage = cgi.FieldStorage(
-                fp=self.environ['wsgi.input'],
-                environ=self.environ,
-                strict_parsing=False,
-                keep_blank_values=True
-            )
-        except TypeError:
-            raise exceptions.HttpBadRequest('Cannot parse the request.')
-
-        if storage.list is None or not len(storage.list):
-            return result
-
-        def get_value(f):
-            # noinspection PyProtectedMember
-            return f.value if isinstance(f,  cgi.MiniFieldStorage) \
-                or (isinstance(f, cgi.FieldStorage) and not f._binary_file) else f
-
-        for k in storage:
-            v = storage[k]
-
-            if isinstance(v, list):
-                result[k] = [get_value(i) for i in v]
-            else:
-                result[k] = get_value(v)
-
-        return result
+        return parse_any_form(
+            self.environ,
+            content_length=self.request_content_length,
+            content_type=self.request_content_type
+        )
 
     @LazyAttribute
     def cookies(self):

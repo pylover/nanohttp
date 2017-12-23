@@ -1,11 +1,14 @@
 
-from os.path import isdir, join
+import cgi
 import threading
+import ujson
+from os.path import isdir, join
 from email.header import decode_header
 
 import pymlconf
 
 from .configuration import settings
+from . import exceptions
 
 
 class LazyAttribute(object):
@@ -117,3 +120,47 @@ def decode_rfc2047_text(value):
             atom = atom.decode(charset)
         decodedvalue += atom
     return decodedvalue
+
+
+def get_cgi_field_value(field):
+    # noinspection PyProtectedMember
+    return field.value if isinstance(field, cgi.MiniFieldStorage) \
+        or (isinstance(field, cgi.FieldStorage) and not field._binary_file) else field
+
+
+def parse_any_form(environ, content_length=None, content_type=None):
+    if content_length is None:
+        content_length = int(environ.get('CONTENT_LENGTH', 0))
+
+    if content_type is None:
+        content_type = environ.get('CONTENT_TYPE', '').split(';')[0]
+
+    if content_length and content_type == 'application/json':
+        fp = environ['wsgi.input']
+        data = fp.read(content_length)
+        return ujson.decode(data)
+
+    try:
+        storage = cgi.FieldStorage(
+            fp=environ['wsgi.input'],
+            environ=environ,
+            strict_parsing=False,
+            keep_blank_values=True
+        )
+    except TypeError:
+        raise exceptions.HttpBadRequest('Cannot parse the request.')
+
+    if storage.list is None or not len(storage.list):
+        return {}
+
+    result = {}
+
+    for k in storage:
+        v = storage[k]
+
+        if isinstance(v, list):
+            result[k] = [get_cgi_field_value(i) for i in v]
+        else:
+            result[k] = get_cgi_field_value(v)
+
+    return result
