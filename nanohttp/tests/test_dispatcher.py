@@ -68,20 +68,20 @@ class DispatcherTestCase(WsgiAppTestCase):
 
         @json(verbs='post')
         def login(self):
-            return ["token"]
+            return ['token']
 
         @html(verbs=['get', 'post'])
         def contact(self, contact_id: int=None):
-            yield "Contact: %s" % contact_id
+            yield 'Contact: %s' % contact_id
 
         @html
         def users(self, user_id: int=None, attr: str=None):
-            yield f'User: {user_id}\n'
-            yield f'Attr: {attr}\n'
+            yield 'User: %s\n' % user_id
+            yield 'Attr: %s\n' % attr
 
         @html
         def books(self, name=None, *, sort='user_id', filters=None):
-            yield f'name: {name} sort: {sort} filters: {filters}'
+            yield 'name: %s sort: %s filters: %s' % (name, sort, filters)
 
         @html
         def bad(self):
