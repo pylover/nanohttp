@@ -1,23 +1,39 @@
 import ujson
 import functools
+from inspect import signature, Parameter
 
-from .configuration import settings
 from .contexts import context
 
 
 def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
     def decorator(func):
-        argcount = func.__code__.co_argcount
 
         if inner_decorator is not None:
             func = inner_decorator(func, *args, **kwargs)
 
-        func.__http_methods__ = verbs
-        func.__response_encoding__ = encoding
-        func.__argcount__ = argcount
+        # Examining the signature, and counting the optional and positional arguments.
+        positional_arguments, optional_arguments, keywordonly_arguments = [], [], []
+        action_signature = signature(func)
+        for name, parameter in action_signature.parameters.items():
+            if name == 'self':
+                continue
 
-        if content_type:
-            func.__content_type__ = content_type
+            if parameter.kind == Parameter.KEYWORD_ONLY:
+                keywordonly_arguments.append((parameter.name, parameter.default))
+            elif parameter.default is Parameter.empty:
+                positional_arguments.append(parameter.name)
+            else:
+                optional_arguments.append((parameter.name, parameter.default))
+
+        func.__nanohttp__ = dict(
+            verbs=verbs,
+            encoding=encoding,
+            content_type=content_type,
+            positional_arguments=positional_arguments,
+            optional_arguments=optional_arguments,
+            keywordonly_arguments=keywordonly_arguments,
+            default_action='index'
+        )
 
         return func
 
@@ -39,7 +55,7 @@ def jsonify(func):
         elif not isinstance(result, (list, dict, int, str)):
             raise ValueError('Cannot encode to json: %s' % type(result))
 
-        return ujson.dumps(result, indent=settings.json.indent)
+        return ujson.dumps(result, indent=4)
 
     return wrapper
 

@@ -13,82 +13,96 @@ from .constants import HTTP_DATETIME_FORMAT
 
 logging.basicConfig(level=logging.INFO)
 
+UNLIMITED = -1
+
 
 class Controller(object):
-    __http_methods__ = 'any'
-    __response_encoding__ = 'utf8'
-    __default_action__ = 'index'
-    __remove_trailing_slash__ = True
+    __nanohttp__ = dict(
+        verbs='any',
+        encoding='utf8',
+        default_action='index'
+    )
 
-    # noinspection PyMethodMayBeStatic
-    def _serve_handler(self, handler, *remaining_paths):
-        if hasattr(handler, '__response_encoding__'):
-            context.response_encoding = handler.__response_encoding__
-
-        if hasattr(handler, '__content_type__'):
-            context.response_content_type = handler.__content_type__
-
-        return handler(*remaining_paths)
-
-    def _dispatch(self, *remaining_paths):
-        if not len(remaining_paths):
-            path = self.__default_action__
-        else:
-            path = self.__default_action__ if remaining_paths[0] == '' else remaining_paths[0]
-            remaining_paths = remaining_paths[1:]
-
-        # Ensuring the handler
-        handler = getattr(self, path, None)
-        if handler is None:
-            handler = getattr(self, self.__default_action__, None)
-            if handler is not None:
-                remaining_paths = (path, ) + remaining_paths
-
-        args_count = len(remaining_paths)
-        if (handler is None or not hasattr(handler, '__http_methods__')) \
-                or (hasattr(handler, '__argcount__') and handler.__argcount__ < args_count) \
-                or (hasattr(handler, '__annotations__') and len(handler.__annotations__) < args_count):
+    def _get_default_handler(self, remaining_paths):
+        default_action = self.__nanohttp__['default_action']
+        handler = getattr(self, default_action, None)
+        if not handler:
             raise HttpNotFound()
 
-        if 'any' != handler.__http_methods__ and context.method not in handler.__http_methods__:
+        return handler, remaining_paths
+
+    def _find_handler(self, remaining_paths):
+        if not remaining_paths or not hasattr(self, remaining_paths[0]):
+            # Handler is not found, trying default handler
+            return self._get_default_handler(remaining_paths)
+
+        return getattr(self, remaining_paths[0], None), remaining_paths[1:]
+
+    # noinspection PyMethodMayBeStatic
+    def _validate_handler(self, handler, remaining_paths):
+        if not callable(handler) or not hasattr(handler, '__nanohttp__'):
+            raise HttpNotFound()
+
+        # noinspection PyUnresolvedReferences
+        manifest = handler.__nanohttp__
+
+        positionals = manifest.get('positional_arguments', None)
+        positionals_length = len(positionals) if positionals is not None else UNLIMITED
+
+        optionals = manifest.get('optional_arguments', None)
+        optionals_length = len(optionals) if optionals is not None else UNLIMITED
+
+        available_arguments = len(remaining_paths)
+        verbs = manifest.get('verbs', 'any')
+
+        if UNLIMITED not in (optionals_length, positionals_length) and \
+                (positionals_length > available_arguments or available_arguments > (positionals_length + optionals_length)):
+            raise HttpNotFound()
+
+        if verbs is not 'any' and context.method not in verbs:
             raise HttpMethodNotAllowed()
 
         return handler, remaining_paths
 
+    # noinspection PyMethodMayBeStatic
+    def _serve_handler(self, handler, remaining_paths):
+        context.response_encoding = handler.__nanohttp__.get('encoding', None)
+        context.response_content_type = handler.__nanohttp__.get('content_type', None)
+
+        kwargs = {}
+        for k, v in handler.__nanohttp__.get('keywordonly_arguments', []):
+            value = context.query_string.get(k)
+            if value:
+                kwargs[k] = value
+
+        return handler(*remaining_paths, **kwargs)
+
     def __call__(self, *remaining_paths):
-        handler, remaining_paths = self._dispatch(*remaining_paths)
-        return self._serve_handler(handler, *remaining_paths)
+        handler, remaining_paths = self._find_handler(list(remaining_paths))
+        handler, remaining_paths = self._validate_handler(handler, remaining_paths)
+        return self._serve_handler(handler, remaining_paths)
 
 
 class RestController(Controller):
 
-    def _dispatch(self, *remaining_paths):
-        handler = None
-        if remaining_paths:
-            first_path = remaining_paths[0]
-            if hasattr(self, first_path):
-                remaining_paths = remaining_paths[1:]
-                handler = getattr(self, first_path)
+    def _find_handler(self, remaining_paths):
+        if remaining_paths and hasattr(self, remaining_paths[0]):
+            return getattr(self, remaining_paths[0], None), remaining_paths[1:]
 
-        if handler is None:
+        # Handler is not found, trying verb
+        if not hasattr(self, context.method):
+            raise HttpMethodNotAllowed()
 
-            if not hasattr(self, context.method):
-                raise HttpMethodNotAllowed()
-            else:
-                handler = getattr(self, context.method)
-
-        if handler is None or not hasattr(handler, '__http_methods__'):
-            raise HttpNotFound()
-
-        # FIXME: check argcount
-        if hasattr(handler, '__annotations__') and len(handler.__annotations__) < len(remaining_paths):
-            raise HttpNotFound()
-
-        return handler, remaining_paths
+        return getattr(self, context.method), remaining_paths
 
 
 class Static(Controller):
-    __response_encoding__ = None
+    __nanohttp__ = dict(
+        verbs='any',
+        encoding=None,
+        default_action='index'
+    )
+
     __chunk_size__ = 0x4000
 
     def __init__(self, directory='.', default_document='index.html'):

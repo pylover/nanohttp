@@ -2,7 +2,7 @@
 
 from .exceptions import HttpStatus, HttpBadRequest, HttpUnauthorized, HttpForbidden, HttpNotFound, \
     HttpMethodNotAllowed, HttpConflict, HttpGone, HttpRedirect, HttpMovedPermanently, HttpFound, \
-    HttpInternalServerError, HttpNotModified
+    HttpInternalServerError, HttpNotModified, HttpBadGatewayError, HttpPreconditionFailed
 from .controllers import Controller, RestController, Static, RegexDispatchController
 from .decorators import action, html, json, xml, binary, text, ifmatch, etag
 from .helpers import quickstart, LazyAttribute
@@ -11,4 +11,4 @@ from .contexts import context, ContextIsNotInitializedError
 from .configuration import settings, configure
 from .application import Application
 
-__version__ = '0.20.1'
+__version__ = '0.26.0'

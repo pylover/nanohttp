@@ -52,8 +52,7 @@ class Application:
             self._hook('begin_request')
 
             # Removing the trailing slash in-place, if exists
-            if self.__root__.__remove_trailing_slash__:
-                ctx.path = ctx.path.rstrip('/')
+            ctx.path = ctx.path.rstrip('/')
 
             # Removing the heading slash, and query string anyway
             path = ctx.path[1:].split('?')[0]
@@ -130,3 +129,6 @@ class Application:
                 context.__exit__(*sys.exc_info())
 
         return _response()
+
+    def shutdown(self):
+        pass
