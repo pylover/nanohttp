@@ -1,6 +1,7 @@
 
 import time
 import os
+import re
 import logging
 from os.path import isdir, join, relpath, pardir, exists
 from mimetypes import guess_type
@@ -145,3 +146,35 @@ class Static(Controller):
 
         except OSError:
             raise HttpNotFound()
+
+
+class RegexRouteController(Controller):
+    """
+    This is how to use it:
+
+    class Root(RegexRouteController):
+
+        def __init__(self):
+            super().__init__((
+                ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
+            ))
+
+        @json
+        def access_tokens(self, installation_id: int):
+            return dict(
+                installationId=installation_id
+            )
+
+
+    """
+
+    def __init__(self, routes):
+        self.routes = [(re.compile(p), a) for p, a in routes]
+
+    def _find_handler(self, remaining_paths):
+        path = '/' + '/'.join(remaining_paths)
+        for pattern, handler in self.routes:
+            match = pattern.match(path)
+            if match:
+                return handler, match.groups()
+        raise HttpNotFound()

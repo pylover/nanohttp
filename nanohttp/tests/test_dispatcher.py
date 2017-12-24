@@ -1,7 +1,7 @@
 
 import unittest
 
-from nanohttp import Controller, html, json, RestController, text
+from nanohttp import Controller, html, json, RestController, text, RegexRouteController
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -43,11 +43,24 @@ class ArticleController(RestController):
         yield 'Removing, %s' % id_
 
 
+class AwesomeRegexController(RegexRouteController):
+
+    def __init__(self):
+        super().__init__([
+            ('/awesome/(?P<name>\d+)', self.awesome_action)
+        ])
+
+    @text
+    def awesome_action(self, name):
+        return name
+
+
 class DispatcherTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
         articles = ArticleController()
+        regex = AwesomeRegexController()
 
         @html
         def index(self):
@@ -131,6 +144,10 @@ class DispatcherTestCase(WsgiAppTestCase):
             '/books/?filters=a>1&filters=b<3',
             expected_response='name: None sort: user_id filters: [\'a>1\', \'b<3\']'
         )
+
+    def test_regex_route_controller(self):
+        self.assert_get('/regex/awesome/badinteger', status=404)
+        self.assert_get('/regex/awesome/123', expected_response='123')
 
 
 if __name__ == '__main__':  # pragma: no cover
