@@ -1,4 +1,5 @@
 
+import re
 import time
 import os
 import logging
@@ -145,3 +146,37 @@ class Static(Controller):
 
         except OSError:
             raise HttpNotFound()
+
+
+class RegexDispatchController(Controller):
+    """
+    This is how to use it:
+
+    class Root(RegexDispatchController):
+
+        def __init__(self):
+            super().__init__((
+                ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
+            ))
+
+        @json
+        def access_tokens(self, installation_id: int):
+            return dict(
+                installationId=installation_id
+            )
+
+
+    """
+
+    def __init__(self, routes):
+        self.routes = []
+        for pattern, handler in routes:
+            self.routes.append((re.compile(pattern), handler))
+
+    def _dispatch(self, *remaining_paths):
+        path = '/' + '/'.join(remaining_paths)
+        for pattern, handler in self.routes:
+            match = pattern.match(path)
+            if match:
+                return handler, match.groups()
+        raise HttpNotFound()
