@@ -1,4 +1,4 @@
-
+import io
 import re
 import unittest
 
@@ -79,6 +79,11 @@ class ContextTestCase(WsgiAppTestCase):
 
             self.assertEqual(context.field1, 'parent value')
             self.assertIs(Context.get_current(), parent)
+
+    def test_content_length(self):
+        with Context({'CONTENT_LENGTH': '', 'wsgi.input': io.BytesIO()}):
+            form = context.form
+            self.assertEqual({}, form)
 
 
 if __name__ == '__main__':  # pragma: no cover

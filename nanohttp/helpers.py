@@ -129,11 +129,6 @@ def get_cgi_field_value(field):
 
 
 def parse_any_form(environ, content_length=None, content_type=None):
-    if content_length is None:
-        content_length = int(environ.get('CONTENT_LENGTH', 0))
-
-    if content_type is None:
-        content_type = environ.get('CONTENT_TYPE', '').split(';')[0]
 
     if content_length and content_type == 'application/json':
         fp = environ['wsgi.input']
