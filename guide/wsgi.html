@@ -186,8 +186,8 @@ or frameworks for the Python programming language. <a class="footnote-reference"
 <p>So nanohttp application designed with WSGI
 (originally specified as <a class="reference external" href="https://www.python.org/dev/peps/pep-0333/">PEP333</a>) standards,
 this sample show you how to use it:</p>
-<p><code class="docutils literal"><span class="pre">wsgi.py</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">configure</span>
+<p><code class="docutils literal notranslate"><span class="pre">wsgi.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Application</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">configure</span>
 
 
 <span class="k">class</span> <span class="nc">RootController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
@@ -209,7 +209,7 @@ this sample show you how to use it:</p>
 like <a class="reference external" href="http://gunicorn.org/">gunicorn</a> or <a class="reference external" href="http://uwsgi-docs.readthedocs.org/en/latest/">uWSGI</a>
 to serve application.</p>
 <p>for example with gunicorn:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ gunicorn -b :8080 wsgi:app
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ gunicorn -b :8080 wsgi:app
 </pre></div>
 </div>
 <p>now application can accessible through the browser in <a class="reference external" href="http://localhost:8080">http://localhost:8080</a>.</p>

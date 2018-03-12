@@ -180,8 +180,8 @@
 <h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
 <p>nanohttp have a great human-friendly configuration system with help of
 <a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a> and <a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a>.</p>
-<p>Create a <code class="docutils literal"><span class="pre">demo.yml</span></code> file. The file below is same as the default configuration.</p>
-<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">demo.yml</span></code> file. The file below is same as the default configuration.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">debug</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 
 <span class="l l-Scalar l-Scalar-Plain">domain</span><span class="p p-Indicator">:</span>
 
@@ -190,8 +190,8 @@
   <span class="l l-Scalar l-Scalar-Plain">secure</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
-<p>You may use <code class="docutils literal"><span class="pre">nanohttp.settings</span></code> anywhere to access the config values.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">settings</span>
+<p>You may use <code class="docutils literal notranslate"><span class="pre">nanohttp.settings</span></code> anywhere to access the config values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">settings</span>
 
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
 
@@ -203,7 +203,7 @@
 </pre></div>
 </div>
 <p>Passing the config file(s) Using python:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>from nanohttp import quickstart
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>from nanohttp import quickstart
 
 quickstart<span class="o">(</span>Root<span class="o">()</span>, <span class="nv">config</span><span class="o">=</span><span class="s1">&#39;&lt;YAML config string&gt;&#39;</span><span class="o">)</span>
 </pre></div>

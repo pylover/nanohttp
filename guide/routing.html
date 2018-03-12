@@ -190,9 +190,9 @@ it can help you to have a pythonic, beautiful, meaningful
 structure with the best performance.</p>
 <div class="section" id="controller">
 <span id="routing-controller"></span><h2>Controller<a class="headerlink" href="#controller" title="Permalink to this headline">¶</a></h2>
-<p>The requested path will be split-ed by <code class="docutils literal"><span class="pre">/</span></code> and python’s <code class="docutils literal"><span class="pre">getattr</span></code> will be used on the <code class="docutils literal"><span class="pre">Root</span></code> controller
+<p>The requested path will be split-ed by <code class="docutils literal notranslate"><span class="pre">/</span></code> and python’s <code class="docutils literal notranslate"><span class="pre">getattr</span></code> will be used on the <code class="docutils literal notranslate"><span class="pre">Root</span></code> controller
 recursively to find specific callable to handle request.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span>
 
 <span class="k">class</span> <span class="nc">ChildController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
 
@@ -213,15 +213,15 @@ recursively to find specific callable to handle request.</p>
 </pre></div>
 </div>
 <p>Final path can be like:</p>
-<div class="highlight-text"><div class="highlight"><pre><span></span>/                   -&gt; Root.index()
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/                   -&gt; Root.index()
 /children           -&gt; Root.children.index()
 /children/name      -&gt; Root.children.name()
 </pre></div>
 </div>
 <div class="section" id="trailing-slashes">
 <span id="routing-rest-controller"></span><h3>Trailing slashes<a class="headerlink" href="#trailing-slashes" title="Permalink to this headline">¶</a></h3>
-<p>If the <code class="docutils literal"><span class="pre">Controller.__remove_trailing_slash__</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, then all trailing slashes are ignored.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_trailing_slash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<p>If the <code class="docutils literal notranslate"><span class="pre">Controller.__remove_trailing_slash__</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all trailing slashes are ignored.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_trailing_slash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">assert_get</span><span class="p">(</span><span class="s1">&#39;/users/10/jobs/&#39;</span><span class="p">,</span> <span class="n">expected_response</span><span class="o">=</span><span class="s1">&#39;User: 10</span><span class="se">\n</span><span class="s1">Attr: jobs</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -230,9 +230,9 @@ recursively to find specific callable to handle request.</p>
 <div class="section" id="rest-controller">
 <h2>Rest Controller<a class="headerlink" href="#rest-controller" title="Permalink to this headline">¶</a></h2>
 <p>For using nanohttp with <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> rules
-we have a <code class="docutils literal"><span class="pre">RestController</span></code>, it’s behavior same as basic <a class="reference internal" href="#routing-controller"><span class="std std-ref">Controller</span></a>
+we have a <code class="docutils literal notranslate"><span class="pre">RestController</span></code>, it’s behavior same as basic <a class="reference internal" href="#routing-controller"><span class="std std-ref">Controller</span></a>
 but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">RestController</span><span class="p">,</span> <span class="n">html</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">RestController</span><span class="p">,</span> <span class="n">html</span>
 
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">RestController</span><span class="p">):</span>
 

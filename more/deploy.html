@@ -188,7 +188,7 @@ then you need to run application and control it.</p>
 monitor and control your application.
 Follow the instructions on <a class="reference external" href="http://supervisord.org/">supervisor</a> documentation.</p>
 <p>This is simple config for supervisor:</p>
-<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[program:YourApplicationName]</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[program:YourApplicationName]</span>
 <span class="na">command</span><span class="o">=</span><span class="s">/path/to/my-virtualenv/bin/gunicorn -b :8080 wsgi:app</span>
 <span class="na">directory</span><span class="o">=</span><span class="s">/path/to/my_application_directory</span>
 <span class="na">autostart</span><span class="o">=</span><span class="s">true</span>
@@ -201,7 +201,7 @@ Follow the instructions on <a class="reference external" href="http://supervisor
 <p>Finally you should configure web server to connect to application.
 simple solution is using reverse proxy and it’s available in most of web servers.</p>
 <p>sample reverse proxy config for NGINX:</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
     <span class="kn">rewrite</span> <span class="s">/(.*)</span> <span class="s">/</span><span class="nv">$1</span>  <span class="s">break</span><span class="p">;</span>
     <span class="kn">try_files</span> <span class="nv">$uri</span> <span class="s">@proxy_to_my_application</span><span class="p">;</span>
 <span class="p">}</span>
@@ -219,7 +219,7 @@ simple solution is using reverse proxy and it’s available in most of web serve
 </pre></div>
 </div>
 <p>Or Apache:</p>
-<div class="highlight-apacheconf"><div class="highlight"><pre><span></span><span class="nt">&lt;Location</span> <span class="s">/</span><span class="nt">&gt;</span>
+<div class="highlight-apacheconf notranslate"><div class="highlight"><pre><span></span><span class="nt">&lt;Location</span> <span class="s">/</span><span class="nt">&gt;</span>
     <span class="nb">ProxyPass</span> http://0.0.0.0:8080
     <span class="nb">ProxyPassReverse</span> http://0.0.0.0:8080
     <span class="nb">Order</span> allow,deny

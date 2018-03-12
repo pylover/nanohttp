@@ -182,8 +182,8 @@ But you can implement any template engines (like
 <a class="reference external" href="http://jinja.pocoo.org/">Jinja</a>,
 <a class="reference external" href="https://github.com/defunkt/pystache">Mustache</a>, etc.).</p>
 <p>This is how to use <a class="reference external" href="http://www.makotemplates.org/">Mako</a> template engine with the nanohttp:</p>
-<p><code class="docutils literal"><span class="pre">main.py</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
+<p><code class="docutils literal notranslate"><span class="pre">main.py</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">join</span>
 
 <span class="kn">from</span> <span class="nn">mako.lookup</span> <span class="kn">import</span> <span class="n">TemplateLookup</span>
@@ -226,8 +226,8 @@ But you can implement any template engines (like
         <span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">templates/index.html</span></code></p>
-<div class="highlight-html+mako"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<p><code class="docutils literal notranslate"><span class="pre">templates/index.html</span></code></p>
+<div class="highlight-html+mako notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>nanohttp mako example<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>

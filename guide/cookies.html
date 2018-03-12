@@ -179,13 +179,13 @@
   <div class="section" id="cookies">
 <h1>Cookies<a class="headerlink" href="#cookies" title="Permalink to this headline">¶</a></h1>
 <p>Accessing the request cookies:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span>
 
 <span class="n">counter</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;counter&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Setting cookie:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span>
 
 <span class="n">context</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;dummy-cookie1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;dummy-value&#39;</span>
 <span class="n">context</span><span class="o">.</span><span class="n">cookies</span><span class="p">[</span><span class="s1">&#39;dummy-cookie1&#39;</span><span class="p">][</span><span class="s1">&#39;http_only&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
