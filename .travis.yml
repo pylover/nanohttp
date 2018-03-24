@@ -10,7 +10,6 @@ language: python
 python:
   - 3.5
   - 3.6
-  - nightly
 
 before_install:
   - pip install -U pip setuptools wheel
@@ -31,4 +30,4 @@ deploy:
     tags: true
     distributions: sdist bdist_wheel
     repo: Carrene/nanohttp
-    all_branches: true
+    condition: $TRAVIS_PYTHON_VERSION = 3.5
