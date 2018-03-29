@@ -1,81 +1,102 @@
 import functools
 import re
 
-from nanohttp import context
 from nanohttp.exceptions import HttpBadRequest
 
 
 class ActionValidator:
     def __init__(self, fields):
-        self.default_rules = {}
         self.fields = fields
 
-    @staticmethod
-    def ensure_exists(field_name, form):
-        if field_name not in form:
-            raise HttpBadRequest()
+    def __call__(self, form=None, query_string=None, *args, **kwargs):
+        for field_name in self.fields:
+            self.validate_field(field_name, form, query_string)
+        return form, query_string
 
-    @classmethod
-    def required(cls, field_name, expected_value, form):
-        if expected_value:
-            cls.ensure_exists(field_name, form)
+    def validate_type(self, field, value):
+        specification = self.fields.get(field)
+        if 'type' in specification:
+            try:
+                return specification.get('type')(value)
+            except ValueError:
+                raise HttpBadRequest()
+        return value
 
-    @classmethod
-    def min(cls, field_name, expected_value, form):
-        cls.ensure_exists(field_name, form)
-        cls.type(field_name, (int,), form)
-        if form.get(field_name) < expected_value[0]:
-            raise HttpBadRequest()
+    def validate_length(self, field, value):
+        specification = self.fields.get(field)
+        if 'min_length' in specification:
+            value = str(value)
+            if len(value) < specification.get('min_length'):
+                raise HttpBadRequest()
+        if 'max_length' in specification:
+            value = str(value)
+            if len(value) > specification.get('max_length'):
+                raise HttpBadRequest()
+        return value
 
-    @classmethod
-    def max(cls, field_name, expected_value, form):
-        cls.ensure_exists(field_name, form)
-        cls.type(field_name, (int,), form)
-        if form.get(field_name) > expected_value[0]:
-            raise HttpBadRequest()
-
-    @classmethod
-    def min_length(cls, field_name, expected_value, form):
-        cls.ensure_exists(field_name, form)
-        cls.type(field_name, (str,), form)
-        if len(form.get(field_name)) < expected_value[0]:
-            raise HttpBadRequest()
-
-    @classmethod
-    def max_length(cls, field_name, expected_value, form):
-        cls.ensure_exists(field_name, form)
-        cls.type(field_name, (str,), form)
-        if len(form.get(field_name)) > expected_value[0]:
-            raise HttpBadRequest()
-
-    @classmethod
-    def pattern(cls, field_name, expected_value, form):
-        cls.ensure_exists(field_name, form)
-        pattern = re.compile(expected_value[0]) if isinstance(expected_value[0], str) else expected_value[0]
-        if pattern.match(form.get(field_name)) is None:
-            raise HttpBadRequest()
-
-    @classmethod
-    def type(cls, field_name, desired_type, form):
-        cls.ensure_exists(field_name, form)
+    def validate_range(self, field, value):
+        specification = self.fields.get(field)
         try:
-            form[field_name] = desired_type[0](form[field_name])
+            if 'min' in specification:
+                value = int(value)
+                if value < specification.get('min'):
+                    raise HttpBadRequest()
+            if 'max' in specification:
+                value = int(value)
+                if value > specification.get('max'):
+                    raise HttpBadRequest()
         except ValueError:
             raise HttpBadRequest()
+        else:
+            return value
 
-    def __call__(self, form=None, *args, **kwargs):
-        form = context.form if form is None else form
-        for field_name, validation in self.fields.items():
-            for validation_title, validation_value in validation.items():
-                if callable(validation_value):
-                    # Todo: if callable
-                    pass
-                validation_value = (validation_value, 400) if type(validation_value) != tuple else validation_value
-                getattr(self, validation_title)(field_name, validation_value, form)
-        return form
+    def validate_pattern(self, field, value):
+        specification = self.fields.get(field)
+        if 'pattern' in specification:
+            desired_pattern = specification.get('pattern')
+            pattern = re.compile(desired_pattern) if isinstance(desired_pattern, str) else desired_pattern
+            if pattern.match(value) is None:
+                raise HttpBadRequest()
+        return value
+
+    def validate_field(self, field, form, query_string):
+        """
+        :param field: A dictionary of {field_name: validation_specification}
+        :param form: A dictionary of request body that will be validate according to the above specification
+        :param query_string: A dictionary of request query string that will be validate according to the above
+            specification
+        """
+
+        specification = self.fields.get(field)
+        accept_specification = specification.get('accept', 'form')
+        accept_specification = set(accept_specification) if type(accept_specification) is list \
+            else {accept_specification}
+
+        if form and 'form' not in accept_specification and field in form:
+            raise HttpBadRequest()
+        elif query_string and 'query_string' not in accept_specification and field in query_string:
+            raise HttpBadRequest()
+        else:
+            if form and field in form:
+                value, parent = (form[field], 'form')
+            elif query_string and field in query_string:
+                value, parent = (query_string[field], 'query_string')
+            else:
+                value, parent = (None, None)
+
+        if not value:
+            if specification.get('required', False):
+                raise HttpBadRequest()
+            return
+
+        value = self.validate_type(field, value)
+        value = self.validate_length(field, value)
+        value = self.validate_range(field, value)
+        value = self.validate_pattern(field, value)
+        locals()[parent][field] = value
 
 
-def validate(fields):
+def validate(fields):  # pragma: no cover
 
     def decorator(func):
         validator = ActionValidator(fields)
