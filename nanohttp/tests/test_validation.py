@@ -2,7 +2,6 @@ import unittest
 import re
 
 from nanohttp import HttpBadRequest
-
 from nanohttp.validation import ActionValidator
 
 
@@ -17,11 +16,21 @@ class ValidationTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(dict(param1='value1'), validator(dict(param1='value1')))
+        self.assertEqual((dict(param1='value1'), None), validator(dict(param1='value1')))
 
-        # Missing parameter
+        # Missing param1
         with self.assertRaises(HttpBadRequest):
-            validator({})
+            validator(dict(anotherParam1='value1'))
+
+        # Required false
+        validator = ActionValidator(
+            fields=dict(
+                param1=dict(
+                    required=False
+                )
+            )
+        )
+        self.assertEqual(({}, None), validator({}))
 
     def test_validation_max(self):
 
@@ -32,12 +41,16 @@ class ValidationTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(dict(param1=9), validator(dict(param1=9)))
-        self.assertEqual(dict(param1=9), validator(dict(param1='9')))
+        self.assertEqual((dict(param1=9), None), validator(dict(param1=9)))
+        self.assertEqual((dict(param1=9), None), validator(dict(param1='9')))
 
         # More than Expectation
         with self.assertRaises(HttpBadRequest):
             validator(dict(param1=11))
+
+        # Not int input
+        with self.assertRaises(HttpBadRequest):
+            validator(dict(param1='a'))
 
     def test_validation_min(self):
 
@@ -49,8 +62,8 @@ class ValidationTestCase(unittest.TestCase):
             )
         )
 
-        self.assertEqual(dict(param1=11), validator(dict(param1=11)))
-        self.assertEqual(dict(param1=11), validator(dict(param1='11')))
+        self.assertEqual((dict(param1=11), None), validator(dict(param1=11)))
+        self.assertEqual((dict(param1=11), None), validator(dict(param1='11')))
 
         # Less than Expectation
         with self.assertRaises(HttpBadRequest):
@@ -65,9 +78,9 @@ class ValidationTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(dict(param1='abcd'), validator(dict(param1='abcd')))
-        self.assertEqual(dict(param1='abc'), validator(dict(param1='abc')))
-        self.assertEqual(dict(param1='1234'), validator(dict(param1=1234)))
+        self.assertEqual((dict(param1='abcd'), None), validator(dict(param1='abcd')))
+        self.assertEqual((dict(param1='abc'), None), validator(dict(param1='abc')))
+        self.assertEqual((dict(param1='1234'), None), validator(dict(param1=1234)))
 
         # Shorter than Expectation
         with self.assertRaises(HttpBadRequest):
@@ -81,9 +94,9 @@ class ValidationTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(dict(param1='abc'), validator(dict(param1='abc')))
-        self.assertEqual(dict(param1='abcd'), validator(dict(param1='abcd')))
-        self.assertEqual(dict(param1='1234'), validator(dict(param1=1234)))
+        self.assertEqual((dict(param1='abc'), None), validator(dict(param1='abc')))
+        self.assertEqual((dict(param1='abcd'), None), validator(dict(param1='abcd')))
+        self.assertEqual((dict(param1='1234'), None), validator(dict(param1=1234)))
 
         # Longer than Expectation
         with self.assertRaises(HttpBadRequest):
@@ -98,7 +111,7 @@ class ValidationTestCase(unittest.TestCase):
             )
         )
 
-        self.assertEqual(dict(param1='abcdeFGHIJ'), validator(dict(param1='abcdeFGHIJ')))
+        self.assertEqual((dict(param1='abcdeFGHIJ'), None), validator(dict(param1='abcdeFGHIJ')))
 
         # Param1 not matching
         with self.assertRaises(HttpBadRequest):
@@ -114,7 +127,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         self.assertEqual(
-            dict(param1='0123456789'), validator(dict(param1='0123456789'))
+            (dict(param1='0123456789'), None), validator(dict(param1='0123456789'))
         )
 
         # Param1 not matching
@@ -134,12 +147,43 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         self.assertEqual(
-            dict(param1=123, param2='123'), validator(dict(param1='123', param2=123))
+            (dict(param1=123, param2='123'), None), validator(dict(param1='123', param2=123))
         )
 
         # Param1 bad value(Cannot be converted to int)
         with self.assertRaises(HttpBadRequest):
             validator(dict(param1='str', param2='str'))
+
+    def test_validation_accept(self):
+
+        # Accept query_string
+        validator = ActionValidator(
+            fields=dict(
+                param1=dict(
+                    accept=['query_string']
+                ),
+            )
+        )
+
+        self.assertEqual(
+            (None, dict(param1='value')), validator(query_string=dict(param1='value'))
+        )
+
+        # Send in Form
+        with self.assertRaises(HttpBadRequest):
+            validator(dict(param1='value'))
+
+        # Accept form
+        validator = ActionValidator(
+            fields=dict(
+                param1=dict(
+                    accept=['form']
+                ),
+            )
+        )
+        # Send in query_string
+        with self.assertRaises(HttpBadRequest):
+            validator(query_string = dict(param1='value'))
 
 
 if __name__ == '__main__':  # pragma: no cover
