@@ -6,11 +6,27 @@ from nanohttp.exceptions import HttpBadRequest
 
 class ActionValidator:
     def __init__(self, fields):
+        default = dict(
+            required=False,
+            form=True,
+            query_string=False
+        )
+
+        for field_name in fields:
+            default_copy = default.copy()
+            default_copy.update(fields[field_name])
+            fields[field_name] = default_copy
+
         self.fields = fields
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
         for field_name in self.fields:
-            self.validate_field(field_name, form, query_string)
+            if form and self.fields[field_name]['form']:
+                self.validate_field(field_name, form)
+
+            if query_string and self.fields[field_name]['query_string']:
+                self.validate_field(field_name, query_string)
+
         return form, query_string
 
     def validate_type(self, field, value):
@@ -59,33 +75,17 @@ class ActionValidator:
                 raise HttpBadRequest()
         return value
 
-    def validate_field(self, field, form, query_string):
+    def validate_field(self, field, container):
         """
-        :param field: A dictionary of {field_name: validation_specification}
-        :param form: A dictionary of request body that will be validate according to the above specification
-        :param query_string: A dictionary of request query string that will be validate according to the above
-            specification
+        :param field: A field_name that should be validate with self.fields specification
+        :param container: A dictionary that will be validate according to the above specification
         """
 
         specification = self.fields.get(field)
-        accept_specification = specification.get('accept', 'form')
-        accept_specification = set(accept_specification) if type(accept_specification) is list \
-            else {accept_specification}
 
-        if form and 'form' not in accept_specification and field in form:
-            raise HttpBadRequest()
-        elif query_string and 'query_string' not in accept_specification and field in query_string:
-            raise HttpBadRequest()
-        else:
-            if form and field in form:
-                value, parent = (form[field], 'form')
-            elif query_string and field in query_string:
-                value, parent = (query_string[field], 'query_string')
-            else:
-                value, parent = (None, None)
-
+        value = container.get(field)
         if not value:
-            if specification.get('required', False):
+            if specification['required']:
                 raise HttpBadRequest()
             return
 
@@ -93,7 +93,7 @@ class ActionValidator:
         value = self.validate_length(field, value)
         value = self.validate_range(field, value)
         value = self.validate_pattern(field, value)
-        locals()[parent][field] = value
+        container[field] = value
 
 
 def validate(fields):  # pragma: no cover

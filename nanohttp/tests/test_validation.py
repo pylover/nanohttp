@@ -30,7 +30,9 @@ class ValidationTestCase(unittest.TestCase):
                 )
             )
         )
-        self.assertEqual(({}, None), validator({}))
+
+        # Send another param
+        self.assertEqual((dict(another_param='value'), None), validator(dict(another_param='value')))
 
     def test_validation_max(self):
 
@@ -154,13 +156,13 @@ class ValidationTestCase(unittest.TestCase):
         with self.assertRaises(HttpBadRequest):
             validator(dict(param1='str', param2='str'))
 
-    def test_validation_accept(self):
+    def test_validation_query_string(self):
 
         # Accept query_string
         validator = ActionValidator(
             fields=dict(
                 param1=dict(
-                    accept=['query_string']
+                    query_string=True
                 ),
             )
         )
@@ -168,22 +170,6 @@ class ValidationTestCase(unittest.TestCase):
         self.assertEqual(
             (None, dict(param1='value')), validator(query_string=dict(param1='value'))
         )
-
-        # Send in Form
-        with self.assertRaises(HttpBadRequest):
-            validator(dict(param1='value'))
-
-        # Accept form
-        validator = ActionValidator(
-            fields=dict(
-                param1=dict(
-                    accept=['form']
-                ),
-            )
-        )
-        # Send in query_string
-        with self.assertRaises(HttpBadRequest):
-            validator(query_string = dict(param1='value'))
 
 
 if __name__ == '__main__':  # pragma: no cover
