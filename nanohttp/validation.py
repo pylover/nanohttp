@@ -12,12 +12,11 @@ class ActionValidator:
             query_string=False
         )
 
+        self.fields = {}
         for field_name in fields:
             default_copy = default.copy()
             default_copy.update(fields[field_name])
-            fields[field_name] = default_copy
-
-        self.fields = fields
+            self.fields[field_name] = default_copy
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
         for field_name in self.fields:
@@ -77,6 +76,7 @@ class ActionValidator:
 
     def validate_field(self, field, container):
         """
+        Creates a validation based on given specification
         :param field: A field_name that should be validate with self.fields specification
         :param container: A dictionary that will be validate according to the above specification
         """
