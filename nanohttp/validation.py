@@ -1,7 +1,121 @@
-import functools
 import re
+import functools
 
 from nanohttp.exceptions import HttpBadRequest
+
+
+class Criterion:
+    def __init__(self, expression, status_code=400, status_text='Bad request'):
+        self.expression = expression
+        self.status_code = status_code
+        self.status_text = status_text
+
+    def validate(self, value):
+        raise NotImplementedError()
+
+    @classmethod
+    def create(cls, type_, expression):
+        if not isinstance(expression, tuple):
+            expression = (expression, )
+
+        return {
+            'required': RequiredCriterion,
+            'type': TypeCriterion,
+            'min_length': MinLengthCriterion,
+            'max_length': MaxLengthCriterion,
+            'min': MinCriterion,
+            'max': MaxCriterion,
+            'pattern': PatternCriterion,
+        }[type_](*expression)
+
+
+class RequiredCriterion(Criterion):
+
+    def validate(self, value):
+        if not value:
+            if self.expression:
+                raise HttpBadRequest()
+        return value
+
+
+class TypeCriterion(Criterion):
+
+    def validate(self, value):
+        try:
+            return self.expression(value)
+        except ValueError:
+            raise HttpBadRequest()
+
+
+class MinLengthCriterion(Criterion):
+
+    def validate(self, value):
+        value = str(value)
+        if len(value) < self.expression:
+            raise HttpBadRequest()
+        return value
+
+
+class MaxLengthCriterion(Criterion):
+
+    def validate(self, value):
+        value = str(value)
+        if len(value) > self.expression:
+            raise HttpBadRequest()
+        return value
+
+
+class MinCriterion(Criterion):
+
+    def validate(self, value):
+        try:
+            value = int(value)
+            if value < self.expression:
+                raise HttpBadRequest()
+        except ValueError:
+            raise HttpBadRequest()
+        else:
+            return value
+
+
+class MaxCriterion(Criterion):
+
+    def validate(self, value):
+        try:
+            value = int(value)
+            if value > self.expression:
+                raise HttpBadRequest()
+        except ValueError:
+            raise HttpBadRequest()
+        else:
+            return value
+
+
+class PatternCriterion(Criterion):
+
+    def validate(self, value):
+        pattern = re.compile(self.expression) if isinstance(self.expression, str) else self.expression
+        if pattern.match(value) is None:
+            raise HttpBadRequest()
+        return value
+
+
+class Field:
+    def __init__(self, title, form=True, query_string=False, **specification):
+        self.title = title
+        self.form = form
+        self.query_string = query_string
+        self.criteria = []
+        for key, expression in specification.items():
+            self.criteria.append(Criterion.create(key, expression))
+
+    def validate(self, container):
+        for criterion in self.criteria:
+            result = criterion.validate(container.get(self.title) if container else None)
+            if self.title in container:
+                container[self.title] = result
+
+        return container
 
 
 class ActionValidator:
@@ -12,88 +126,22 @@ class ActionValidator:
             query_string=False
         )
 
+        # Merging default specification
         self.fields = {}
-        for field_name in fields:
+        for field_name, specification in fields.items():
             default_copy = default.copy()
             default_copy.update(fields[field_name])
-            self.fields[field_name] = default_copy
+            self.fields[field_name] = Field(field_name, **specification)
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
-        for field_name in self.fields:
-            if form and self.fields[field_name]['form']:
-                self.validate_field(field_name, form)
+        for field_name, field in self.fields.items():
+            if form and field.form:
+                form = field.validate(form)
 
-            if query_string and self.fields[field_name]['query_string']:
-                self.validate_field(field_name, query_string)
+            if query_string and field.query_string:
+                query_string = field.validate(query_string)
 
         return form, query_string
-
-    def validate_type(self, field, value):
-        specification = self.fields.get(field)
-        if 'type' in specification:
-            try:
-                return specification.get('type')(value)
-            except ValueError:
-                raise HttpBadRequest()
-        return value
-
-    def validate_length(self, field, value):
-        specification = self.fields.get(field)
-        if 'min_length' in specification:
-            value = str(value)
-            if len(value) < specification.get('min_length'):
-                raise HttpBadRequest()
-        if 'max_length' in specification:
-            value = str(value)
-            if len(value) > specification.get('max_length'):
-                raise HttpBadRequest()
-        return value
-
-    def validate_range(self, field, value):
-        specification = self.fields.get(field)
-        try:
-            if 'min' in specification:
-                value = int(value)
-                if value < specification.get('min'):
-                    raise HttpBadRequest()
-            if 'max' in specification:
-                value = int(value)
-                if value > specification.get('max'):
-                    raise HttpBadRequest()
-        except ValueError:
-            raise HttpBadRequest()
-        else:
-            return value
-
-    def validate_pattern(self, field, value):
-        specification = self.fields.get(field)
-        if 'pattern' in specification:
-            desired_pattern = specification.get('pattern')
-            pattern = re.compile(desired_pattern) if isinstance(desired_pattern, str) else desired_pattern
-            if pattern.match(value) is None:
-                raise HttpBadRequest()
-        return value
-
-    def validate_field(self, field, container):
-        """
-        Creates a validation based on given specification
-        :param field: A field_name that should be validate with self.fields specification
-        :param container: A dictionary that will be validate according to the above specification
-        """
-
-        specification = self.fields.get(field)
-
-        value = container.get(field)
-        if not value:
-            if specification['required']:
-                raise HttpBadRequest()
-            return
-
-        value = self.validate_type(field, value)
-        value = self.validate_length(field, value)
-        value = self.validate_range(field, value)
-        value = self.validate_pattern(field, value)
-        container[field] = value
 
 
 def validate(fields):  # pragma: no cover
