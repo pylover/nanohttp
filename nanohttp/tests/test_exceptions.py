@@ -3,7 +3,7 @@ import unittest
 
 import ujson
 
-from nanohttp import Controller, html, HttpBadRequest, json
+from nanohttp import Controller, html, HttpBadRequest, json, HttpCustomStatus
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -18,6 +18,10 @@ class ExceptionTestCase(WsgiAppTestCase):
         def data(self):
             raise HttpBadRequest(reason='blah blah')
 
+        @json
+        def custom(self):
+            raise HttpCustomStatus(status_code=462, status_text='custom text', info='custom info')
+
         @html
         def err(self):
             x = 1 / 0
@@ -27,7 +31,7 @@ class ExceptionTestCase(WsgiAppTestCase):
         response, content = self.assert_get('/', status=400)
         self.assertIn('x-reason', response)
         self.assertEqual(response['x-reason'], 'blah blah')
-        
+
         response, content = self.assert_get('/data', status=400)
         self.assertIn('x-reason', response)
         self.assertEqual(response['x-reason'], 'blah blah')
@@ -39,6 +43,13 @@ class ExceptionTestCase(WsgiAppTestCase):
         response, content = self.assert_get('/err', status=500)
         self.assertIsNotNone(content)
         self.assertIsNotNone(response.reason)
+
+    def test_custom_exception(self):
+        response, content = self.assert_get('/custom', status=462)
+        self.assertDictEqual(ujson.loads(content), {
+            'description': 'custom info',
+            'message': 'custom text'
+        })
 
 
 if __name__ == '__main__':  # pragma: no cover
