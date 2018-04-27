@@ -30,13 +30,13 @@ A very micro HTTP framework.
 Features
 --------
 
-- Very simple, less-code & fast.
-- Using object dispatcher instead of regex route dispatcher.
-- Url-Encoded, Multipart and JSON form parsing.
-- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
+- Very simple, less-code & fast
+- Using object dispatcher instead of regex route dispatcher
+- Url-Encoded, Multipart and JSON form parsing
+- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
-- Method(verb) dispatcher.
+- Method(verb) dispatcher
 
 Contents
 --------
