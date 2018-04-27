@@ -157,6 +157,11 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+autodoc_default_flags = [
+    'members',
+    'show-inheritance',
+]
+
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
