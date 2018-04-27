@@ -5,11 +5,95 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="svg4153"
-   viewBox="0 0 57.904397 64.999992"
-   height="18.344442mm"
-   width="16.341908mm">
+   viewBox="0 0 243.75 243.75002"
+   height="260"
+   width="260"
+   sodipodi:docname="favicon.svg"
+   inkscape:version="0.92.1 r15371"
+   inkscape:export-filename="/home/dobby/works-dev/nanohttp/stuff/favicon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     id="namedview9"
+     showgrid="false"
+     units="px"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:zoom="2"
+     inkscape:cx="152.53376"
+     inkscape:cy="84.241465"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-global="true">
+    <sodipodi:guide
+       position="9.373999,201.97601"
+       orientation="1,0"
+       id="guide4486"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="52.983401,234.37501"
+       orientation="0,1"
+       id="guide4488"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-1.8750001,9.3750004"
+       orientation="0,1"
+       id="guide4492"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="234.37501,210.0586"
+       orientation="1,0"
+       id="guide4494"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="121.87499,225.43431"
+       orientation="1,0"
+       id="guide4496"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-57.649625,121.87499"
+       orientation="0,1"
+       id="guide4498"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="18.750001,210.0586"
+       orientation="1,0"
+       id="guide4534"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="225.00001,216.53321"
+       orientation="1,0"
+       id="guide4536"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="70.312503,222.42188"
+       orientation="1,0"
+       id="guide4538"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="173.4375,286.40627"
+       orientation="1,0"
+       id="guide4540"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
   <defs
      id="defs4155" />
   <metadata
@@ -25,19 +109,23 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(1354.6665,-97.005066)"
-     id="layer1">
+     transform="matrix(3.4623635,0,0,3.4623635,4711.9798,-326.51859)"
+     id="layer1"
+     style="stroke-width:0.28882003">
     <path
-       d="m -1296.7621,145.75509 -28.9522,16.24997 -28.9522,-16.24997 0,-32.49999 28.9522,-16.250034 28.9522,16.250034 z"
+       d="m -1295.9297,145.75509 -29.7846,16.24997 -29.7845,-16.24997 V 113.2551 l 29.7845,-16.250034 29.7846,16.250034 z"
        id="path4144"
-       style="opacity:1;fill:#ff0066;fill-opacity:1;stroke:none;stroke-width:0.12318316;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#ff0066;fill-opacity:1;stroke:none;stroke-width:0.03557776;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:connector-curvature="0" />
     <path
-       d="m -1332.3905,142.63006 4.7797,0 0,-21.3027 q 0,-4.6973 -5.851,-4.6973 l -10.8368,0 q -5.851,0 -5.851,4.6973 l 0,21.3027 4.7385,0 0,-20.47861 q 0,-0.74166 1.5658,-0.74166 l 9.889,0 q 1.5658,0 1.5658,0.74166 l 0,20.47861 z"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:47.75328445px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:2.38766432px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       id="path4224-6" />
+       d="m -1334.1169,142.50506 h 4.7797 v -21.3027 q 0,-4.6973 -5.851,-4.6973 h -10.8368 q -5.851,0 -5.851,4.6973 v 21.3027 h 4.7385 v -20.47861 q 0,-0.74166 1.5658,-0.74166 h 9.889 q 1.5658,0 1.5658,0.74166 z"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:47.75328445px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:2.38766432px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.28882003px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="path4224-6"
+       inkscape:connector-curvature="0" />
     <path
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.76984596px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:-3.43325996px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m -1301.4886,142.62538 -0.012,0 0,-25.99478 -4.7116,0 0,10.58885 -12.6255,0 0,-10.58885 -4.5171,0 0,25.99946 4.5171,0 0,-10.58885 12.6255,0 0,10.58885 4.7156,0 0,-0.005 z"
-       id="path4212" />
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:22.76984596px;line-height:108.00000429%;font-family:'Radio Space Bold';-inkscape-font-specification:'Radio Space Bold, Bold';text-align:end;letter-spacing:-3.43325996px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.28882003px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -1299.8889,142.50011 h -0.012 v -25.99478 h -4.7116 v 10.58885 h -12.6255 v -10.58885 h -4.5171 v 25.99946 h 4.5171 v -10.58885 h 12.6255 v 10.58885 h 4.7156 v -0.005 z"
+       id="path4212"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
