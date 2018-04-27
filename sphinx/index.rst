@@ -23,6 +23,10 @@
 .. image:: https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&label=Star
      :target: https://github.com/Carrene/nanohttp
 
+nanohttp
+--------
+A very micro HTTP framework.
+
 Features
 --------
 
