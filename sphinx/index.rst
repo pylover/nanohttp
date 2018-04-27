@@ -37,6 +37,7 @@ Features
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
 - Method(verb) dispatcher
+- Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ arguments for query strings (>= 0.24.0)
 
 Contents
 --------
