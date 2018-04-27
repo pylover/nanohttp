@@ -6,8 +6,9 @@ Some more knowledge about nanohttp.
 .. toctree::
     :maxdepth: 2
 
-    examples
+    cli
     templates
     testing
-    deploy
     beginners
+    examples
+    deploy
