@@ -2,6 +2,8 @@
 import threading
 import wsgiref.util
 import wsgiref.headers
+
+from typing import Union
 from urllib.parse import parse_qs
 from http.cookies import SimpleCookie
 
@@ -25,12 +27,43 @@ class ContextStack(list):
 
 # FIXME: use __slots__
 class Context:
+    """
+    A Global context for Request and Response.
+
+    Context are initialized and entering on every request (referring to nanohttp application lifecycle).
+
+    Context also supports to use stack nested (>=0.16.6), its useful on testing.
+
+    .. code-block:: python
+
+        def sample:
+            return context.query_string['weather']
+
+        with Context({'QUERY_STRING': 'weather=Sunny'}):
+            assert sample() == 'Sunny
+
+            with Context({'QUERY_STRING': 'weather=Rainy'}):
+                assert sample() == 'Rainy'
+
+    """
+
+    #: Response encoding
     response_encoding = None
+
+    #: Thread local variable contexts stored in
     thread_local = threading.local()
+
+    #: Current :class:`.Application` instance
     application = None
+
+    #: Nested contexts stack
     __stack__ = ContextStack()
 
     def __init__(self, environ, application=None):
+        """
+        :param environ: WSGI environ dictionary
+        :param application: :class:`.Application` instance
+        """
         self.environ = environ
         self.application = application
         self.response_headers = wsgiref.headers.Headers()
@@ -49,19 +82,22 @@ class Context:
             self.thread_local.nanohttp_context = self.__stack__.pop()
 
     @LazyAttribute
-    def request_content_length(self):
+    def request_content_length(self) -> Union[int, None]:
+        """ Request content length """
         v = self.environ.get('CONTENT_LENGTH')
         return None if not v or not v.strip() else int(v)
 
     @LazyAttribute
-    def request_content_type(self):
+    def request_content_type(self) -> Union[str, None]:
+        """ Request content type """
         content_type = self.environ.get('CONTENT_TYPE')
         if content_type:
             return content_type.split(';')[0]
         return None
 
     @property
-    def response_content_type(self):
+    def response_content_type(self) -> Union[str, None]:
+        """ Response content type property """
         content_type = self.response_headers.get('Content-Type')
         if content_type:
             return content_type.split(';')[0]
@@ -75,29 +111,38 @@ class Context:
             self.response_headers['Content-Type'] = '%s; charset=%s' % (v, self.response_encoding)
 
     @classmethod
-    def get_current(cls):
+    def get_current(cls) -> 'Context':
+        """ Get current context
+
+            Not initialized context raises :class:`.ContextIsNotInitializedError`,
+        """
         if not hasattr(cls.thread_local, 'nanohttp_context'):
             raise ContextIsNotInitializedError("Context is not initialized yet.")
         return cls.thread_local.nanohttp_context
 
     @LazyAttribute
     def method(self):
+        """ `HTTP Request method <https://tools.ietf.org/html/rfc7231#section-4.3>`_ """
         return self.environ['REQUEST_METHOD'].lower()
 
     @LazyAttribute
     def path(self):
+        """ Request path """
         return self.environ['PATH_INFO']
 
     @LazyAttribute
     def request_uri(self):
+        """ Request full URI (includes query string)"""
         return wsgiref.util.request_uri(self.environ, include_query=True)
 
     @LazyAttribute
     def request_scheme(self):
+        """ Request Scheme (http|https) """
         return wsgiref.util.guess_scheme(self.environ)
 
     @LazyAttribute
     def query_string(self):
+        """ Request query string """
         if 'QUERY_STRING' not in self.environ:
             return {}
 
@@ -109,6 +154,11 @@ class Context:
 
     @LazyAttribute
     def form(self):
+        """
+        Request form values
+
+        .. note:: if using `multipart/form-data` uploaded file will reproduce as ``cgi.FieldStorage``.
+        """
         return parse_any_form(
             self.environ,
             content_length=self.request_content_length,
@@ -116,13 +166,15 @@ class Context:
         )
 
     @LazyAttribute
-    def cookies(self):
+    def cookies(self) -> 'SimpleCookie':
+        """ Cookies """
         result = SimpleCookie()
         if 'HTTP_COOKIE' in self.environ:
             result.load(self.environ['HTTP_COOKIE'])
         return result
 
     def encode_response(self, buffer):
+        """ Encode response buffer with encoding definition on current context """
         try:
             if self.response_encoding:
                 return buffer.encode(self.response_encoding)
