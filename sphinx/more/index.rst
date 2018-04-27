@@ -10,5 +10,4 @@ Some more knowledge about nanohttp.
     templates
     testing
     deploy
-    faq
     beginners

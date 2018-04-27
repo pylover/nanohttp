@@ -47,7 +47,6 @@ Contents
 
    installation/index
    guide/index
-   tutorials/index
    api/index
    development/index
    more/index
