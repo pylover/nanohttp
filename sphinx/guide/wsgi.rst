@@ -22,13 +22,8 @@ this sample show you how to use it:
         def index(self):
             return '<h1>HelloWorld!</h1>'
 
-
-    class MyApplication(Application):
-        __root__ = RootController()
-
-
     configure()
-    app = MyApplication()
+    app = Application(root=RootController())
 
 
 We need a `WSGI server <https://www.fullstackpython.com/wsgi-servers.html>`_
