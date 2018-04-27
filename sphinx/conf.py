@@ -89,15 +89,6 @@ todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = 'sphinx_rtd_theme'
-html_favicon = '../stuff/favicon.ico'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-html_theme_options = {
-    'logo_only': True
-}
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
@@ -169,7 +160,13 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
 
-html_title = ''
-# html_short_title =
+# The theme to use for HTML and HTML Help pages
+html_title = 'nanohttp Documentation'
+html_theme = 'sphinx_rtd_theme'
+html_favicon = '../stuff/favicon.ico'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme_options = {
+    'logo_only': True
+}
 html_show_sourcelink = False
 html_logo = '../stuff/logo.svg'
