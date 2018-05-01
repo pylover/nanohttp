@@ -13,14 +13,32 @@ logger = logging.getLogger('nanohttp')
 
 
 class Application:
+    """ Application main handler """
+
+    #: Application logger based on python builtin logging module
     __logger__ = logger
+
+    #: The root controller
     __root__ = None
 
     def __init__(self, root=None):
+        """
+        Initialize application and calling ``app_init`` hook.
+
+        .. note:: ``__root__`` attribute will set by ``root`` parameter.
+
+        :param root: The root controller
+        """
         self.__root__ = root
         self._hook('app_init')
 
     def _hook(self, name, *args, **kwargs):
+        """ Call the hook
+
+        :param name: Hook name
+        :param args: Pass to the hook positional arguments
+        :param kwargs: Pass to the hook keyword arguments
+        """
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
@@ -39,6 +57,7 @@ class Application:
         raise ex
 
     def __call__(self, environ, start_response):
+        """ Method that `WSGI <https://www.python.org/dev/peps/pep-0333/#id15>`_ server calls """
         # Entering the context
         ctx = Context(environ, self)
         ctx.__enter__()

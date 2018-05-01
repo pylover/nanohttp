@@ -17,6 +17,8 @@ UNLIMITED = -1
 
 
 class Controller(object):
+    """ Base Controller """
+
     __nanohttp__ = dict(
         verbs='any',
         encoding='utf8',
@@ -84,7 +86,9 @@ class Controller(object):
 
 
 class RestController(Controller):
-
+    """
+    HTTP method oriented controller
+    """
     def _find_handler(self, remaining_paths):
         if remaining_paths and hasattr(self, remaining_paths[0]):
             return getattr(self, remaining_paths[0], None), remaining_paths[1:]
@@ -97,6 +101,9 @@ class RestController(Controller):
 
 
 class Static(Controller):
+    """
+    Serves static files
+    """
     __nanohttp__ = dict(
         verbs='any',
         encoding=None,
@@ -106,6 +113,10 @@ class Static(Controller):
     __chunk_size__ = 0x4000
 
     def __init__(self, directory='.', default_document='index.html'):
+        """
+        :param directory: Directory path to server
+        :param default_document: Default document to serve as index
+        """
         self.default_document = default_document
         self.directory = directory
 
@@ -152,23 +163,28 @@ class RegexRouteController(Controller):
     """
     This is how to use it:
 
-    class Root(RegexRouteController):
+    .. code-block:: python
 
-        def __init__(self):
-            super().__init__((
-                ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
-            ))
+        class Root(RegexRouteController):
 
-        @json
-        def access_tokens(self, installation_id: int):
-            return dict(
-                installationId=installation_id
-            )
+            def __init__(self):
+                super().__init__((
+                    ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
+                ))
+
+            @json
+            def access_tokens(self, installation_id: int):
+                return dict(
+                    installationId=installation_id
+                )
 
 
     """
 
     def __init__(self, routes):
+        """
+        :param routes: Routes list in (regex, method) format
+        """
         self.routes = [(re.compile(p), a) for p, a in routes]
 
     def _find_handler(self, remaining_paths):

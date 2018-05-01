@@ -1,11 +1,21 @@
 import ujson
 import functools
+from typing import Union
 from inspect import signature, Parameter
 
 from .contexts import context
 
 
-def action(*args, verbs='any', encoding='utf-8', content_type=None, inner_decorator=None, **kwargs):
+def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
+           content_type: Union[str, None]=None, inner_decorator: Union[callable, None]=None, **kwargs):
+    """
+    Base action decorator
+
+    :param verbs: Allowed HTTP methods
+    :param encoding: Content encoding
+    :param content_type: Content Type
+    :param inner_decorator: Inner decorator
+    """
     def decorator(func):
 
         if inner_decorator is not None:
@@ -60,14 +70,26 @@ def jsonify(func):
     return wrapper
 
 
+#: HTML action decorator
 html = functools.partial(action, content_type='text/html')
+
+#: Plain Text action decorator
 text = functools.partial(action, content_type='text/plain')
+
+#: JSON action decorator
+#:
+#: accepts list, dict, int, str or objects have ``to_dict`` method.
 json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
+
+#: XML action decorator
 xml = functools.partial(action, content_type='application/xml')
+
+#: Binary-data action decorator
 binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
 
 
-def ifmatch(tag):
+def ifmatch(tag: Union[str, int, callable]):
+    """ Validate ``If-Match`` header with given tag argument """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -77,7 +99,12 @@ def ifmatch(tag):
     return decorator
 
 
-def etag(*args, tag=None):
+def etag(*args, tag: Union[str, int, callable, None]=None):
+    """
+    Validate ``If-None-Match`` and response with ``ETag`` header
+
+    tag is getting from ``tag`` argument or response object ``__etag__`` attribute
+    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*a, **kw):
