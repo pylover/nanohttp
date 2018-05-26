@@ -1,22 +1,30 @@
 import re
 import functools
 
-from nanohttp.exceptions import HttpBadRequest
+from nanohttp.exceptions import HttpStatus, HttpBadRequest
 
 
 class Criterion:
     def __init__(self, expression, status_code=400, status_text='Bad request'):
         self.expression = expression
-        self.status_code = status_code
+        self.status_code = int(status_code)
         self.status_text = status_text
 
     def validate(self, value):
         raise NotImplementedError()
 
+    def create_exception(self):
+        if self.status_code == 400 and self.status_text == 'Bad request':
+            return HttpBadRequest
+
+        return HttpStatus(status_code=self.status_code, status_text=self.status_text)
+    
     @classmethod
     def create(cls, type_, expression):
         if not isinstance(expression, tuple):
             expression = (expression, )
+        else:
+            expression = (expression[0], *expression[1].split(' ', 1))
 
         return {
             'required': RequiredCriterion,
@@ -34,7 +42,7 @@ class RequiredCriterion(Criterion):
     def validate(self, value):
         if not value:
             if self.expression:
-                raise HttpBadRequest()
+                raise self.create_exception()
         return value
 
 
@@ -44,7 +52,7 @@ class TypeCriterion(Criterion):
         try:
             return self.expression(value)
         except ValueError:
-            raise HttpBadRequest()
+            raise self.create_exception()
 
 
 class MinLengthCriterion(Criterion):
@@ -52,7 +60,7 @@ class MinLengthCriterion(Criterion):
     def validate(self, value):
         value = str(value)
         if len(value) < self.expression:
-            raise HttpBadRequest()
+            raise self.create_exception()
         return value
 
 
@@ -61,7 +69,7 @@ class MaxLengthCriterion(Criterion):
     def validate(self, value):
         value = str(value)
         if len(value) > self.expression:
-            raise HttpBadRequest()
+            raise self.create_exception()
         return value
 
 
@@ -71,9 +79,9 @@ class MinCriterion(Criterion):
         try:
             value = int(value)
             if value < self.expression:
-                raise HttpBadRequest()
+                raise self.create_exception()
         except ValueError:
-            raise HttpBadRequest()
+            raise self.create_exception()
         else:
             return value
 
@@ -84,9 +92,9 @@ class MaxCriterion(Criterion):
         try:
             value = int(value)
             if value > self.expression:
-                raise HttpBadRequest()
+                raise self.create_exception()
         except ValueError:
-            raise HttpBadRequest()
+            raise self.create_exception()
         else:
             return value
 
@@ -96,7 +104,7 @@ class PatternCriterion(Criterion):
     def validate(self, value):
         pattern = re.compile(self.expression) if isinstance(self.expression, str) else self.expression
         if pattern.match(value) is None:
-            raise HttpBadRequest()
+            raise self.create_exception()
         return value
 
 

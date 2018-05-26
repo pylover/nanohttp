@@ -1,7 +1,7 @@
 import unittest
 import re
 
-from nanohttp import HttpBadRequest
+from nanohttp import HttpBadRequest, HttpStatus
 from nanohttp.validation import ActionValidator
 
 
@@ -170,6 +170,28 @@ class ValidationTestCase(unittest.TestCase):
         self.assertEqual(
             (None, dict(param1='value')), validator(query_string=dict(param1='value'))
         )
+
+    def test_validation_custom_status(self):
+        validator = ActionValidator(
+            fields=dict(
+                param1=dict(
+                    type=(int, '999 Type error'),
+                    min=(30, '666')
+                )
+            )
+        )
+
+        try:
+            validator(dict(param1='str'))
+        except HttpStatus as e:
+            self.assertEqual(e.status_code, 999)
+            self.assertEqual(e.status_text, 'Type error')
+
+        try:
+            validator(dict(param1=29))
+        except HttpStatus as e:
+            self.assertEqual(e.status_code, 666)
+            self.assertEqual(e.status_text, 'Bad request')
 
 
 if __name__ == '__main__':  # pragma: no cover
