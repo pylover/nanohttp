@@ -68,7 +68,8 @@ class Criterion:
         """
         It must be overriden in the child class.
 
-        This method should raise exception if the criterion is not met. there is a chanse to set a new value because the
+        This method should raise exception if the criterion is not met. there is a chanse to set
+        a new value because the
         container is available here.
         :param value: The value to validate
         :param field:
