@@ -143,7 +143,7 @@ Config File
 
 Create a ``demo.yml`` file. The file below is same as the default configuration.
 
-.. code-block:: yml
+.. code-block:: yaml
 
    debug: true
 
