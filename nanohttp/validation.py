@@ -4,129 +4,159 @@ import functools
 from nanohttp.exceptions import HttpStatus, HttpBadRequest
 
 
-class Criterion:
-    def __init__(self, expression, status_code=400, status_text='Bad request'):
-        self.expression = expression
-        self.status_code = int(status_code)
-        self.status_text = status_text
-
-    def validate(self, value):
-        raise NotImplementedError()
-
-    def create_exception(self):
-        if self.status_code == 400 and self.status_text == 'Bad request':
-            return HttpBadRequest
-
-        return HttpStatus(status_code=self.status_code, status_text=self.status_text)
-    
-    @classmethod
-    def create(cls, type_, expression):
-        if not isinstance(expression, tuple):
-            expression = (expression, )
-        else:
-            expression = (expression[0], *expression[1].split(' ', 1))
-
-        return {
-            'required': RequiredCriterion,
-            'type': TypeCriterion,
-            'min_length': MinLengthCriterion,
-            'max_length': MaxLengthCriterion,
-            'min': MinCriterion,
-            'max': MaxCriterion,
-            'pattern': PatternCriterion,
-        }[type_](*expression)
-
-
-class RequiredCriterion(Criterion):
-
-    def validate(self, value):
-        if not value:
-            if self.expression:
-                raise self.create_exception()
-        return value
-
-
-class TypeCriterion(Criterion):
-
-    def validate(self, value):
-        try:
-            return self.expression(value)
-        except ValueError:
-            raise self.create_exception()
-
-
-class MinLengthCriterion(Criterion):
-
-    def validate(self, value):
-        value = str(value)
-        if len(value) < self.expression:
-            raise self.create_exception()
-        return value
-
-
-class MaxLengthCriterion(Criterion):
-
-    def validate(self, value):
-        value = str(value)
-        if len(value) > self.expression:
-            raise self.create_exception()
-        return value
-
-
-class MinCriterion(Criterion):
-
-    def validate(self, value):
-        try:
-            value = int(value)
-            if value < self.expression:
-                raise self.create_exception()
-        except ValueError:
-            raise self.create_exception()
-        else:
-            return value
-
-
-class MaxCriterion(Criterion):
-
-    def validate(self, value):
-        try:
-            value = int(value)
-            if value > self.expression:
-                raise self.create_exception()
-        except ValueError:
-            raise self.create_exception()
-        else:
-            return value
-
-
-class PatternCriterion(Criterion):
-
-    def validate(self, value):
-        pattern = re.compile(self.expression) if isinstance(self.expression, str) else self.expression
-        if pattern.match(value) is None:
-            raise self.create_exception()
-        return value
-
-
 class Field:
-    def __init__(self, title, form=True, query_string=False, **specification):
+    def __init__(self, title, form=True, query_string=False, required=None, type_=None, minimum=None, maximum=None,
+                 pattern=None, min_length=None, max_length=None):
         self.title = title
         self.form = form
         self.query_string = query_string
         self.criteria = []
-        for key, expression in specification.items():
-            self.criteria.append(Criterion.create(key, expression))
+
+        if required:
+            self.criteria.append(RequiredValidator(required))
+
+        if type_:
+            self.criteria.append(TypeValidator(type_))
+
+        if minimum:
+            self.criteria.append(MinimumValidator(minimum))
+
+        if maximum:
+            self.criteria.append(MaximumValidator(maximum))
+
+        if pattern:
+            self.criteria.append(PatternValidator(pattern))
+
+        if min_length:
+            self.criteria.append(MinLengthValidator(min_length))
+
+        if max_length:
+            self.criteria.append(MaxLengthValidator(max_length))
 
     def validate(self, container):
         for criterion in self.criteria:
-            result = criterion.validate(container.get(self.title) if container else None)
-            if self.title in container:
-                container[self.title] = result
+            criterion.validate(self, container)
 
         return container
 
 
-class ActionValidator:
+class Criterion:
+    def __init__(self, expression):
+        if isinstance(expression, tuple):
+            error = expression[1]
+            self.expression = expression[0]
+        else:
+            self.expression = expression
+            error = '400 Bad request'
+
+        parsed_error = error.split(' ', 1)
+
+        self.status_code = int(parsed_error[0])
+
+        if len(parsed_error) == 2:
+            self.status_text = parsed_error[1]
+        else:
+            self.status_text = 'Bad request'
+
+    def validate(self, field: Field, container: dict) -> None:
+        value = container.get(field.title)
+        if value is None:
+            return
+        container[field.title] = self._validate(value, container, field)
+
+    def _validate(self, value, container: dict, field: Field):
+        """
+        It must be overriden in the child class.
+
+        This method should raise exception if the criterion is not met. there is a chanse to set a new value because the
+        container is available here.
+        :param value: The value to validate
+        :param field:
+        :param container:
+        :return:
+        """
+        raise NotImplementedError()
+
+    def create_exception(self):
+        if self.status_code == 400:
+            return HttpBadRequest
+
+        return HttpStatus(status_code=self.status_code, status_text=self.status_text)
+
+
+# noinspection PyAbstractClass
+class RequiredValidator(Criterion):
+
+    def validate(self, field, container):
+        if field.title not in container:
+            raise self.create_exception()
+
+
+class TypeValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        type_ = self.expression
+        try:
+            return type_(value)
+        except (ValueError, TypeError):
+            raise self.create_exception()
+
+
+class MinLengthValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        value = str(value)
+        if len(value) < self.expression:
+            raise self.create_exception()
+
+        return value
+
+
+class MaxLengthValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        value = str(value)
+        if len(value) > self.expression:
+            raise self.create_exception()
+
+        return value
+
+
+class MinimumValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        try:
+            if value < self.expression:
+                raise self.create_exception()
+        except TypeError:
+            raise self.create_exception()
+
+        return value
+
+
+class MaximumValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        try:
+            if value > self.expression:
+                raise self.create_exception()
+        except TypeError:
+            raise self.create_exception()
+
+        return value
+
+
+class PatternValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        pattern = re.compile(self.expression) if isinstance(self.expression, str) else self.expression
+        if pattern.match(value) is None:
+            raise self.create_exception()
+
+        return value
+
+
+class RequestValidator:
     def __init__(self, fields):
         default = dict(
             required=False,
@@ -155,7 +185,7 @@ class ActionValidator:
 def validate(fields):  # pragma: no cover
 
     def decorator(func):
-        validator = ActionValidator(fields)
+        validator = RequestValidator(fields)
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
