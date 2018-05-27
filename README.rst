@@ -374,8 +374,8 @@ A complete list of validation options is:
 
 - ``required``: Boolean, indicates the field is required.
 - ``type_``: A callable to pass the received value to it as the only argument and get it in the
-  apprpriate type, Both `ValueError` and `TypeError` may be raised if the value cannot casted to
-  specified type. A good example of thid callable would be the `int`.
+  apprpriate type, Both ``ValueError`` and ``TypeError`` may be raised if the value cannot casted to
+  the specified type. A good example of this callable would be the ``int``.
   
 - ``minimum``: Numeric, Minimum allowed value.
 - ``maximum``: Numeric, Maximum allowed value.
@@ -383,7 +383,7 @@ A complete list of validation options is:
 - ``min_length``: Only for strings, the minumum allowed length of the value.
 - ``max_length``: Only for strings, the maximum allowed length of the value.
 
-Values for those options can be a pair of `criteria, http status`, for example:
+Values for those options can be a pair of ``criteria, http status``, for example:
 
 .. code-block:: python
 
