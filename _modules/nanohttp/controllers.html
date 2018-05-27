@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nanohttp.controllers &mdash; nanohttp Documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.26.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../more/index.html">More</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">nanohttp</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>nanohttp.controllers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for nanohttp.controllers</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">isdir</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">relpath</span><span class="p">,</span> <span class="n">pardir</span><span class="p">,</span> <span class="n">exists</span>
+<span class="kn">from</span> <span class="nn">mimetypes</span> <span class="k">import</span> <span class="n">guess_type</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">HttpNotFound</span><span class="p">,</span> <span class="n">HttpMethodNotAllowed</span><span class="p">,</span> <span class="n">HttpForbidden</span>
+<span class="kn">from</span> <span class="nn">.contexts</span> <span class="k">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="k">import</span> <span class="n">HTTP_DATETIME_FORMAT</span>
+
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="n">UNLIMITED</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+
+<div class="viewcode-block" id="Controller"><a class="viewcode-back" href="../../api/index.html#nanohttp.controllers.Controller">[docs]</a><span class="k">class</span> <span class="nc">Controller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Base Controller &quot;&quot;&quot;</span>
+
+    <span class="n">__nanohttp__</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">verbs</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+        <span class="n">default_action</span><span class="o">=</span><span class="s1">&#39;index&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_default_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="n">default_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nanohttp__</span><span class="p">[</span><span class="s1">&#39;default_action&#39;</span><span class="p">]</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_action</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">handler</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HttpNotFound</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span>
+
+    <span class="k">def</span> <span class="nf">_find_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">remaining_paths</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="c1"># Handler is not found, trying default handler</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_default_handler</span><span class="p">(</span><span class="n">remaining_paths</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">),</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="c1"># noinspection PyMethodMayBeStatic</span>
+    <span class="k">def</span> <span class="nf">_validate_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="s1">&#39;__nanohttp__&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">HttpNotFound</span><span class="p">()</span>
+
+        <span class="c1"># noinspection PyUnresolvedReferences</span>
+        <span class="n">manifest</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span>
+
+        <span class="n">positionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;positional_arguments&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">positionals_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positionals</span><span class="p">)</span> <span class="k">if</span> <span class="n">positionals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">UNLIMITED</span>
+
+        <span class="n">optionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optional_arguments&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">optionals_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">optionals</span><span class="p">)</span> <span class="k">if</span> <span class="n">optionals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">UNLIMITED</span>
+
+        <span class="n">available_arguments</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">remaining_paths</span><span class="p">)</span>
+        <span class="n">verbs</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbs&#39;</span><span class="p">,</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">UNLIMITED</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">optionals_length</span><span class="p">,</span> <span class="n">positionals_length</span><span class="p">)</span> <span class="ow">and</span> \
+                <span class="p">(</span><span class="n">positionals_length</span> <span class="o">&gt;</span> <span class="n">available_arguments</span> <span class="ow">or</span> <span class="n">available_arguments</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">positionals_length</span> <span class="o">+</span> <span class="n">optionals_length</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">HttpNotFound</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">verbs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;any&#39;</span> <span class="ow">and</span> <span class="n">context</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">verbs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HttpMethodNotAllowed</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span>
+
+    <span class="c1"># noinspection PyMethodMayBeStatic</span>
+    <span class="k">def</span> <span class="nf">_serve_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">response_encoding</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content_type&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keywordonly_arguments&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">query_string</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">handler</span><span class="p">(</span><span class="o">*</span><span class="n">remaining_paths</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_handler</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">remaining_paths</span><span class="p">))</span>
+        <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_handler</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serve_handler</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RestController"><a class="viewcode-back" href="../../api/index.html#nanohttp.controllers.RestController">[docs]</a><span class="k">class</span> <span class="nc">RestController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HTTP method oriented controller</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_find_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">remaining_paths</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">),</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+        <span class="c1"># Handler is not found, trying verb</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">method</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">HttpMethodNotAllowed</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">method</span><span class="p">),</span> <span class="n">remaining_paths</span></div>
+
+
+<div class="viewcode-block" id="Static"><a class="viewcode-back" href="../../api/index.html#nanohttp.controllers.Static">[docs]</a><span class="k">class</span> <span class="nc">Static</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Serves static files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__nanohttp__</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">verbs</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">,</span>
+        <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">default_action</span><span class="o">=</span><span class="s1">&#39;index&#39;</span>
+    <span class="p">)</span>
+
+    <span class="n">__chunk_size__</span> <span class="o">=</span> <span class="mh">0x4000</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">default_document</span><span class="o">=</span><span class="s1">&#39;index.html&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param directory: Directory path to server</span>
+<span class="sd">        :param default_document: Default document to serve as index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_document</span> <span class="o">=</span> <span class="n">default_document</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">remaining_paths</span><span class="p">):</span>
+
+        <span class="c1"># Find the physical path of the given path parts</span>
+        <span class="n">physical_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="o">*</span><span class="n">remaining_paths</span><span class="p">)</span>
+
+        <span class="c1"># Check to do not access the parent directory of root and also we are not listing directories here.</span>
+        <span class="k">if</span> <span class="n">pardir</span> <span class="ow">in</span> <span class="n">relpath</span><span class="p">(</span><span class="n">physical_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">HttpForbidden</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">isdir</span><span class="p">(</span><span class="n">physical_path</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_document</span><span class="p">:</span>
+                <span class="n">physical_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">physical_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_document</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">(</span><span class="n">physical_path</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">HttpForbidden</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HttpForbidden</span><span class="p">()</span>
+
+        <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="n">guess_type</span><span class="p">(</span><span class="n">physical_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">physical_path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">fstat</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Content-Length&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">stat</span><span class="p">[</span><span class="mi">6</span><span class="p">]))</span>
+            <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span>
+                <span class="s1">&#39;Last-Modified&#39;</span><span class="p">,</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">HTTP_DATETIME_FORMAT</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">stat</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">))</span>
+            <span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__chunk_size__</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">yield</span> <span class="n">r</span>
+
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HttpNotFound</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="RegexRouteController"><a class="viewcode-back" href="../../api/index.html#nanohttp.controllers.RegexRouteController">[docs]</a><span class="k">class</span> <span class="nc">RegexRouteController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is how to use it:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        class Root(RegexRouteController):</span>
+
+<span class="sd">            def __init__(self):</span>
+<span class="sd">                super().__init__((</span>
+<span class="sd">                    (&#39;/installations/(?P&lt;installation_id&gt;\d+)/access_tokens&#39;, self.access_tokens),</span>
+<span class="sd">                ))</span>
+
+<span class="sd">            @json</span>
+<span class="sd">            def access_tokens(self, installation_id: int):</span>
+<span class="sd">                return dict(</span>
+<span class="sd">                    installationId=installation_id</span>
+<span class="sd">                )</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">routes</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param routes: Routes list in (regex, method) format</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">[(</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">routes</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_find_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remaining_paths</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">handler</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">handler</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">HttpNotFound</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Vahid Mardani.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.26.3',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

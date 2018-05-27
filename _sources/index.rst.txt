@@ -23,16 +23,21 @@
 .. image:: https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&label=Star
      :target: https://github.com/Carrene/nanohttp
 
+nanohttp
+--------
+A very micro HTTP framework.
+
 Features
 --------
 
-- Very simple, less-code & fast.
-- Using object dispatcher instead of regex route dispatcher.
-- Url-Encoded, Multipart and JSON form parsing.
-- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
+- Very simple, less-code & fast
+- Using object dispatcher instead of regex route dispatcher
+- Url-Encoded, Multipart and JSON form parsing
+- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``
 - A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
 - Dispatching arguments using the `obj.__annonations__ <https://docs.python.org/3/library/typing.html>`_
-- Method(verb) dispatcher.
+- Method(verb) dispatcher
+- Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ arguments for query strings (>= 0.24.0)
 
 Contents
 --------
@@ -42,7 +47,6 @@ Contents
 
    installation/index
    guide/index
-   tutorials/index
    api/index
    development/index
    more/index

@@ -8,10 +8,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Features</title>
+  <title>nanohttp &mdash; nanohttp Documentation</title>
   
 
   
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
   
   
   
@@ -25,18 +27,11 @@
   
 
   
-  
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="" href="#"/>
-        <link rel="next" title="Installation" href="installation/index.html"/>
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation/index.html" />
     <link href="_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -45,7 +40,7 @@
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -62,7 +57,7 @@
 
           
             
-            <img src="_static/logo.svg" class="logo" />
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -70,7 +65,7 @@
             
             
               <div class="version">
-                0.1.13
+                0.26.3
               </div>
             
           
@@ -97,7 +92,6 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="more/index.html">More</a></li>
@@ -112,7 +106,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="#">nanohttp</a>
@@ -120,9 +114,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -145,7 +140,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Features</li>
+      <li>nanohttp</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -168,16 +163,21 @@
 <a class="reference external image-reference" href="https://gitter.im/Carrene/nanohttp"><img alt="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" src="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/Carrene/nanohttp/fork"><img alt="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" src="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" /></a>
 <a class="reference external image-reference" href="https://github.com/Carrene/nanohttp"><img alt="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" src="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" /></a>
+<div class="section" id="nanohttp">
+<h1>nanohttp<a class="headerlink" href="#nanohttp" title="Permalink to this headline">¶</a></h1>
+<p>A very micro HTTP framework.</p>
+</div>
 <div class="section" id="features">
 <h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Very simple, less-code &amp; fast.</li>
-<li>Using object dispatcher instead of regex route dispatcher.</li>
-<li>Url-Encoded, Multipart and JSON form parsing.</li>
-<li>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available, everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code>.</li>
+<li>Very simple, less-code &amp; fast</li>
+<li>Using object dispatcher instead of regex route dispatcher</li>
+<li>Url-Encoded, Multipart and JSON form parsing</li>
+<li>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available, everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code></li>
 <li>A very flexible configuration system: <a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></li>
 <li>Dispatching arguments using the <a class="reference external" href="https://docs.python.org/3/library/typing.html">obj.__annonations__</a></li>
-<li>Method(verb) dispatcher.</li>
+<li>Method(verb) dispatcher</li>
+<li>Use Python’s <a class="reference external" href="https://www.python.org/dev/peps/pep-3102/">keywordonly</a> arguments for query strings (&gt;= 0.24.0)</li>
 </ul>
 </div>
 <div class="section" id="contents">
@@ -201,12 +201,15 @@
 <li class="toctree-l2"><a class="reference internal" href="guide/exceptions.html">Exceptions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/helloworld.html">Hello World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/blog.html">Simple Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.application">application Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.configuration">configuration Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.contexts">contexts Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.controllers">controllers Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.decorators">decorators Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/index.html#module-nanohttp.exceptions">exceptions Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="development/contribution.html">Contribution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development/changelog.html">Changelog</a></li>
@@ -214,12 +217,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="more/index.html">More</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="more/examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more/cli.html">CLI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/templates.html">Templates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/testing.html">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/deploy.html">Deploy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/faq.html">FAQ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/beginners.html">Beginners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more/examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="more/deploy.html">Deploy</a></li>
 </ul>
 </li>
 </ul>
@@ -236,9 +239,7 @@
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -258,7 +259,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -276,7 +277,8 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.13',
+            VERSION:'0.26.3',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -294,14 +296,11 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
