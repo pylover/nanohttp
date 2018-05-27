@@ -19,7 +19,7 @@ class HttpStatus(Exception):
             self.status_code = status_code
 
         if status_text is not None:
-            self.status_text == status_text
+            self.status_text = status_text
 
         if reason:
             context.response_headers.add_header('X-Reason', reason)
