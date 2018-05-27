@@ -236,7 +236,8 @@ Setting cookie:
    context.cookies['dummy-cookie1'] = 'dummy-value'
    context.cookies['dummy-cookie1']['http_only'] = True
 
-For more information on how to use cookies, please check the python builtin's `http.cookies<https://docs.python.org/3/library/http.cookies.html>`_.
+For more information on how to use cookies, please check the python builtin's 
+`http.cookies <https://docs.python.org/3/library/http.cookies.html>`_.
 
 
 Trailing slashes
