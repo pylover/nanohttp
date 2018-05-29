@@ -1,12 +1,14 @@
 import re
 import functools
 
+from nanohttp import context
 from nanohttp.exceptions import HttpStatus, HttpBadRequest
 
 
 class Field:
-    def __init__(self, title, form=True, query_string=False, required=None, type_=None, minimum=None, maximum=None,
-                 pattern=None, min_length=None, max_length=None):
+    def __init__(self, title, form=True, query_string=False, required=None,
+                 type_=None, minimum=None, maximum=None, pattern=None,
+                 min_length=None, max_length=None):
         self.title = title
         self.form = form
         self.query_string = query_string
@@ -64,11 +66,13 @@ class Criterion:
             return
         container[field.title] = self._validate(value, container, field)
 
-    def _validate(self, value, container: dict, field: Field):
+    def _validate(self, value, container: dict, field: Field
+                  ):  # pragma: no cover
         """
-        It must be overriden in the child class.
+        It must be overridden in the child class.
 
-        This method should raise exception if the criterion is not met. there is a chanse to set
+        This method should raise exception if the criterion is not met. there
+        is a chance to set
         a new value because the
         container is available here.
         :param value: The value to validate
@@ -82,7 +86,10 @@ class Criterion:
         if self.status_code == 400:
             return HttpBadRequest
 
-        return HttpStatus(status_code=self.status_code, status_text=self.status_text)
+        return HttpStatus(
+            status_code=self.status_code,
+            status_text=self.status_text
+        )
 
 
 # noinspection PyAbstractClass
@@ -150,7 +157,9 @@ class MaximumValidator(Criterion):
 class PatternValidator(Criterion):
 
     def _validate(self, value, container, field):
-        pattern = re.compile(self.expression) if isinstance(self.expression, str) else self.expression
+        pattern = re.compile(self.expression)\
+            if isinstance(self.expression, str)\
+            else self.expression
         if pattern.match(value) is None:
             raise self.create_exception()
 
@@ -174,23 +183,28 @@ class RequestValidator:
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
         for field_name, field in self.fields.items():
-            if form and field.form:
-                form = field.validate(form)
 
             if query_string and field.query_string:
                 query_string = field.validate(query_string)
 
+            if field.form \
+                    and field.title is not None \
+                    and (
+                        query_string is None or field.title not in query_string
+                    ):
+                form = field.validate(form)
+
         return form, query_string
 
 
-def validate(fields):  # pragma: no cover
+def validate(**fields):
 
     def decorator(func):
         validator = RequestValidator(fields)
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            args, kwargs = validator(*args, **kwargs)
+            validator(form=context.form, query_string=context.query_string)
             return func(*args, **kwargs)
 
         return wrapper
