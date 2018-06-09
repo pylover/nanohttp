@@ -205,14 +205,11 @@ class ValidationTestCase(unittest.TestCase):
         try:
             validator(dict(param1='NotInteger'))
         except HttpStatus as e:
-            self.assertEqual(e.status_code, 999)
-            self.assertEqual(e.status_text, 'Type error')
-
+            self.assertEqual(e.status, '999 Type error')
         try:
             validator(dict(param1=29))
         except HttpStatus as e:
-            self.assertEqual(e.status_code, 666)
-            self.assertEqual(e.status_text, 'Bad request')
+            self.assertEqual(e.status, '666 Bad request')
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):

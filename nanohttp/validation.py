@@ -87,8 +87,7 @@ class Criterion:
             return HttpBadRequest
 
         return HttpStatus(
-            status_code=self.status_code,
-            status_text=self.status_text
+            status=f'{self.status_code} {self.status_text}'
         )
 
 
