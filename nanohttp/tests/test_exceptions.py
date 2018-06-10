@@ -12,11 +12,11 @@ class ExceptionTestCase(WsgiAppTestCase):
     class Root(Controller):
         @html
         def index(self):
-            raise HttpBadRequest(reason='blah blah')
+            raise HttpBadRequest()
 
         @json
         def data(self):
-            raise HttpBadRequest(reason='blah blah')
+            raise HttpBadRequest()
 
         @json
         def custom(self):
@@ -27,14 +27,10 @@ class ExceptionTestCase(WsgiAppTestCase):
             x = 1 / 0
             return 'test'
 
-    def test_reason(self):
+    def test_exception(self):
         response, content = self.assert_get('/', status=400)
-        self.assertIn('x-reason', response)
-        self.assertEqual(response['x-reason'], 'blah blah')
 
         response, content = self.assert_get('/data', status=400)
-        self.assertIn('x-reason', response)
-        self.assertEqual(response['x-reason'], 'blah blah')
         self.assertDictEqual(ujson.loads(content), {
             'description': 'Bad request syntax or unsupported method',
         })
