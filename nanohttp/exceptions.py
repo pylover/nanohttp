@@ -27,39 +27,45 @@ class HttpStatus(Exception):
             return stack_trace if settings.debug else ''
 
 
-class HttpBadRequest(HttpStatus):
+class HttpKnownStatus(HttpStatus):
+    def __init__(self, status_text=None):
+        code, text = self.status.split(' ', 1)
+        super().__init__(f'{code} {status_text or text}')
+
+
+class HttpBadRequest(HttpKnownStatus):
     status = '400 Bad Request'
 
 
-class HttpUnauthorized(HttpStatus):
+class HttpUnauthorized(HttpKnownStatus):
     status = '401 Unauthorized'
 
 
-class HttpForbidden(HttpStatus):
+class HttpForbidden(HttpKnownStatus):
     status = '403 Forbidden'
 
 
-class HttpNotFound(HttpStatus):
+class HttpNotFound(HttpKnownStatus):
     status = '404 Not Found'
 
 
-class HttpMethodNotAllowed(HttpStatus):
+class HttpMethodNotAllowed(HttpKnownStatus):
     status = '405 Method Not Allowed'
 
 
-class HttpConflict(HttpStatus):
+class HttpConflict(HttpKnownStatus):
     status = '409 Conflict'
 
 
-class HttpGone(HttpStatus):
+class HttpGone(HttpKnownStatus):
     status = '410 Gone'
 
 
-class HttpPreconditionFailed(HttpStatus):
+class HttpPreconditionFailed(HttpKnownStatus):
     status = '412 Precondition Failed'
 
 
-class HttpRedirect(HttpStatus):
+class HttpRedirect(HttpKnownStatus):
     """
     This is an abstract class for all redirects.
     """
@@ -77,11 +83,11 @@ class HttpFound(HttpRedirect):
     status = '302 Found'
 
 
-class HttpNotModified(HttpStatus):
+class HttpNotModified(HttpKnownStatus):
     status = '304 Not Modified'
 
 
-class HttpInternalServerError(HttpStatus):
+class HttpInternalServerError(HttpKnownStatus):
     status = '500 Internal Server Error'
 
     @property
@@ -91,5 +97,6 @@ class HttpInternalServerError(HttpStatus):
         return 'Server got itself in trouble'
 
 
-class HttpBadGatewayError(HttpStatus):
+class HttpBadGatewayError(HttpKnownStatus):
     status = '502 Bad Gateway'
+

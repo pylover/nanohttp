@@ -12,4 +12,4 @@ from .configuration import settings, configure
 from .application import Application
 from .validation import validate
 
-__version__ = '0.28.0'
+__version__ = '0.29.0'
