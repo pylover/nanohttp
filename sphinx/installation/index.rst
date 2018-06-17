@@ -4,7 +4,7 @@ Installation
 Requirements
 ^^^^^^^^^^^^
 
-nanohttp supports python versions greater than 3.5.x and no have any external requirements,
+nanohttp supports python versions greater than 3.6.x and no have any external requirements,
 every things defined in ``setup.py`` and automatically installing
 through the `python packaging tool <https://packaging.python.org>`_.
 

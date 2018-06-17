@@ -77,13 +77,21 @@ class WsgiTester(httplib2.Http):
             )
         except WSGIAppError as e:
             content = traceback.format_exc().encode()
+
+            # Closing the dirty(excepted) connection to force use a fresh one
+            # for the next request. see:
+            # https://github.com/Carrene/nanohttp/issues/67
+            for c in (self.connections or {}).values():
+                c.close()
+
+            # Create response object to indicate a 500
             response = httplib2.Response({
                 "content-type": "text/plain",
-                "status": "408",
+                "status": "500",
                 "content-length": len(content)
             })
             response.reason = content
-            response.status = 500
+            #response.status = 500
             return response, content
 
 

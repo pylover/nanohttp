@@ -1,7 +1,8 @@
 
 import cgi
-import threading
 import ujson
+import threading
+import traceback
 from os.path import isdir, join
 from email.header import decode_header
 
@@ -143,7 +144,7 @@ def parse_any_form(environ, content_length=None, content_type=None):
             keep_blank_values=True
         )
     except TypeError:
-        raise exceptions.HttpBadRequest('Cannot parse the request.')
+        raise exceptions.HttpBadRequest('400 Cannot parse the request.')
 
     result = {}
     if storage.list is None or not len(storage.list):

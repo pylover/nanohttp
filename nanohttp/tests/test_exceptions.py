@@ -3,7 +3,8 @@ import unittest
 
 import ujson
 
-from nanohttp import Controller, html, HttpBadRequest, json, HttpStatus
+from nanohttp import Controller, html, HttpBadRequest, json, HttpStatus, \
+    settings
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -20,7 +21,7 @@ class ExceptionTestCase(WsgiAppTestCase):
 
         @json
         def custom(self):
-            raise HttpStatus(status_code=462, status_text='custom text', info='custom info')
+            raise HttpStatus(status='462 custom text')
 
         @html
         def err(self):
@@ -29,21 +30,28 @@ class ExceptionTestCase(WsgiAppTestCase):
 
     def test_exception(self):
         response, content = self.assert_get('/', status=400)
+        self.assertIsNotNone(content)
 
         response, content = self.assert_get('/data', status=400)
-        self.assertDictEqual(ujson.loads(content), {
-            'description': 'Bad request syntax or unsupported method',
-        })
+        self.assertIn('stackTrace', ujson.loads(content))
+        self.assertIsNotNone('stackTrace', ujson.loads(content))
 
         response, content = self.assert_get('/err', status=500)
         self.assertIsNotNone(content)
-        self.assertIsNotNone(response.reason)
+
+        settings.debug = False
+
+        response, content = self.assert_get('/', status=400)
+        self.assertEqual(content, b'')
+
+        response, content = self.assert_get('/data', status=400)
+        self.assertNotIn('stackTrace', ujson.loads(content))
 
     def test_custom_exception(self):
         response, content = self.assert_get('/custom', status=462)
-        self.assertDictEqual(ujson.loads(content), {
-            'description': 'custom info',
-        })
+
+        self.assertIn('stackTrace', ujson.loads(content))
+        self.assertIsNotNone('stackTrace', ujson.loads(content))
 
 
 if __name__ == '__main__':  # pragma: no cover

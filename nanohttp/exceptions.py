@@ -1,4 +1,3 @@
-
 import ujson
 import traceback
 
@@ -7,70 +6,57 @@ from .configuration import settings
 
 
 class HttpStatus(Exception):
-    status_code = None
-    status_text = None
-    info = None
+    status = None
 
-    def __init__(self, message=None, info=None, status_code=None, status_text=None):
-        if info is not None:
-            self.info = info
+    def __init__(self, status=None):
+        if status is not None:
+            self.status = status
 
-        if status_code is not None:
-            self.status_code = status_code
-
-        if status_text is not None:
-            self.status_text = status_text
-
-        super().__init__(message or self.status_text)
-
-    @property
-    def status(self):
-        return '%s %s' % (self.status_code, self.status_text)
-
-    def to_dict(self):
-        return dict(
-            description=self.info
-        )
+        super().__init__(self.status)
 
     def render(self):
+        stack_trace = traceback.format_exc()
         if context.response_content_type == 'application/json':
-            return ujson.encode(self.to_dict())
+            return ujson.encode(
+                dict(
+                    stackTrace=stack_trace) if settings.debug else dict()
+            )
         else:
             context.response_encoding = 'utf-8'
             context.response_content_type = 'text/plain'
-            return "%s\n%s" % (self.status_text, self.info)
+            return stack_trace if settings.debug else ''
 
 
 class HttpBadRequest(HttpStatus):
-    status_code, status_text, info = 400, 'Bad Request', 'Bad request syntax or unsupported method'
+    status = '400 Bad Request'
 
 
 class HttpUnauthorized(HttpStatus):
-    status_code, status_text, info = 401, 'Unauthorized', 'No permission -- see authorization schemes'
+    status = '401 Unauthorized'
 
 
 class HttpForbidden(HttpStatus):
-    status_code, status_text, info = 403, 'Forbidden', 'Request forbidden -- authorization will not help'
+    status = '403 Forbidden'
 
 
 class HttpNotFound(HttpStatus):
-    status_code, status_text, info = 404, 'Not Found', 'Nothing matches the given URI'
+    status = '404 Not Found'
 
 
 class HttpMethodNotAllowed(HttpStatus):
-    status_code, status_text, info = 405, 'Method Not Allowed', 'Specified method is invalid for this resource'
+    status = '405 Method Not Allowed'
 
 
 class HttpConflict(HttpStatus):
-    status_code, status_text, info = 409, 'Conflict', 'Request conflict'
+    status = '409 Conflict'
 
 
 class HttpGone(HttpStatus):
-    status_code, status_text, info = 410, 'Gone', 'URI no longer exists and has been permanently removed'
+    status = '410 Gone'
 
 
 class HttpPreconditionFailed(HttpStatus):
-    status_code, status_text, info = 412, 'Precondition Failed', 'Request cannot be fulfilled'
+    status = '412 Precondition Failed'
 
 
 class HttpRedirect(HttpStatus):
@@ -84,19 +70,19 @@ class HttpRedirect(HttpStatus):
 
 
 class HttpMovedPermanently(HttpRedirect):
-    status_code, status_text, info = 301, 'Moved Permanently', 'Object moved permanently'
+    status = '301 Moved Permanently'
 
 
 class HttpFound(HttpRedirect):
-    status_code, status_text, info = 302, 'Found', 'Object moved temporarily'
+    status = '302 Found'
 
 
 class HttpNotModified(HttpStatus):
-    status_code, status_text, info = 304, 'Not Modified', ''  # 304 is only header
+    status = '304 Not Modified'
 
 
 class HttpInternalServerError(HttpStatus):
-    status_code, status_text = 500, 'Internal Server Error'
+    status = '500 Internal Server Error'
 
     @property
     def info(self):
@@ -106,4 +92,4 @@ class HttpInternalServerError(HttpStatus):
 
 
 class HttpBadGatewayError(HttpStatus):
-    status_code, status_text = 502, 'Bad Gateway'
+    status = '502 Bad Gateway'

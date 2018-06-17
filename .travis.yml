@@ -8,7 +8,6 @@ env:
 language: python
 
 python:
-  - 3.5
   - 3.6
 
 before_install:
@@ -17,8 +16,7 @@ before_install:
 
 install: pip install -ve .
 script: coverage run --source nanohttp $(which nosetests)
-after_success: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then travis_retry coveralls ; fi
-after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then ./scripts/travis-gh-pages.sh ; fi
+after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./scripts/travis-gh-pages.sh ; fi
 deploy:
   provider: pypi
   skip_cleanup: true
@@ -30,4 +28,4 @@ deploy:
     tags: true
     distributions: sdist bdist_wheel
     repo: Carrene/nanohttp
-    condition: $TRAVIS_PYTHON_VERSION = 3.5
+    condition: $TRAVIS_PYTHON_VERSION = 3.6
