@@ -26,8 +26,7 @@
 
   
 
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -157,8 +156,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for nanohttp.exceptions</h1><div class="highlight"><pre>
-<span></span>
-<span class="kn">import</span> <span class="nn">ujson</span>
+<span></span><span class="kn">import</span> <span class="nn">ujson</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 
 <span class="kn">from</span> <span class="nn">.contexts</span> <span class="k">import</span> <span class="n">context</span>
@@ -166,73 +164,57 @@
 
 
 <div class="viewcode-block" id="HttpStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpStatus">[docs]</a><span class="k">class</span> <span class="nc">HttpStatus</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="n">status_code</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">status_text</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
 
-        <span class="k">if</span> <span class="n">status_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="n">status_code</span>
-
-        <span class="k">if</span> <span class="n">status_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span> <span class="o">=</span> <span class="n">status_text</span>
-
-        <span class="k">if</span> <span class="n">reason</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;X-Reason&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="p">)</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">description</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span>
-        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">stack_trace</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">==</span> <span class="s1">&#39;application/json&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ujson</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">ujson</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">stackTrace</span><span class="o">=</span><span class="n">stack_trace</span><span class="p">)</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">context</span><span class="o">.</span><span class="n">response_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
             <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">=</span> <span class="s1">&#39;text/plain&#39;</span>
-            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="n">stack_trace</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpBadRequest"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpBadRequest">[docs]</a><span class="k">class</span> <span class="nc">HttpBadRequest</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">400</span><span class="p">,</span> <span class="s1">&#39;Bad Request&#39;</span><span class="p">,</span> <span class="s1">&#39;Bad request syntax or unsupported method&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;400 Bad Request&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpUnauthorized"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpUnauthorized">[docs]</a><span class="k">class</span> <span class="nc">HttpUnauthorized</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">401</span><span class="p">,</span> <span class="s1">&#39;Unauthorized&#39;</span><span class="p">,</span> <span class="s1">&#39;No permission -- see authorization schemes&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;401 Unauthorized&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpForbidden"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpForbidden">[docs]</a><span class="k">class</span> <span class="nc">HttpForbidden</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">403</span><span class="p">,</span> <span class="s1">&#39;Forbidden&#39;</span><span class="p">,</span> <span class="s1">&#39;Request forbidden -- authorization will not help&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;403 Forbidden&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpNotFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNotFound">[docs]</a><span class="k">class</span> <span class="nc">HttpNotFound</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">404</span><span class="p">,</span> <span class="s1">&#39;Not Found&#39;</span><span class="p">,</span> <span class="s1">&#39;Nothing matches the given URI&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;404 Not Found&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpMethodNotAllowed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpMethodNotAllowed">[docs]</a><span class="k">class</span> <span class="nc">HttpMethodNotAllowed</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">405</span><span class="p">,</span> <span class="s1">&#39;Method Not Allowed&#39;</span><span class="p">,</span> <span class="s1">&#39;Specified method is invalid for this resource&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;405 Method Not Allowed&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpConflict"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpConflict">[docs]</a><span class="k">class</span> <span class="nc">HttpConflict</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">409</span><span class="p">,</span> <span class="s1">&#39;Conflict&#39;</span><span class="p">,</span> <span class="s1">&#39;Request conflict&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;409 Conflict&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpGone"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpGone">[docs]</a><span class="k">class</span> <span class="nc">HttpGone</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">410</span><span class="p">,</span> <span class="s1">&#39;Gone&#39;</span><span class="p">,</span> <span class="s1">&#39;URI no longer exists and has been permanently removed&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;410 Gone&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpPreconditionFailed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpPreconditionFailed">[docs]</a><span class="k">class</span> <span class="nc">HttpPreconditionFailed</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">412</span><span class="p">,</span> <span class="s1">&#39;Precondition Failed&#39;</span><span class="p">,</span> <span class="s1">&#39;Request cannot be fulfilled&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;412 Precondition Failed&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpRedirect"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpRedirect">[docs]</a><span class="k">class</span> <span class="nc">HttpRedirect</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
@@ -246,19 +228,19 @@
 
 
 <div class="viewcode-block" id="HttpMovedPermanently"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpMovedPermanently">[docs]</a><span class="k">class</span> <span class="nc">HttpMovedPermanently</span><span class="p">(</span><span class="n">HttpRedirect</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">301</span><span class="p">,</span> <span class="s1">&#39;Moved Permanently&#39;</span><span class="p">,</span> <span class="s1">&#39;Object moved permanently&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;301 Moved Permanently&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpFound">[docs]</a><span class="k">class</span> <span class="nc">HttpFound</span><span class="p">(</span><span class="n">HttpRedirect</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">302</span><span class="p">,</span> <span class="s1">&#39;Found&#39;</span><span class="p">,</span> <span class="s1">&#39;Object moved temporarily&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;302 Found&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpNotModified"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNotModified">[docs]</a><span class="k">class</span> <span class="nc">HttpNotModified</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="mi">304</span><span class="p">,</span> <span class="s1">&#39;Not Modified&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># 304 is only header</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;304 Not Modified&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpInternalServerError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpInternalServerError">[docs]</a><span class="k">class</span> <span class="nc">HttpInternalServerError</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Internal Server Error&#39;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;500 Internal Server Error&#39;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -268,7 +250,7 @@
 
 
 <div class="viewcode-block" id="HttpBadGatewayError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpBadGatewayError">[docs]</a><span class="k">class</span> <span class="nc">HttpBadGatewayError</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
-    <span class="n">status_code</span><span class="p">,</span> <span class="n">status_text</span> <span class="o">=</span> <span class="mi">502</span><span class="p">,</span> <span class="s1">&#39;Bad Gateway&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;502 Bad Gateway&#39;</span></div>
 </pre></div>
 
            </div>
@@ -317,10 +299,7 @@
 
   
 
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {
