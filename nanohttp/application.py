@@ -34,8 +34,8 @@ class Application:
 
     def _hook(self, name, *args, **kwargs):
         """ Call the hook
-:
-        param name: Hook name
+
+        :param name: Hook name
         :param args: Pass to the hook positional arguments
         :param kwargs: Pass to the hook keyword arguments
         """
