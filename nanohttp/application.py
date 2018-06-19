@@ -59,8 +59,8 @@ class Application:
     def __call__(self, environ, start_response):
         """ Method that `WSGI <https://www.python.org/dev/peps/pep-0333/#id15>`_ server calls """
         # Entering the context
-        ctx = Context(environ, self)
-        ctx.__enter__()
+        context_ = Context(environ, self)
+        context_.__enter__()
 
         # Preparing some variables
         status = '200 OK'
@@ -71,10 +71,10 @@ class Application:
             self._hook('begin_request')
 
             # Removing the trailing slash in-place, if exists
-            ctx.path = ctx.path.rstrip('/')
+            context_.path = context_.path.rstrip('/')
 
             # Removing the heading slash, and query string anyway
-            path = ctx.path[1:].split('?')[0]
+            path = context_.path[1:].split('?')[0]
 
             # Splitting the path by slash(es) if any
             remaining_paths = path.split('/') if path else []
@@ -108,32 +108,32 @@ class Application:
         self._hook('begin_response')
 
         # Setting cookies in response headers, if any
-        cookie = ctx.cookies.output()
+        cookie = context_.cookies.output()
         if cookie:
             for line in cookie.split('\r\n'):
-                ctx.response_headers.add_header(*line.split(': ', 1))
+                context_.response_headers.add_header(*line.split(': ', 1))
 
         # Sometimes don't need to transfer any body, for example the 304 case.
         if status[:3] in NO_CONTENT_STATUSES:
-            del ctx.response_headers['Content-Type']
-            start_response(status, ctx.response_headers.items())
+            del context_.response_headers['Content-Type']
+            start_response(status, context_.response_headers.items())
             # This is only header, and body should not be transferred.
             # So the context is also should be destroyed
             context.__exit__(*sys.exc_info())
             return []
         else:
-            start_response(status, ctx.response_headers.items())
+            start_response(status, context_.response_headers.items())
 
         # It seems we have to transfer a body, so this function should yield a generator of the body chunks.
         def _response():
             try:
                 if buffer is not None:
-                    yield ctx.encode_response(buffer)
+                    yield context_.encode_response(buffer)
 
                 if response_iterable:
                     # noinspection PyTypeChecker
                     for chunk in response_iterable:
-                        yield ctx.encode_response(chunk)
+                        yield context_.encode_response(chunk)
                 else:
                     yield b''
             except Exception as ex_:  # pragma: no cover
