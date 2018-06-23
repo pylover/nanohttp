@@ -62,12 +62,13 @@ Quick Start
 
 .. code-block:: python
 
-   from nanohttp import Controller, RestController, context, html, json, HttpFound
+   from nanohttp import Controller, RestController, context, html, json,
+    HttpFound
 
 
    class TipsControllers(RestController):
        @json
-       def get(self, tip_id: int = None):
+       def get(self, tip_id: int=None):
            if tip_id is None:
                return [dict(id=i, title="Tip %s" % i) for i in range(1, 4)]
            else:
@@ -77,7 +78,7 @@ Quick Start
                )
 
        @json
-       def post(self, tip_id: int = None):
+       def post(self, tip_id: int=None):
            tip_title = context.form.get('title')
            print(tip_id, tip_title)
 
@@ -351,7 +352,7 @@ The `context.form` is a dictionary representing the request payload, supported r
    class TipsControllers(RestController):
 
        @json
-       def post(self, tip_id: int = None):
+       def post(self, tip_id: int=None):
            tip_title = context.form.get('title')
 
 
