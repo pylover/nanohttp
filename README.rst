@@ -14,7 +14,7 @@ nanohttp
    :alt: Join the chat at https://gitter.im/Carrene/nanohttp
    :target: https://gitter.im/Carrene/nanohttp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
-A very micro HTTP framework.
+A very micro HTTP framework. *[documentation](http://nanohttp.org)*
 
 Features
 --------

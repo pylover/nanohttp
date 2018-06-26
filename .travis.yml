@@ -2,19 +2,17 @@
 env:
   global:
     - COMMIT_AUTHOR_EMAIL: vahid.mardani@gmail.com
-    - COVERALLS_REPO_TOKEN: 8sPM12kzXz9F8YsHemK7XTsiz915meUfz
     - ENCRYPTION_LABEL: 1ba779fff1ea
 
 language: python
 
-python:
-  - 3.6
+python: 3.6
 
 before_install:
   - pip install -U pip setuptools wheel
   - pip install -r requirements-dev.txt
 
-install: pip install -ve .
+install: pip install -e .
 script: coverage run --source nanohttp $(which nosetests)
 after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./scripts/travis-gh-pages.sh ; fi
 deploy:
