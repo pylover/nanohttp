@@ -14,7 +14,9 @@ before_install:
 
 install: pip install -e .
 script: coverage run --source nanohttp $(which nosetests)
-after_deploy: if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./scripts/travis-gh-pages.sh ; fi
+after_deploy: 
+ - coveralls
+ - if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./scripts/travis-gh-pages.sh ; fi
 deploy:
   provider: pypi
   skip_cleanup: true
