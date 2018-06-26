@@ -40,6 +40,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinxcontrib.googleanalytics',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -175,3 +176,7 @@ html_theme_options = {
 }
 html_show_sourcelink = False
 html_logo = '../stuff/logo.svg'
+
+# Google analythics
+googleanalytics_id = 'UA-121464081-1'
+
