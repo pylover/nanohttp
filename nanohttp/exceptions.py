@@ -90,12 +90,6 @@ class HttpNotModified(HttpKnownStatus):
 class HttpInternalServerError(HttpKnownStatus):
     status = '500 Internal Server Error'
 
-    @property
-    def info(self):
-        if settings.debug:
-            return traceback.format_exc()
-        return 'Server got itself in trouble'
-
 
 class HttpBadGatewayError(HttpKnownStatus):
     status = '502 Bad Gateway'
