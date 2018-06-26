@@ -16,8 +16,6 @@ Application
     .. automethod:: __init__
 
 
-
-
 configuration Module
 --------------------
 
@@ -29,8 +27,6 @@ configure
 .. autofunction:: configure
 
 
-
-
 contexts Module
 ---------------
 
@@ -39,8 +35,6 @@ contexts Module
 Context
 ^^^^^^^
 .. autoclass:: Context
-
-
 
 
 controllers Module
@@ -68,15 +62,34 @@ RegexRouteController
 .. autoclass:: RegexRouteController
 
 
-
 decorators Module
 -----------------
 
 .. automodule:: nanohttp.decorators
 
+validations Module
+------------------
+
+.. automodule:: nanohttp.validation
+
+Field
+^^^^^
+
+.. autoclass:: Field
+.. autoclass:: Criterion
+.. autoclass:: RequiredValidator
+.. autoclass:: TypeValidator
+.. autoclass:: MinLengthValidator
+.. autoclass:: MaxLengthValidator
+.. autoclass:: MinimumValidator
+.. autoclass:: MaximumValidator
+.. autoclass:: PatternValidator
+.. autoclass:: RequestValidator
+.. autofunction:: validate
 
 
 exceptions Module
 -----------------
 
 .. automodule:: nanohttp.exceptions
+
