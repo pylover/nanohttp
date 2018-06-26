@@ -90,13 +90,34 @@ class HttpNotModified(HttpKnownStatus):
 class HttpInternalServerError(HttpKnownStatus):
     status = '500 Internal Server Error'
 
-    @property
-    def info(self):
-        if settings.debug:
-            return traceback.format_exc()
-        return 'Server got itself in trouble'
-
 
 class HttpBadGatewayError(HttpKnownStatus):
     status = '502 Bad Gateway'
 
+
+class HttpSuccess(HttpKnownStatus):
+    status = '200 OK'
+
+
+class HttpCreated(HttpSuccess):
+    status = '201 Created'
+
+
+class HttpAccepted(HttpSuccess):
+    status = '202 Accepted'
+
+
+class HttpNonAuthoritativeInformation(HttpSuccess):
+    status = '203 Non-Authoritative Information'
+
+
+class HttpNoContent(HttpSuccess):
+    status = '204 No Content'
+
+
+class HttpResetContent(HttpSuccess):
+    status = '205 Reset Content'
+
+
+class HttpPartialContent(HttpSuccess):
+    status = '206 Partial Content'
