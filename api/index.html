@@ -5,7 +5,18 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-121464081-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>API &mdash; nanohttp Documentation</title>
@@ -113,6 +124,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nanohttp.decorators">decorators Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-nanohttp.validation">validations Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#field">Field</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#module-nanohttp.exceptions">exceptions Module</a></li>
 </ul>
 </li>
@@ -439,8 +454,85 @@
 </dd></dl>
 
 </div>
+<div class="section" id="module-nanohttp.validation">
+<span id="validations-module"></span><h2>validations Module<a class="headerlink" href="#module-nanohttp.validation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="field">
+<h3>Field<a class="headerlink" href="#field" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="nanohttp.validation.Field">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">Field</code><span class="sig-paren">(</span><em>title</em>, <em>form=True</em>, <em>query_string=False</em>, <em>required=None</em>, <em>type_=None</em>, <em>minimum=None</em>, <em>maximum=None</em>, <em>pattern=None</em>, <em>min_length=None</em>, <em>max_length=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#Field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.Criterion">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">Criterion</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#Criterion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.Criterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.RequiredValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">RequiredValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#RequiredValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.RequiredValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.TypeValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">TypeValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#TypeValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.TypeValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.MinLengthValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">MinLengthValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#MinLengthValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.MinLengthValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.MaxLengthValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">MaxLengthValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#MaxLengthValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.MaxLengthValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.MinimumValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">MinimumValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#MinimumValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.MinimumValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.MaximumValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">MaximumValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#MaximumValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.MaximumValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.PatternValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">PatternValidator</code><span class="sig-paren">(</span><em>expression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#PatternValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.PatternValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.validation.Criterion" title="nanohttp.validation.Criterion"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.validation.Criterion</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nanohttp.validation.RequestValidator">
+<em class="property">class </em><code class="descclassname">nanohttp.validation.</code><code class="descname">RequestValidator</code><span class="sig-paren">(</span><em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#RequestValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.RequestValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nanohttp.validation.validate">
+<code class="descclassname">nanohttp.validation.</code><code class="descname">validate</code><span class="sig-paren">(</span><em>**fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/validation.html#validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.validation.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
 <div class="section" id="module-nanohttp.exceptions">
 <span id="exceptions-module"></span><h2>exceptions Module<a class="headerlink" href="#module-nanohttp.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="nanohttp.exceptions.HttpAccepted">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpAccepted</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpAccepted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpAccepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+</dd></dl>
+
 <dl class="exception">
 <dt id="nanohttp.exceptions.HttpBadGatewayError">
 <em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpBadGatewayError</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpBadGatewayError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpBadGatewayError" title="Permalink to this definition">¶</a></dt>
@@ -457,6 +549,12 @@
 <dt id="nanohttp.exceptions.HttpConflict">
 <em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpConflict</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpConflict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpConflict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nanohttp.exceptions.HttpCreated">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpCreated</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpCreated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpCreated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
@@ -502,6 +600,18 @@
 </dd></dl>
 
 <dl class="exception">
+<dt id="nanohttp.exceptions.HttpNoContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNoContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNoContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNoContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nanohttp.exceptions.HttpNonAuthoritativeInformation">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNonAuthoritativeInformation</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNonAuthoritativeInformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNonAuthoritativeInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
 <dt id="nanohttp.exceptions.HttpNotFound">
 <em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNotFound</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNotFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNotFound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
@@ -511,6 +621,12 @@
 <dt id="nanohttp.exceptions.HttpNotModified">
 <em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNotModified</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNotModified"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNotModified" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nanohttp.exceptions.HttpPartialContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpPartialContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpPartialContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpPartialContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
@@ -527,9 +643,21 @@
 </dd></dl>
 
 <dl class="exception">
+<dt id="nanohttp.exceptions.HttpResetContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpResetContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpResetContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpResetContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
 <dt id="nanohttp.exceptions.HttpStatus">
 <em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpStatus</code><span class="sig-paren">(</span><em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nanohttp.exceptions.HttpSuccess">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpSuccess</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpSuccess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpSuccess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">

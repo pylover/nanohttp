@@ -5,7 +5,18 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-121464081-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.application &mdash; nanohttp Documentation</title>
@@ -217,8 +228,8 @@
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Method that `WSGI &lt;https://www.python.org/dev/peps/pep-0333/#id15&gt;`_ server calls &quot;&quot;&quot;</span>
         <span class="c1"># Entering the context</span>
-        <span class="n">ctx</span> <span class="o">=</span> <span class="n">Context</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="n">ctx</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
+        <span class="n">context_</span> <span class="o">=</span> <span class="n">Context</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">context_</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
 
         <span class="c1"># Preparing some variables</span>
         <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span>
@@ -229,10 +240,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;begin_request&#39;</span><span class="p">)</span>
 
             <span class="c1"># Removing the trailing slash in-place, if exists</span>
-            <span class="n">ctx</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">context_</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">context_</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 
             <span class="c1"># Removing the heading slash, and query string anyway</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">context_</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="c1"># Splitting the path by slash(es) if any</span>
             <span class="n">remaining_paths</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="p">[]</span>
@@ -245,13 +256,16 @@
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
                     <span class="c1"># Generators are iterable !</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="n">response_body</span>
+
                     <span class="c1"># Trying to get at least one element from the generator, to force the method call till the second</span>
                     <span class="c1"># `yield` statement</span>
                     <span class="n">buffer</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">response_iterable</span><span class="p">)</span>
+
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
                     <span class="c1"># Mocking the body inside an iterable to prevent the iteration over the str character by character</span>
                     <span class="c1"># For more info check the pull-request #34, https://github.com/Carrene/nanohttp/pull/34</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
+
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Assuming the body is an iterable.</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="n">response_body</span>
@@ -266,32 +280,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;begin_response&#39;</span><span class="p">)</span>
 
         <span class="c1"># Setting cookies in response headers, if any</span>
-        <span class="n">cookie</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">output</span><span class="p">()</span>
+        <span class="n">cookie</span> <span class="o">=</span> <span class="n">context_</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">output</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">cookie</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cookie</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">):</span>
-                <span class="n">ctx</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="c1"># Sometimes don&#39;t need to transfer any body, for example the 304 case.</span>
         <span class="k">if</span> <span class="n">status</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NO_CONTENT_STATUSES</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">ctx</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span>
-            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">ctx</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">del</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span>
+            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
             <span class="c1"># This is only header, and body should not be transferred.</span>
             <span class="c1"># So the context is also should be destroyed</span>
             <span class="n">context</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">ctx</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
         <span class="c1"># It seems we have to transfer a body, so this function should yield a generator of the body chunks.</span>
         <span class="k">def</span> <span class="nf">_response</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">yield</span> <span class="n">ctx</span><span class="o">.</span><span class="n">encode_response</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="n">context_</span><span class="o">.</span><span class="n">encode_response</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">response_iterable</span><span class="p">:</span>
                     <span class="c1"># noinspection PyTypeChecker</span>
                     <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response_iterable</span><span class="p">:</span>
-                        <span class="k">yield</span> <span class="n">ctx</span><span class="o">.</span><span class="n">encode_response</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                        <span class="k">yield</span> <span class="n">context_</span><span class="o">.</span><span class="n">encode_response</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex_</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>

@@ -6,7 +6,18 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-121464081-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Index &mdash; nanohttp Documentation</title>
@@ -165,14 +176,18 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
+ | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  | <a href="#X"><strong>X</strong></a>
  
 </div>
@@ -217,11 +232,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.configuration.configure">configure() (in module nanohttp.configuration)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.contexts.Context">Context (class in nanohttp.contexts)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.controllers.Controller">Controller (class in nanohttp.controllers)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.Criterion">Criterion (class in nanohttp.validation)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -234,6 +251,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.decorators.etag">etag() (in module nanohttp.decorators)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.validation.Field">Field (class in nanohttp.validation)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -251,11 +276,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.decorators.html">html (in module nanohttp.decorators)</a>
 </li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpAccepted">HttpAccepted</a>
+</li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpBadGatewayError">HttpBadGatewayError</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpBadRequest">HttpBadRequest</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpConflict">HttpConflict</a>
+</li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpCreated">HttpCreated</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpForbidden">HttpForbidden</a>
 </li>
@@ -265,23 +294,33 @@
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpInternalServerError">HttpInternalServerError</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.exceptions.HttpKnownStatus">HttpKnownStatus</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpMethodNotAllowed">HttpMethodNotAllowed</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.exceptions.HttpMovedPermanently">HttpMovedPermanently</a>
+</li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpNoContent">HttpNoContent</a>
+</li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpNonAuthoritativeInformation">HttpNonAuthoritativeInformation</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpNotFound">HttpNotFound</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpNotModified">HttpNotModified</a>
 </li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpPartialContent">HttpPartialContent</a>
+</li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpPreconditionFailed">HttpPreconditionFailed</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpRedirect">HttpRedirect</a>
 </li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpResetContent">HttpResetContent</a>
+</li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpStatus">HttpStatus</a>
+</li>
+      <li><a href="api/index.html#nanohttp.exceptions.HttpSuccess">HttpSuccess</a>
 </li>
       <li><a href="api/index.html#nanohttp.exceptions.HttpUnauthorized">HttpUnauthorized</a>
 </li>
@@ -304,6 +343,22 @@
   </ul></td>
 </tr></table>
 
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.validation.MaximumValidator">MaximumValidator (class in nanohttp.validation)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.MaxLengthValidator">MaxLengthValidator (class in nanohttp.validation)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.validation.MinimumValidator">MinimumValidator (class in nanohttp.validation)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.MinLengthValidator">MinLengthValidator (class in nanohttp.validation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -321,6 +376,16 @@
 </li>
       <li><a href="api/index.html#module-nanohttp.exceptions">nanohttp.exceptions (module)</a>
 </li>
+      <li><a href="api/index.html#module-nanohttp.validation">nanohttp.validation (module)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.validation.PatternValidator">PatternValidator (class in nanohttp.validation)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -329,10 +394,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.controllers.RegexRouteController">RegexRouteController (class in nanohttp.controllers)</a>
 </li>
-      <li><a href="api/index.html#nanohttp.contexts.Context.response_content_type">response_content_type (nanohttp.contexts.Context attribute)</a>
+      <li><a href="api/index.html#nanohttp.validation.RequestValidator">RequestValidator (class in nanohttp.validation)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.RequiredValidator">RequiredValidator (class in nanohttp.validation)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context.response_content_type">response_content_type (nanohttp.contexts.Context attribute)</a>
+</li>
       <li><a href="api/index.html#nanohttp.contexts.Context.response_encoding">response_encoding (nanohttp.contexts.Context attribute)</a>
 </li>
       <li><a href="api/index.html#nanohttp.controllers.RestController">RestController (class in nanohttp.controllers)</a>
@@ -356,6 +425,16 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.contexts.Context.thread_local">thread_local (nanohttp.contexts.Context attribute)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.TypeValidator">TypeValidator (class in nanohttp.validation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.validation.validate">validate() (in module nanohttp.validation)</a>
 </li>
   </ul></td>
 </tr></table>

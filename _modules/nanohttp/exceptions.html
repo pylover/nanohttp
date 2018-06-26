@@ -5,7 +5,18 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-121464081-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.exceptions &mdash; nanohttp Documentation</title>
@@ -246,18 +257,39 @@
 
 
 <div class="viewcode-block" id="HttpInternalServerError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpInternalServerError">[docs]</a><span class="k">class</span> <span class="nc">HttpInternalServerError</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;500 Internal Server Error&#39;</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
-        <span class="k">return</span> <span class="s1">&#39;Server got itself in trouble&#39;</span></div>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;500 Internal Server Error&#39;</span></div>
 
 
 <div class="viewcode-block" id="HttpBadGatewayError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpBadGatewayError">[docs]</a><span class="k">class</span> <span class="nc">HttpBadGatewayError</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;502 Bad Gateway&#39;</span></div>
 
+
+<div class="viewcode-block" id="HttpSuccess"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpSuccess">[docs]</a><span class="k">class</span> <span class="nc">HttpSuccess</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpCreated"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpCreated">[docs]</a><span class="k">class</span> <span class="nc">HttpCreated</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;201 Created&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpAccepted"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpAccepted">[docs]</a><span class="k">class</span> <span class="nc">HttpAccepted</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;202 Accepted&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpNonAuthoritativeInformation"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNonAuthoritativeInformation">[docs]</a><span class="k">class</span> <span class="nc">HttpNonAuthoritativeInformation</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;203 Non-Authoritative Information&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpNoContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNoContent">[docs]</a><span class="k">class</span> <span class="nc">HttpNoContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;204 No Content&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpResetContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpResetContent">[docs]</a><span class="k">class</span> <span class="nc">HttpResetContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;205 Reset Content&#39;</span></div>
+
+
+<div class="viewcode-block" id="HttpPartialContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpPartialContent">[docs]</a><span class="k">class</span> <span class="nc">HttpPartialContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;206 Partial Content&#39;</span></div>
 </pre></div>
 
            </div>
