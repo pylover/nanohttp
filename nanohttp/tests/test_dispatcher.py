@@ -55,10 +55,14 @@ class AwesomeRegexController(RegexRouteController):
         return name
 
 
+class NoIndexController(Controller):
+    pass
+
+
 class DispatcherTestCase(WsgiAppTestCase):
 
     class Root(Controller):
-
+        no_index = NoIndexController()
         articles = ArticleController()
         regex = AwesomeRegexController()
 
@@ -113,6 +117,7 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_options('/contact', status=405)
         self.assert_options('/')
         self.assert_delete('/articles', status=405)
+        self.assert_get('/no_index', status=404)
 
     def test_rest_controller(self):
         self.assert_get('/articles', expected_response='GET Articles')

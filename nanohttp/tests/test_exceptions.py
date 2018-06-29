@@ -25,8 +25,7 @@ class ExceptionTestCase(WsgiAppTestCase):
 
         @html
         def err(self):
-            x = 1 / 0
-            return 'test'
+            return 1 / 0
 
     def test_exception(self):
         response, content = self.assert_get('/', status=400)
