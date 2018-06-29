@@ -12,7 +12,7 @@ will generating from that.
 Payload
 -------
 Request payload will representing in ``context.form``, and supported request formats are
-``query-string``, ``multipart/form-data``, ``application/x-www-form-urlencoded``
+``query``, ``multipart/form-data``, ``application/x-www-form-urlencoded``
 and ``json``.
 
 
@@ -27,7 +27,7 @@ and ``json``.
             tip_title = context.form.get('title')
             return 'Tip: %s' % tip_title
 
-.. note:: Query strings always directly can accessible with ``context.query_string``.
+.. note:: Query strings always directly can accessible with ``context.query``.
 
 
 Decorators

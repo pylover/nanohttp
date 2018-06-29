@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                0.29
+                1.0
               </div>
             
           
@@ -199,7 +199,7 @@ will generating from that.</p>
 <div class="section" id="payload">
 <span id="requests-payload"></span><h2>Payload<a class="headerlink" href="#payload" title="Permalink to this headline">¶</a></h2>
 <p>Request payload will representing in <code class="docutils literal notranslate"><span class="pre">context.form</span></code>, and supported request formats are
-<code class="docutils literal notranslate"><span class="pre">query-string</span></code>, <code class="docutils literal notranslate"><span class="pre">multipart/form-data</span></code>, <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>
+<code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">multipart/form-data</span></code>, <code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>
 and <code class="docutils literal notranslate"><span class="pre">json</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">text</span>
 
@@ -213,7 +213,7 @@ and <code class="docutils literal notranslate"><span class="pre">json</span></co
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Query strings always directly can accessible with <code class="docutils literal notranslate"><span class="pre">context.query_string</span></code>.</p>
+<p class="last">Query strings always directly can accessible with <code class="docutils literal notranslate"><span class="pre">context.query</span></code>.</p>
 </div>
 </div>
 <div class="section" id="decorators">
@@ -318,7 +318,7 @@ and <code class="docutils literal notranslate"><span class="pre">json</span></co
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.29.3',
+            VERSION:'1.0.0a0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
