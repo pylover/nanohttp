@@ -29,6 +29,9 @@ class QueryStringTestCase(WsgiAppTestCase):
     def test_rest_controller_query_string(self):
         self.assert_post('/users', query_string=dict(a=1, b=2), expected_response="a: 1, b: 2")
 
+    def test_escaping(self):
+        self.assert_get('/?a=%26%20%21&b=2', expected_response="a: & !, b: 2")
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
