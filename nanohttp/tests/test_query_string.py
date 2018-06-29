@@ -7,7 +7,7 @@ from nanohttp.tests.helpers import WsgiAppTestCase
 class Users(RestController):
     @action
     def post(self):
-        return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.query_string.items(), key=lambda x: x[0]))
+        return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.query.items(), key=lambda x: x[0]))
 
 
 class QueryStringTestCase(WsgiAppTestCase):
@@ -17,7 +17,7 @@ class QueryStringTestCase(WsgiAppTestCase):
 
         @action()
         def index(self):
-            return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.query_string.items(), key=lambda x: x[0]))
+            return ', '.join('%s: %s' % (k, v) for k, v in sorted(context.query.items(), key=lambda x: x[0]))
 
     def test_simple_query_string(self):
         self.assert_get('/?a=1&b=&c=2', expected_response="a: 1, b: , c: 2")

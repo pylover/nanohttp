@@ -37,7 +37,7 @@ class Context:
     .. code-block:: python
 
         def sample:
-            return context.query_string['weather']
+            return context.query['weather']
 
         with Context({'QUERY_STRING': 'weather=Sunny'}):
             assert sample() == 'Sunny
@@ -141,7 +141,7 @@ class Context:
         return wsgiref.util.guess_scheme(self.environ)
 
     @LazyAttribute
-    def query_string(self):
+    def query(self):
         """ Request query string """
         if 'QUERY_STRING' not in self.environ:
             return {}

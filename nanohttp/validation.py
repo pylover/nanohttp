@@ -203,7 +203,7 @@ def validate(**fields):
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            validator(form=context.form, query_string=context.query_string)
+            validator(form=context.form, query_string=context.query)
             return func(*args, **kwargs)
 
         return wrapper

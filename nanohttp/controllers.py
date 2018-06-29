@@ -73,7 +73,7 @@ class Controller(object):
 
         kwargs = {}
         for k, v in handler.__nanohttp__.get('keywordonly_arguments', []):
-            value = context.query_string.get(k)
+            value = context.query.get(k)
             if value:
                 kwargs[k] = value
 
