@@ -13,4 +13,4 @@ from .configuration import settings, configure
 from .application import Application
 from .validation import validate
 
-__version__ = '0.29.2'
+__version__ = '0.29.3'
