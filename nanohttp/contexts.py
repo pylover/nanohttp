@@ -128,7 +128,7 @@ class Context:
     @LazyAttribute
     def path(self):
         """ Request path """
-        return self.environ['PATH_INFO']
+        return self.environ['PATH_INFO'].encode('latin1').decode('utf8')
 
     @LazyAttribute
     def request_uri(self):

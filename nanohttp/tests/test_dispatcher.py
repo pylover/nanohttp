@@ -101,6 +101,7 @@ class DispatcherTestCase(WsgiAppTestCase):
 
     def test_arguments(self):
         self.assert_get('/contact/1', expected_response='Contact: 1')
+        self.assert_get('/contact/سلام', expected_response='Contact: سلام')
         self.assert_post('/contact', expected_response='Contact: None')
         self.assert_get('/users', expected_response='User: None\nAttr: None\n')
         self.assert_get('/users/10/')
