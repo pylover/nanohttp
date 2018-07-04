@@ -84,3 +84,29 @@ but dispatcher tries to dispatch request using HTTP method(verb) at first.
         @html
         def patch(self):
             return '<h1>You called PATCH Method</h1>'
+
+
+Regex Controller
+----------------
+
+For who want to handle complex URLs, nanohttp also supports
+`Regular Expression <https://en.wikipedia.org/wiki/Regular_expression>`_ dispatcher
+and here is a easy way to play with:
+
+
+..  code-block:: python
+
+    from nanohttp import RegexRouteController, json
+
+    class Root(RegexRouteController):
+
+        def __init__(self):
+            super().__init__((
+                ('/user/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
+            ))
+
+        @json
+        def access_tokens(self, installation_id: int):
+            return dict(
+                installationId=installation_id
+            )
