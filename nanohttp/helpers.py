@@ -123,7 +123,10 @@ def parse_any_form(environ, content_length=None, content_type=None):
     if content_length and content_type == 'application/json':
         fp = environ['wsgi.input']
         data = fp.read(content_length)
-        return ujson.decode(data)
+        try:
+            return ujson.decode(data)
+        except ValueError:
+            raise exceptions.HttpBadRequest('Cannot parse the request')
 
     try:
         storage = cgi.FieldStorage(
