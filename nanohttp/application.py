@@ -152,5 +152,5 @@ class Application:
 
         return _response()
 
-    def shutdown(self):
+    def shutdown(self):  # pragma: nocover
         pass
