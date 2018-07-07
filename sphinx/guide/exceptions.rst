@@ -11,6 +11,12 @@ and supported in nanohttp:
 =====  ==============
 Code   Exception Name
 =====  ==============
+201    HttpCreated
+202    HttpAccepted
+203    HttpNonAuthoritativeInformation
+204    HttpNoContent
+205    HttpResetContent
+206    HttpPartialContent
 301    HttpMovedPermanently
 302    HttpFound
 304    HttpNotModified
