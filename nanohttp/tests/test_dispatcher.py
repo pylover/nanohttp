@@ -1,7 +1,7 @@
 
 import unittest
 
-from nanohttp import Controller, html, json, RestController, text, RegexRouteController
+from nanohttp import Controller, html, json, action, RestController, text, RegexRouteController
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -74,6 +74,10 @@ class DispatcherTestCase(WsgiAppTestCase):
         def login(self):
             return ['token']
 
+        @action
+        def tuple(self):
+            return ('the', 'tuple')
+
         @html(verbs=['get', 'post'])
         def contact(self, contact_id: int=None):
             yield 'Contact: %s' % contact_id
@@ -107,6 +111,7 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
         self.assert_get('/users/10/11/11', status=404)
         self.assert_post('/articles/2', status=404)
+        self.assert_get('/tuple', status=200)
 
     def test_verbs(self):
         self.assert_put('/', expected_response='Index')
