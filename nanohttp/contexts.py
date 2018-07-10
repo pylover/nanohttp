@@ -27,12 +27,13 @@ class ContextStack(list):
 
 # FIXME: use __slots__
 class Context:
-    """
-    A Global context for Request and Response.
+    """A Global context for Request and Response.
 
-    Context are initialized and entering on every request (referring to nanohttp application lifecycle).
+    Context are initialized and entering on every request (referring to
+     nanohttp application lifecycle).
 
-    Context also supports to use stack nested (>=0.16.6), its useful on testing.
+    Context also supports to use stack nested (>=0.16.6), its useful on
+    testing.
 
     .. code-block:: python
 
@@ -83,13 +84,15 @@ class Context:
 
     @LazyAttribute
     def request_content_length(self) -> Union[int, None]:
-        """ Request content length """
+        """Request content length
+        """
         v = self.environ.get('CONTENT_LENGTH')
         return None if not v or not v.strip() else int(v)
 
     @LazyAttribute
     def request_content_type(self) -> Union[str, None]:
-        """ Request content type """
+        """Request content type
+        """
         content_type = self.environ.get('CONTENT_TYPE')
         if content_type:
             return content_type.split(';')[0]
@@ -97,7 +100,8 @@ class Context:
 
     @property
     def response_content_type(self) -> Union[str, None]:
-        """ Response content type property """
+        """Response content type property
+        """
         content_type = self.response_headers.get('Content-Type')
         if content_type:
             return content_type.split(';')[0]
@@ -108,41 +112,51 @@ class Context:
         if v is None:
             del self.response_headers['Content-Type']
         else:
-            self.response_headers['Content-Type'] = '%s; charset=%s' % (v, self.response_encoding)
+            self.response_headers['Content-Type'] = \
+                '%s; charset=%s' % (v, self.response_encoding)
 
     @classmethod
     def get_current(cls) -> 'Context':
-        """ Get current context
+        """Get current context
 
-            Not initialized context raises :class:`.ContextIsNotInitializedError`,
+            Not initialized context raises
+            :class:`.ContextIsNotInitializedError`,
         """
         if not hasattr(cls.thread_local, 'nanohttp_context'):
-            raise ContextIsNotInitializedError("Context is not initialized yet.")
+            raise ContextIsNotInitializedError(
+                "Context is not initialized yet."
+            )
         return cls.thread_local.nanohttp_context
 
     @LazyAttribute
     def method(self):
-        """ `HTTP Request method <https://tools.ietf.org/html/rfc7231#section-4.3>`_ """
+        """`HTTP Request method
+        <https://tools.ietf.org/html/rfc7231#section-4.3>`_
+        """
         return self.environ['REQUEST_METHOD'].lower()
 
     @LazyAttribute
     def path(self):
-        """ Request path """
+        """Request path
+        """
         return self.environ['PATH_INFO']
 
     @LazyAttribute
     def request_uri(self):
-        """ Request full URI (includes query string)"""
+        """Request full URI (includes query string)
+        """
         return wsgiref.util.request_uri(self.environ, include_query=True)
 
     @LazyAttribute
     def request_scheme(self):
-        """ Request Scheme (http|https) """
+        """Request Scheme (http|https)
+        """
         return wsgiref.util.guess_scheme(self.environ)
 
     @LazyAttribute
     def query(self):
-        """ Request query string """
+        """Request query string
+        """
         if 'QUERY_STRING' not in self.environ:
             return {}
 
@@ -154,10 +168,10 @@ class Context:
 
     @LazyAttribute
     def form(self):
-        """
-        Request form values
+        """Request form values
 
-        .. note:: if using `multipart/form-data` uploaded file will reproduce as ``cgi.FieldStorage``.
+        .. note:: if using `multipart/form-data` uploaded file will reproduce
+         as ``cgi.FieldStorage``.
         """
         return parse_any_form(
             self.environ,
@@ -167,21 +181,27 @@ class Context:
 
     @LazyAttribute
     def cookies(self) -> 'SimpleCookie':
-        """ Cookies """
+        """Cookies
+        """
         result = SimpleCookie()
         if 'HTTP_COOKIE' in self.environ:
             result.load(self.environ['HTTP_COOKIE'])
         return result
 
     def encode_response(self, buffer):
-        """ Encode response buffer with encoding definition on current context """
+        """Encode response buffer with encoding definition on current
+        context
+        """
         try:
             if self.response_encoding:
                 return buffer.encode(self.response_encoding)
             else:
                 return buffer
         except AttributeError:  # pragma: no cover
-            raise TypeError('The returned response should has the `encode` attribute, such as `str`.')
+            raise TypeError(
+                'The returned response should has the `encode` attribute, '
+                'such as `str`.'
+            )
 
     def expired(self, etag, force=False):
         none_match = self.environ.get('HTTP_IF_NONE_MATCH')
@@ -201,7 +221,10 @@ class Context:
         ok = match(etag)
 
         if not ok and throw:
-            raise (throw if not isinstance(throw, bool) else exceptions.HttpPreconditionFailed)()
+            raise (
+                throw if not isinstance(throw, bool)
+                else exceptions.HttpPreconditionFailed
+            )()
 
         if add_headers:
             self.etag(etag)
@@ -209,7 +232,11 @@ class Context:
         return ok
 
     def etag_match(self, etag, **kwargs):
-        return self.must_revalidate(etag, lambda t: self.environ.get('HTTP_IF_MATCH') == t, **kwargs)
+        return self.must_revalidate(
+            etag,
+            lambda t: self.environ.get('HTTP_IF_MATCH') == t,
+            **kwargs
+        )
 
     def etag_none_match(self, etag, throw=True, **kwargs):
         return self.must_revalidate(
