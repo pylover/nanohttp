@@ -17,8 +17,16 @@ class HttpRedirectTestCase(WsgiAppTestCase):
             raise HttpFound('/new/address')
 
     def test_redirect_response_header(self):
-        self.assert_get('/', status=301, expected_headers={'Location': '/new/address'})
-        self.assert_get('/about', status=302, expected_headers={'Location': '/new/address'})
+        self.assert_get(
+            '/',
+            status=301,
+            expected_headers={'Location': '/new/address'}
+        )
+        self.assert_get(
+            '/about',
+            status=302,
+            expected_headers={'Location': '/new/address'}
+        )
 
 
 if __name__ == '__main__':  # pragma: no cover
