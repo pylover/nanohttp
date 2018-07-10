@@ -111,7 +111,7 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
         self.assert_get('/users/10/11/11', status=404)
         self.assert_post('/articles/2', status=404)
-        self.assert_get('/tuple', status=200)
+        self.assert_get('/tuple')
 
     def test_verbs(self):
         self.assert_put('/', expected_response='Index')
