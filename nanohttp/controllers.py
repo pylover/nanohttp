@@ -17,7 +17,8 @@ UNLIMITED = -1
 
 
 class Controller(object):
-    """ Base Controller """
+    """Base Controller
+    """
 
     __nanohttp__ = dict(
         verbs='any',
@@ -49,16 +50,20 @@ class Controller(object):
         manifest = handler.__nanohttp__
 
         positionals = manifest.get('positional_arguments', None)
-        positionals_length = len(positionals) if positionals is not None else UNLIMITED
+        positionals_length = len(positionals) if positionals is not None \
+            else UNLIMITED
 
         optionals = manifest.get('optional_arguments', None)
-        optionals_length = len(optionals) if optionals is not None else UNLIMITED
+        optionals_length = len(optionals) if optionals is not None \
+            else UNLIMITED
 
         available_arguments = len(remaining_paths)
         verbs = manifest.get('verbs', 'any')
 
-        if UNLIMITED not in (optionals_length, positionals_length) and \
-                (positionals_length > available_arguments or available_arguments > (positionals_length + optionals_length)):
+        if UNLIMITED not in (optionals_length, positionals_length) and (
+                positionals_length > available_arguments or
+                available_arguments > (positionals_length + optionals_length)
+            ):
             raise HttpNotFound()
 
         if verbs is not 'any' and context.method not in verbs:
@@ -69,7 +74,8 @@ class Controller(object):
     # noinspection PyMethodMayBeStatic
     def _serve_handler(self, handler, remaining_paths):
         context.response_encoding = handler.__nanohttp__.get('encoding', None)
-        context.response_content_type = handler.__nanohttp__.get('content_type', None)
+        context.response_content_type = \
+            handler.__nanohttp__.get('content_type', None)
 
         kwargs = {}
         for k, v in handler.__nanohttp__.get('keywordonly_arguments', []):
@@ -81,13 +87,13 @@ class Controller(object):
 
     def __call__(self, *remaining_paths):
         handler, remaining_paths = self._find_handler(list(remaining_paths))
-        handler, remaining_paths = self._validate_handler(handler, remaining_paths)
+        handler, remaining_paths = \
+            self._validate_handler(handler, remaining_paths)
         return self._serve_handler(handler, remaining_paths)
 
 
 class RestController(Controller):
-    """
-    HTTP method oriented controller
+    """HTTP method oriented controller
     """
     def _find_handler(self, remaining_paths):
         if remaining_paths and hasattr(self, remaining_paths[0]):
@@ -101,8 +107,7 @@ class RestController(Controller):
 
 
 class Static(Controller):
-    """
-    Serves static files
+    """Serves static files
     """
     __nanohttp__ = dict(
         verbs='any',
@@ -125,7 +130,8 @@ class Static(Controller):
         # Find the physical path of the given path parts
         physical_path = join(self.directory, *remaining_paths)
 
-        # Check to do not access the parent directory of root and also we are not listing directories here.
+        # Check to do not access the parent directory of root and also we are
+        # not listing directories here.
         if pardir in relpath(physical_path, self.directory):
             raise HttpForbidden()
 
@@ -137,7 +143,10 @@ class Static(Controller):
             else:
                 raise HttpForbidden()
 
-        context.response_headers.add_header('Content-Type', guess_type(physical_path)[0] or 'application/octet-stream')
+        context.response_headers.add_header(
+            'Content-Type',
+            guess_type(physical_path)[0] or 'application/octet-stream'
+        )
 
         try:
             f = open(physical_path, mode='rb')
@@ -160,8 +169,7 @@ class Static(Controller):
 
 
 class RegexRouteController(Controller):
-    """
-    This is how to use it:
+    """This is how to use it:
 
     .. code-block:: python
 
@@ -169,7 +177,8 @@ class RegexRouteController(Controller):
 
             def __init__(self):
                 super().__init__((
-                    ('/installations/(?P<installation_id>\d+)/access_tokens', self.access_tokens),
+                    ('/installations/(?P<installation_id>\d+)/access_tokens',
+                    self.access_tokens),
                 ))
 
             @json
