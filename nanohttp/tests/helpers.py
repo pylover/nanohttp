@@ -42,7 +42,12 @@ class WsgiTester(httplib2.Http):
 
     def __init__(self, app_factory, host='nanohttp.org', port=80, **kw):
         super(WsgiTester, self).__init__()
-        self.interceptor = Httplib2Interceptor(app_factory, host=host, port=port, **kw)
+        self.interceptor = Httplib2Interceptor(
+            app_factory,
+            host=host,
+            port=port,
+            **kw
+        )
 
     def __enter__(self):
         self.interceptor.__enter__()
@@ -51,7 +56,8 @@ class WsgiTester(httplib2.Http):
     def __exit__(self, exc_type, value, traceback):
         self.interceptor.__exit__(exc_type, value, traceback)
 
-    def request(self, uri, query_string=None, fields=None, files=None, json=None, **kw):
+    def request(self, uri, query_string=None, fields=None, files=None,
+                json=None, **kw):
         headers = kw.setdefault('headers', {})
         body = None
 
@@ -61,13 +67,17 @@ class WsgiTester(httplib2.Http):
             headers.setdefault('Content-Type', content_type)
         elif fields:
             body = urlencode(fields)
-            headers.setdefault('Content-Type', 'application/x-www-form-urlencoded')
+            headers.setdefault(
+                'Content-Type',
+                'application/x-www-form-urlencoded'
+            )
         elif json:
             body = json
             headers.setdefault('Content-Type', 'application/json')
 
         if query_string:
-            uri += '%s%s' % ('&' if '?' in uri else '?', urlencode(query_string))
+            uri +=\
+                '%s%s' % ('&' if '?' in uri else '?', urlencode(query_string))
 
         try:
             return super(WsgiTester, self).request(
@@ -112,15 +122,18 @@ class WsgiAppTestCase(unittest.TestCase):
     def tearDown(self):
         self.client.__exit__(*sys.exc_info())
 
-    def assert_request(self, uri, method, cookies=None, expected_response=None, expected_checksum=None,
-                       not_expected_headers=None, expected_headers=None, status=200, **kw):
+    def assert_request(self, uri, method, cookies=None, expected_response=None,
+                       expected_checksum=None,not_expected_headers=None,
+                       expected_headers=None, status=200, **kw):
 
         if cookies:
             headers = kw.setdefault('headers', {})
             if isinstance(cookies, str):
                 headers['Cookie'] = cookies
             else:
-                headers['Cookie'] = '; '.join('%s=%s' % (k, v.value) for k, v in cookies.items())
+                headers['Cookie'] = '; '.join(
+                    '%s=%s' % (k, v.value) for k, v in cookies.items()
+                )
 
         response, content = self.client.request(uri, method=method, **kw)
 
@@ -166,7 +179,9 @@ class WsgiAppTestCase(unittest.TestCase):
 
 
 def encode_multipart_data(fields=None, files=None):  # pragma: no cover
-    boundary = ''.join(['-----', base64.urlsafe_b64encode(urandom(27)).decode()])
+    boundary = ''.join(
+        ['-----', base64.urlsafe_b64encode(urandom(27)).decode()]
+    )
     crlf = b'\r\n'
     lines = []
 
@@ -186,7 +201,10 @@ def encode_multipart_data(fields=None, files=None):  # pragma: no cover
                 (key, filename))
             lines.append(
                 'Content-Type: %s' %
-                (mimetypes.guess_type(filename)[0] or 'application/octet-stream'))
+                (
+                    mimetypes.guess_type(filename)[0] or
+                    'application/octet-stream')
+            )
             lines.append('')
             with open(file_path, 'rb') as f:
                 lines.append(f.read())
@@ -216,7 +234,14 @@ def find_free_tcp_port():
 
 
 if __name__ == '__main__':  # pragma: no cover
-    ct, b, len_ = encode_multipart_data(dict(test1='TEST1VALUE'), files=dict(cat='stuff/cat.jpg'))
+    ct, b, len_ = encode_multipart_data(
+        dict(
+            test1='TEST1VALUE'
+        ),
+        files=dict(
+            cat='stuff/cat.jpg'
+        )
+    )
     print(ct)
     print(len_)
     print(b.read())
