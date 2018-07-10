@@ -57,6 +57,11 @@ class FormTestCase(WsgiAppTestCase):
             }),
             expected_response='a: 1, b: [2, 3]',
         )
+        self.assert_post(
+            '/',
+            json='{',
+            status=400
+        )
 
     def test_invalid_form(self):
         self.assert_post(
