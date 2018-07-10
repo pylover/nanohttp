@@ -1,7 +1,8 @@
 
 import unittest
 
-from nanohttp import Controller, html, json, action, RestController, text, RegexRouteController
+from nanohttp import Controller, html, json, action, RestController, text,\
+    RegexRouteController
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -20,20 +21,21 @@ class ArticleController(RestController):
 
     @html
     def get(self, article_id: int=None):
-        yield "GET Article%s" % (
+        yield 'GET Article%s' % (
             's' if not article_id else (': ' + article_id)
         )
 
     @html
     def post(self):
-        yield "POST Article"
+        yield 'POST Article'
 
     @html
-    def put(self, article_id: int=None, inner_resource: str=None, link_id: int=None):
+    def put(self, article_id: int=None, inner_resource: str=None,
+            link_id: int=None):
         if inner_resource == 'links':
             yield from self.links(article_id, link_id)
         else:
-            yield "PUT Article: %s" % article_id
+            yield 'PUT Article: %s' % article_id
 
     def disallowed(self):  # pragma: no cover
         yield 'bad'
@@ -108,7 +110,10 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_post('/contact', expected_response='Contact: None')
         self.assert_get('/users', expected_response='User: None\nAttr: None\n')
         self.assert_get('/users/10/')
-        self.assert_get('/users/10/jobs', expected_response='User: 10\nAttr: jobs\n')
+        self.assert_get(
+            '/users/10/jobs',
+            expected_response='User: 10\nAttr: jobs\n'
+        )
         self.assert_get('/users/10/11/11', status=404)
         self.assert_post('/articles/2', status=404)
         self.assert_get('/tuple')
@@ -129,13 +134,22 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/articles/23', expected_response='GET Article: 23')
         self.assert_post('/articles', expected_response='POST Article')
         self.assert_put('/articles/23', expected_response='PUT Article: 23')
-        self.assert_put('/articles/23/links/2', expected_response='Article: 23, Links index: 2')
-        self.assert_get('/articles/links', expected_response='Link1, Link2, Link3')
+        self.assert_put(
+            '/articles/23/links/2',
+            expected_response='Article: 23, Links index: 2'
+        )
+        self.assert_get(
+            '/articles/links',
+            expected_response='Link1, Link2, Link3'
+        )
         self.assert_request('/articles', 'disallowed', status=404)
         self.assert_get('/articles/disallowed', status=404)
 
     def test_trailing_slash(self):
-        self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
+        self.assert_get(
+            '/users/10/jobs/',
+            expected_response='User: 10\nAttr: jobs\n'
+        )
 
     def test_exception(self):
         self.assert_get('/bad', status=500)
@@ -144,15 +158,30 @@ class DispatcherTestCase(WsgiAppTestCase):
         self.assert_get('/empty', expected_response='')
 
     def test_positional_argument_dispatch(self):
-        self.assert_request('/articles/23', 'remove', expected_response='Removing, 23')
+        self.assert_request(
+            '/articles/23',
+            'remove',
+            expected_response='Removing, 23'
+        )
 
     def test_dispatch_query_string(self):
-        self.assert_get('/books', expected_response='name: None sort: user_id filters: None')
-        self.assert_get('/books/C++', expected_response='name: C++ sort: user_id filters: None')
-        self.assert_get('/books?sort=title', expected_response='name: None sort: title filters: None')
+        self.assert_get(
+            '/books',
+            expected_response='name: None sort: user_id filters: None'
+        )
+        self.assert_get(
+            '/books/C++',
+            expected_response='name: C++ sort: user_id filters: None'
+        )
+        self.assert_get(
+            '/books?sort=title',
+            expected_response='name: None sort: title filters: None'
+        )
         self.assert_get(
             '/books/?filters=a>1&filters=b<3',
-            expected_response='name: None sort: user_id filters: [\'a>1\', \'b<3\']'
+            expected_response=\
+                'name: None sort: user_id filters: '
+                '[\'a>1\', \'b<3\']'
         )
 
     def test_regex_route_controller(self):

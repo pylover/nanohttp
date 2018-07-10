@@ -2,9 +2,7 @@
 import cgi
 import ujson
 import threading
-import traceback
 from os.path import isdir, join
-from email.header import decode_header
 
 import pymlconf
 
@@ -48,7 +46,8 @@ def load_controller_from_file(specifier):
     controller = None
 
     if specifier:
-        module_name, class_name = specifier.split(':') if ':' in specifier else (specifier, 'Root')
+        module_name, class_name = specifier.split(':') \
+            if ':' in specifier else (specifier, 'Root')
 
         if module_name:
 
@@ -74,7 +73,8 @@ def load_controller_from_file(specifier):
     return controller
 
 
-def quickstart(controller=None, application=None, host='localhost',  port=8080, block=True, config=None):
+def quickstart(controller=None, application=None, host='localhost',  port=8080,
+               block=True, config=None):
     from wsgiref.simple_server import make_server
 
     try:
@@ -115,7 +115,8 @@ def quickstart(controller=None, application=None, host='localhost',  port=8080, 
 def get_cgi_field_value(field):
     # noinspection PyProtectedMember
     return field.value if isinstance(field, cgi.MiniFieldStorage) \
-        or (isinstance(field, cgi.FieldStorage) and not field._binary_file) else field
+        or (isinstance(field, cgi.FieldStorage) and not field._binary_file) \
+        else field
 
 
 def parse_any_form(environ, content_length=None, content_type=None):

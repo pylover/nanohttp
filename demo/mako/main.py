@@ -20,7 +20,10 @@ def render_template(func, template_name):
         if hasattr(result, 'to_dict'):
             result = result.to_dict()
         elif not isinstance(result, dict):
-            raise ValueError('The result must be an instance of dict, not: %s' % type(result))
+            raise ValueError(
+                'The result must be an instance of dict, not: %s'
+                % type(result)
+            )
 
         template_ = lookup.get_template(template_name)
         return template_.render(**result)
@@ -28,7 +31,11 @@ def render_template(func, template_name):
     return wrapper
 
 
-template = functools.partial(action, content_type='text/html', inner_decorator=render_template)
+template = functools.partial(
+    action,
+    content_type='text/html',
+    inner_decorator=render_template
+)
 
 
 class Root(Controller):

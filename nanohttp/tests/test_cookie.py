@@ -40,7 +40,8 @@ class HttpCookieTestCase(WsgiAppTestCase):
         @html
         def clear(self):
             context.cookies['dummy-cookie'] = ''
-            context.cookies['dummy-cookie']['expires'] = 'Sat, 01 Jan 2000 00:00:01 GMT'
+            context.cookies['dummy-cookie']['expires'] = \
+                'Sat, 01 Jan 2000 00:00:01 GMT'
             yield 'remove'
 
     def test_cookie(self):
@@ -64,7 +65,10 @@ class HttpCookieTestCase(WsgiAppTestCase):
         response, content = self.assert_get('/clear')
         cookies_ = cookies.SimpleCookie(response['set-cookie'])
         self.assertIn('dummy-cookie', cookies_)
-        self.assertEqual(cookies_['dummy-cookie']['expires'], 'Sat, 01 Jan 2000 00:00:01 GMT')
+        self.assertEqual(
+            cookies_['dummy-cookie']['expires'],
+            'Sat, 01 Jan 2000 00:00:01 GMT'
+        )
         self.assertEqual(cookies_['dummy-cookie'].value, '')
 
 

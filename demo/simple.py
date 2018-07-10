@@ -1,4 +1,5 @@
-from nanohttp import Controller, RestController, context, html, json, HttpFound, quickstart, configure
+from nanohttp import Controller, RestController, context, html, json,\
+    HttpFound, quickstart, configure
 
 
 class TipsControllers(RestController):
@@ -27,14 +28,14 @@ class Root(Controller):
 
     @html
     def index(self):
-        yield """
+        yield '''
             <html><head><title>nanohttp Demo</title></head><body>
             <form method="POST" action="/tips/2">
                 <input type="text" name="title" />
                 <input type="submit" value="Update" />
             </form>
             </body></html>
-            """
+            '''
 
 
 if __name__ == '__main__':

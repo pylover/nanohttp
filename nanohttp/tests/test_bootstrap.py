@@ -13,13 +13,19 @@ class BootstrapTestCase(unittest.TestCase):
         controller = load_controller_from_file(':Static')
         self.assertIsNotNone(controller)
 
-        controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'package_for_test_bootstrapping'))
+        controller = load_controller_from_file(
+            join(TEST_DIR, 'stuff', 'package_for_test_bootstrapping')
+        )
         self.assertIsNotNone(controller)
 
-        controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping.py'))
+        controller = load_controller_from_file(
+            join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping.py')
+        )
         self.assertIsNotNone(controller)
 
-        controller = load_controller_from_file(join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping'))
+        controller = load_controller_from_file(
+            join(TEST_DIR, 'stuff', 'module_for_test_bootstrapping')
+        )
         self.assertIsNotNone(controller)
 
 

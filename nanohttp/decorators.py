@@ -7,7 +7,8 @@ from .contexts import context
 
 
 def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
-           content_type: Union[str, None]=None, inner_decorator: Union[callable, None]=None, **kwargs):
+           content_type: Union[str, None]=None,
+           inner_decorator: Union[callable, None]=None, **kwargs):
     """
     Base action decorator
 
@@ -21,15 +22,19 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
         if inner_decorator is not None:
             func = inner_decorator(func, *args, **kwargs)
 
-        # Examining the signature, and counting the optional and positional arguments.
-        positional_arguments, optional_arguments, keywordonly_arguments = [], [], []
+        # Examining the signature,
+        # and counting the optional and positional arguments.
+        positional_arguments, optional_arguments, keywordonly_arguments = \
+            [], [], []
         action_signature = signature(func)
         for name, parameter in action_signature.parameters.items():
             if name == 'self':
                 continue
 
             if parameter.kind == Parameter.KEYWORD_ONLY:
-                keywordonly_arguments.append((parameter.name, parameter.default))
+                keywordonly_arguments.append(
+                    (parameter.name, parameter.default)
+                )
             elif parameter.default is Parameter.empty:
                 positional_arguments.append(parameter.name)
             else:
@@ -79,13 +84,21 @@ text = functools.partial(action, content_type='text/plain')
 #: JSON action decorator
 #:
 #: accepts list, dict, int, str or objects have ``to_dict`` method.
-json = functools.partial(action, content_type='application/json', inner_decorator=jsonify)
+json = functools.partial(
+    action,
+    content_type='application/json',
+    inner_decorator=jsonify
+)
 
 #: XML action decorator
 xml = functools.partial(action, content_type='application/xml')
 
 #: Binary-data action decorator
-binary = functools.partial(action, content_type='application/octet-stream', encoding=None)
+binary = functools.partial(
+    action,
+    content_type='application/octet-stream',
+    encoding=None
+)
 
 
 def ifmatch(tag: Union[str, int, callable]):
@@ -100,10 +113,10 @@ def ifmatch(tag: Union[str, int, callable]):
 
 
 def etag(*args, tag: Union[str, int, callable, None]=None):
-    """
-    Validate ``If-None-Match`` and response with ``ETag`` header
+    """Validate ``If-None-Match`` and response with ``ETag`` header
 
-    tag is getting from ``tag`` argument or response object ``__etag__`` attribute
+    tag is getting from ``tag`` argument or response object ``__etag__``
+     attribute
     """
     def decorator(func):
         @functools.wraps(func)
