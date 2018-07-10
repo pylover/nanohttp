@@ -2,7 +2,8 @@ import io
 import re
 import unittest
 
-from nanohttp import Controller, text, ContextIsNotInitializedError, context, Application
+from nanohttp import Controller, text, ContextIsNotInitializedError, context,\
+    Application
 from nanohttp.contexts import Context
 from nanohttp.tests.helpers import WsgiAppTestCase
 
@@ -46,7 +47,8 @@ class ContextTestCase(WsgiAppTestCase):
         self.assert_get(
             '/get_uri',
             query_string={'a': 1, 'b': 2},
-            expected_response=re.compile('http://nanohttp.org/get_uri\?[ab=12&]+')
+            expected_response=\
+                re.compile('http://nanohttp.org/get_uri\?[ab=12&]+')
         )
 
         self.assert_get(
