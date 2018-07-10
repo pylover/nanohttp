@@ -38,7 +38,9 @@ class JsonTestCase(WsgiAppTestCase):
     def test_json(self):
         resp, content = self.assert_get(
             '/',
-            expected_headers={'content-type': 'application/json; charset=utf-8'},
+            expected_headers={
+                'content-type': 'application/json; charset=utf-8'
+            },
         )
         self.assertDictEqual(ujson.loads(content), {'b': '2', 'a': 1})
 
