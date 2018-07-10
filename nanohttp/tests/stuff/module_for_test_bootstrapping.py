@@ -11,6 +11,8 @@ class Root(Controller):
         yield '<h2>debug flag is: %s</h2>' % settings.debug
         yield '<img src="/static/cat.jpg" />'
         yield '<ul>'
-        yield from ('<li><b>%s:</b> %s</li>' % i for i in context.environ.items())
+        yield from (
+            '<li><b>%s:</b> %s</li>' % i for i in context.environ.items()
+        )
         yield '</ul>'
         yield '</body></html>'
