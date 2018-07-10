@@ -21,13 +21,21 @@ class QuickstartTestCase(WsgiAppTestCase):
         shutdown()
 
     def test_with_controller(self):
-        shutdown = quickstart(controller=self.Root(), block=False, port=self.port)
+        shutdown = quickstart(
+            controller=self.Root(),
+            block=False,
+            port=self.port
+        )
         self.assertTrue(callable(shutdown))
         time.sleep(.5)
         shutdown()
 
     def test_with_application(self):
-        shutdown = quickstart(application=self.application, block=False, port=self.port)
+        shutdown = quickstart(
+            application=self.application,
+            block=False,
+            port=self.port
+        )
         self.assertTrue(callable(shutdown))
         time.sleep(.5)
         shutdown()
