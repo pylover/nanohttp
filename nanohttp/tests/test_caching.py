@@ -25,10 +25,20 @@ class CachingTestCase(WsgiAppTestCase):
         global _etag
         _etag = '1'
 
-        self.assert_get('/', expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag})
+        self.assert_get(
+            '/',
+            expected_headers={
+                'Cache-Control': 'must-revalidate',
+                'ETag': _etag
+            }
+        )
 
         # Fetching again with etag header
-        ___, body = self.assert_get('/', headers={'If-None-Match': _etag}, status=304)
+        ___, body = self.assert_get(
+            '/',
+            headers={'If-None-Match': _etag},
+            status=304
+        )
         self.assertEqual(len(body), 0)
 
         _old_etag = _etag
@@ -38,7 +48,10 @@ class CachingTestCase(WsgiAppTestCase):
             '/',
             headers={'If-None-Match': _old_etag},
             status=200,
-            expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag}
+            expected_headers={
+                'Cache-Control': 'must-revalidate',
+                'ETag': _etag
+            }
         )
         self.assertEqual(body, b'Something')
 
@@ -59,7 +72,10 @@ class CachingTestCase(WsgiAppTestCase):
             '/about',
             headers={'If-Match': _etag},
             status=200,
-            expected_headers={'Cache-Control': 'must-revalidate', 'ETag': _etag}
+            expected_headers={
+                'Cache-Control': 'must-revalidate',
+                'ETag': _etag
+            }
         )
         self.assertEqual(body, b'About is Modified')
 
