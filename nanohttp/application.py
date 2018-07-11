@@ -4,7 +4,7 @@ import types
 import logging
 
 from nanohttp.contexts import Context, context
-from nanohttp.exceptions import HttpStatus
+from nanohttp.exceptions import HTTPStatus
 from nanohttp.configuration import settings
 from nanohttp.constants import NO_CONTENT_STATUSES
 
@@ -49,7 +49,7 @@ class Application:
         :param ex: The exception to examine
         :return: status, resp_generator
         """
-        if isinstance(ex, HttpStatus):
+        if isinstance(ex, HTTPStatus):
             return ex.status, ex.render()
 
         self.__logger__.exception('Internal Server Error', exc_info=True)
@@ -110,7 +110,7 @@ class Application:
 
         except Exception as ex:
             # the self._handle_exception may raise the error again, if the
-            # error is not subclass of the HttpStatusOtherwise,
+            # error is not subclass of the HTTPStatusOtherwise,
             # a tuple of the status code and response body will be returned.
             status, response_body = self._handle_exception(ex)
             buffer = None

@@ -1,11 +1,11 @@
 
 
-from .exceptions import HttpStatus, HttpBadRequest, HttpUnauthorized, \
-    HttpForbidden, HttpNotFound, HttpMethodNotAllowed, HttpConflict, HttpGone,\
-    HttpRedirect, HttpMovedPermanently, HttpFound, HttpInternalServerError, \
-    HttpNotModified, HttpBadGatewayError, HttpCreated, HttpAccepted,\
-    HttpNonAuthoritativeInformation, HttpNoContent, HttpResetContent,\
-    HttpPartialContent
+from .exceptions import HTTPStatus, HTTPBadRequest, HTTPUnauthorized, \
+    HTTPForbidden, HTTPNotFound, HTTPMethodNotAllowed, HTTPConflict, HTTPGone,\
+    HTTPRedirect, HTTPMovedPermanently, HTTPFound, HTTPInternalServerError, \
+    HTTPNotModified, HTTPBadGatewayError, HTTPCreated, HTTPAccepted,\
+    HTTPNonAuthoritativeInformation, HTTPNoContent, HTTPResetContent,\
+    HTTPPartialContent
 from .controllers import Controller, RestController, Static, \
     RegexRouteController
 from .decorators import action, html, json, xml, binary, text, ifmatch, etag

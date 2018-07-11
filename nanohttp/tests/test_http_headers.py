@@ -6,7 +6,7 @@ from nanohttp import Controller, action, text, html, context
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
-class HttpHeadersTestCase(WsgiAppTestCase):
+class HTTPHeadersTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 

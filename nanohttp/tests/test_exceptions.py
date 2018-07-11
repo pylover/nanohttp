@@ -3,7 +3,7 @@ import unittest
 
 import ujson
 
-from nanohttp import Controller, html, HttpBadRequest, json, HttpStatus, \
+from nanohttp import Controller, html, HTTPBadRequest, json, HTTPStatus, \
     settings
 from nanohttp.tests.helpers import WsgiAppTestCase
 
@@ -13,15 +13,15 @@ class ExceptionTestCase(WsgiAppTestCase):
     class Root(Controller):
         @html
         def index(self):
-            raise HttpBadRequest()
+            raise HTTPBadRequest()
 
         @json
         def data(self):
-            raise HttpBadRequest()
+            raise HTTPBadRequest()
 
         @json
         def custom(self):
-            raise HttpStatus(status='462 custom text')
+            raise HTTPStatus(status='462 custom text')
 
         @html
         def err(self):
