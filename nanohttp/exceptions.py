@@ -5,7 +5,7 @@ from .contexts import context
 from .configuration import settings
 
 
-class HttpStatus(Exception):
+class HTTPStatus(Exception):
     status = None
 
     def __init__(self, status=None):
@@ -27,45 +27,45 @@ class HttpStatus(Exception):
             return stack_trace if settings.debug else ''
 
 
-class HttpKnownStatus(HttpStatus):
+class HTTPKnownStatus(HTTPStatus):
     def __init__(self, status_text=None):
         code, text = self.status.split(' ', 1)
         super().__init__(f'{code} {status_text or text}')
 
 
-class HttpBadRequest(HttpKnownStatus):
+class HTTPBadRequest(HTTPKnownStatus):
     status = '400 Bad Request'
 
 
-class HttpUnauthorized(HttpKnownStatus):
+class HTTPUnauthorized(HTTPKnownStatus):
     status = '401 Unauthorized'
 
 
-class HttpForbidden(HttpKnownStatus):
+class HTTPForbidden(HTTPKnownStatus):
     status = '403 Forbidden'
 
 
-class HttpNotFound(HttpKnownStatus):
+class HTTPNotFound(HTTPKnownStatus):
     status = '404 Not Found'
 
 
-class HttpMethodNotAllowed(HttpKnownStatus):
+class HTTPMethodNotAllowed(HTTPKnownStatus):
     status = '405 Method Not Allowed'
 
 
-class HttpConflict(HttpKnownStatus):
+class HTTPConflict(HTTPKnownStatus):
     status = '409 Conflict'
 
 
-class HttpGone(HttpKnownStatus):
+class HTTPGone(HTTPKnownStatus):
     status = '410 Gone'
 
 
-class HttpPreconditionFailed(HttpKnownStatus):
+class HTTPPreconditionFailed(HTTPKnownStatus):
     status = '412 Precondition Failed'
 
 
-class HttpRedirect(HttpKnownStatus):
+class HTTPRedirect(HTTPKnownStatus):
     """
     This is an abstract class for all redirects.
     """
@@ -75,49 +75,49 @@ class HttpRedirect(HttpKnownStatus):
         super().__init__(*args, **kw)
 
 
-class HttpMovedPermanently(HttpRedirect):
+class HTTPMovedPermanently(HTTPRedirect):
     status = '301 Moved Permanently'
 
 
-class HttpFound(HttpRedirect):
+class HTTPFound(HTTPRedirect):
     status = '302 Found'
 
 
-class HttpNotModified(HttpKnownStatus):
+class HTTPNotModified(HTTPKnownStatus):
     status = '304 Not Modified'
 
 
-class HttpInternalServerError(HttpKnownStatus):
+class HTTPInternalServerError(HTTPKnownStatus):
     status = '500 Internal Server Error'
 
 
-class HttpBadGatewayError(HttpKnownStatus):
+class HTTPBadGatewayError(HTTPKnownStatus):
     status = '502 Bad Gateway'
 
 
-class HttpSuccess(HttpKnownStatus):
+class HTTPSuccess(HTTPKnownStatus):
     status = '200 OK'
 
 
-class HttpCreated(HttpSuccess):
+class HTTPCreated(HTTPSuccess):
     status = '201 Created'
 
 
-class HttpAccepted(HttpSuccess):
+class HTTPAccepted(HTTPSuccess):
     status = '202 Accepted'
 
 
-class HttpNonAuthoritativeInformation(HttpSuccess):
+class HTTPNonAuthoritativeInformation(HTTPSuccess):
     status = '203 Non-Authoritative Information'
 
 
-class HttpNoContent(HttpSuccess):
+class HTTPNoContent(HTTPSuccess):
     status = '204 No Content'
 
 
-class HttpResetContent(HttpSuccess):
+class HTTPResetContent(HTTPSuccess):
     status = '205 Reset Content'
 
 
-class HttpPartialContent(HttpSuccess):
+class HTTPPartialContent(HTTPSuccess):
     status = '206 Partial Content'

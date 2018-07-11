@@ -2,7 +2,7 @@ import re
 import functools
 
 from nanohttp import context
-from nanohttp.exceptions import HttpStatus, HttpBadRequest
+from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 
 
 class Field:
@@ -84,9 +84,9 @@ class Criterion:
 
     def create_exception(self):
         if self.status_code == 400:
-            return HttpBadRequest
+            return HTTPBadRequest
 
-        return HttpStatus(
+        return HTTPStatus(
             status=f'{self.status_code} {self.status_text}'
         )
 

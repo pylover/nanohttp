@@ -1,20 +1,20 @@
 import unittest
 
-from nanohttp import Controller, action, text, HttpMovedPermanently, HttpFound
+from nanohttp import Controller, action, text, HTTPMovedPermanently, HTTPFound
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
-class HttpRedirectTestCase(WsgiAppTestCase):
+class HTTPRedirectTestCase(WsgiAppTestCase):
 
     class Root(Controller):
 
         @text()
         def index(self):
-            raise HttpMovedPermanently('/new/address')
+            raise HTTPMovedPermanently('/new/address')
 
         @action()
         def about(self):
-            raise HttpFound('/new/address')
+            raise HTTPFound('/new/address')
 
     def test_redirect_response_header(self):
         self.assert_get(

@@ -1,4 +1,4 @@
-from nanohttp import Controller, RestController, context, html, json, HttpFound
+from nanohttp import Controller, RestController, context, html, json, HTTPFound
 
 
 class TipsControllers(RestController):
@@ -19,7 +19,7 @@ class TipsControllers(RestController):
 
         # Updating the tips title
         # TipStore.get(tip_id).update(tip_title)
-        raise HttpFound('/tips/')
+        raise HTTPFound('/tips/')
 
 
 class Root(Controller):

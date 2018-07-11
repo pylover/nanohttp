@@ -127,7 +127,7 @@ def parse_any_form(environ, content_length=None, content_type=None):
         try:
             return ujson.decode(data)
         except ValueError:
-            raise exceptions.HttpBadRequest('Cannot parse the request')
+            raise exceptions.HTTPBadRequest('Cannot parse the request')
 
     try:
         storage = cgi.FieldStorage(
@@ -137,7 +137,7 @@ def parse_any_form(environ, content_length=None, content_type=None):
             keep_blank_values=True
         )
     except TypeError:
-        raise exceptions.HttpBadRequest('Cannot parse the request.')
+        raise exceptions.HTTPBadRequest('Cannot parse the request.')
 
     result = {}
     if storage.list is None or not len(storage.list):

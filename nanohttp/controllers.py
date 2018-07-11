@@ -6,7 +6,7 @@ import logging
 from os.path import isdir, join, relpath, pardir, exists
 from mimetypes import guess_type
 
-from .exceptions import HttpNotFound, HttpMethodNotAllowed, HttpForbidden
+from .exceptions import HTTPNotFound, HTTPMethodNotAllowed, HTTPForbidden
 from .contexts import context
 from .constants import HTTP_DATETIME_FORMAT
 
@@ -30,7 +30,7 @@ class Controller(object):
         default_action = self.__nanohttp__['default_action']
         handler = getattr(self, default_action, None)
         if not handler:
-            raise HttpNotFound()
+            raise HTTPNotFound()
 
         return handler, remaining_paths
 
@@ -44,7 +44,7 @@ class Controller(object):
     # noinspection PyMethodMayBeStatic
     def _validate_handler(self, handler, remaining_paths):
         if not callable(handler) or not hasattr(handler, '__nanohttp__'):
-            raise HttpNotFound()
+            raise HTTPNotFound()
 
         # noinspection PyUnresolvedReferences
         manifest = handler.__nanohttp__
@@ -64,10 +64,10 @@ class Controller(object):
                 positionals_length > available_arguments or
                 available_arguments > (positionals_length + optionals_length)
             ):
-            raise HttpNotFound()
+            raise HTTPNotFound()
 
         if verbs is not 'any' and context.method not in verbs:
-            raise HttpMethodNotAllowed()
+            raise HTTPMethodNotAllowed()
 
         return handler, remaining_paths
 
@@ -101,7 +101,7 @@ class RestController(Controller):
 
         # Handler is not found, trying verb
         if not hasattr(self, context.method):
-            raise HttpMethodNotAllowed()
+            raise HTTPMethodNotAllowed()
 
         return getattr(self, context.method), remaining_paths
 
@@ -133,15 +133,15 @@ class Static(Controller):
         # Check to do not access the parent directory of root and also we are
         # not listing directories here.
         if pardir in relpath(physical_path, self.directory):
-            raise HttpForbidden()
+            raise HTTPForbidden()
 
         if isdir(physical_path):
             if self.default_document:
                 physical_path = join(physical_path, self.default_document)
                 if not exists(physical_path):
-                    raise HttpForbidden
+                    raise HTTPForbidden
             else:
-                raise HttpForbidden()
+                raise HTTPForbidden()
 
         context.response_headers.add_header(
             'Content-Type',
@@ -165,7 +165,7 @@ class Static(Controller):
                     yield r
 
         except OSError:
-            raise HttpNotFound()
+            raise HTTPNotFound()
 
 
 class RegexRouteController(Controller):
@@ -202,4 +202,4 @@ class RegexRouteController(Controller):
             match = pattern.match(path)
             if match:
                 return handler, match.groups()
-        raise HttpNotFound()
+        raise HTTPNotFound()

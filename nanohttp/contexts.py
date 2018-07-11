@@ -209,7 +209,7 @@ class Context:
         expired = etag not in (none_match, match)
 
         if force and not expired:
-            raise exceptions.HttpNotModified()
+            raise exceptions.HTTPNotModified()
 
         return expired
 
@@ -223,7 +223,7 @@ class Context:
         if not ok and throw:
             raise (
                 throw if not isinstance(throw, bool)
-                else exceptions.HttpPreconditionFailed
+                else exceptions.HTTPPreconditionFailed
             )()
 
         if add_headers:
@@ -242,7 +242,7 @@ class Context:
         return self.must_revalidate(
             etag,
             lambda t: self.environ.get('HTTP_IF_NONE_MATCH') != t,
-            throw=exceptions.HttpNotModified if throw is True else throw,
+            throw=exceptions.HTTPNotModified if throw is True else throw,
             **kwargs
         )
 

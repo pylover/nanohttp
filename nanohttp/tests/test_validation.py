@@ -1,7 +1,7 @@
 import unittest
 import re
 
-from nanohttp import HttpBadRequest, HttpStatus, Controller, action, validate
+from nanohttp import HTTPBadRequest, HTTPStatus, Controller, action, validate
 from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp.validation import RequestValidator
 
@@ -21,7 +21,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Missing param1
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(anotherParam1='value1'))
 
         # Required false
@@ -49,18 +49,18 @@ class ValidationTestCase(unittest.TestCase):
             (dict(param1=None), None),
             validator(dict(param1=None))
         )
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             self.assertEqual(
                 (dict(param1=9), None),
                 validator(dict(param1='9'))
             )
 
         # More than Expectation
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1=11))
 
         # Not int input
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='a'))
 
     def test_validation_min(self):
@@ -72,14 +72,14 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         self.assertEqual((dict(param1=11), None), validator(dict(param1=11)))
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             self.assertEqual(
                 (dict(param1=11), None),
                 validator(dict(param1='11'))
             )
 
         # Less than Expectation
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1=9))
 
     def test_validation_min_length(self):
@@ -103,7 +103,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Shorter than Expectation
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='ab'))
 
     def test_validation_max_length(self):
@@ -126,7 +126,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Longer than Expectation
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='abbcde'))
 
     def test_validation_pattern(self):
@@ -142,7 +142,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Param1 not matching
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='asc'))
 
     def test_validation_pattern_compiled(self):
@@ -158,7 +158,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Param1 not matching
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='12345'))
 
     def test_validation_type(self):
@@ -175,7 +175,7 @@ class ValidationTestCase(unittest.TestCase):
         )
 
         # Param1 bad value(Cannot be converted to int)
-        with self.assertRaises(HttpBadRequest):
+        with self.assertRaises(HTTPBadRequest):
             validator(dict(param1='NotInteger', param2='NotInteger'))
 
     def test_validation_query_string(self):
@@ -204,11 +204,11 @@ class ValidationTestCase(unittest.TestCase):
 
         try:
             validator(dict(param1='NotInteger'))
-        except HttpStatus as e:
+        except HTTPStatus as e:
             self.assertEqual(e.status, '999 Type error')
         try:
             validator(dict(param1=29))
-        except HttpStatus as e:
+        except HTTPStatus as e:
             self.assertEqual(e.status, '666 Bad request')
 
 
