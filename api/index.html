@@ -250,20 +250,23 @@
 <dd><p>Load configurations</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference external" href="https://github.com/pylover/pymlconf#documentation">pymlconf Documentations</a></p>
+<p class="last"><a href="#id1"><span class="problematic" id="id2">`</span></a>pymlconf Documentations</p>
 </div>
+<p>&lt;<a class="reference external" href="https://github.com/pylover/pymlconf#documentation">https://github.com/pylover/pymlconf#documentation</a>&gt;`_</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>args</strong> – positional arguments pass into <code class="docutils literal notranslate"><span class="pre">pymlconf.DeferredConfigManager.load</span></code></li>
-<li><strong>kwargs</strong> – keyword arguments pass into <code class="docutils literal notranslate"><span class="pre">pymlconf.DeferredConfigManager.load</span></code></li>
+<li><strong>args</strong> – positional arguments pass into
+<code class="docutils literal notranslate"><span class="pre">pymlconf.DeferredConfigManager.load</span></code></li>
+<li><strong>kwargs</strong> – keyword arguments pass into</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p><code class="docutils literal notranslate"><span class="pre">pymlconf.DeferredConfigManager.load</span></code></p>
 </dd></dl>
 
 </div>
@@ -277,8 +280,12 @@
 <em class="property">class </em><code class="descclassname">nanohttp.contexts.</code><code class="descname">Context</code><span class="sig-paren">(</span><em>environ</em>, <em>application=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/contexts.html#Context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Global context for Request and Response.</p>
-<p>Context are initialized and entering on every request (referring to nanohttp application lifecycle).</p>
-<p>Context also supports to use stack nested (&gt;=0.16.6), its useful on testing.</p>
+<dl class="docutils">
+<dt>Context are initialized and entering on every request (referring to</dt>
+<dd>nanohttp application lifecycle).</dd>
+</dl>
+<p>Context also supports to use stack nested (&gt;=0.16.6), its useful on
+testing.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;weather&#39;</span><span class="p">]</span>
 
@@ -298,14 +305,16 @@
 <dl class="method">
 <dt id="nanohttp.contexts.Context.encode_response">
 <code class="descname">encode_response</code><span class="sig-paren">(</span><em>buffer</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.encode_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.encode_response" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encode response buffer with encoding definition on current context</p>
+<dd><p>Encode response buffer with encoding definition on current
+context</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="nanohttp.contexts.Context.get_current">
 <em class="property">classmethod </em><code class="descname">get_current</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; nanohttp.contexts.Context<a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.get_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.get_current" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get current context</p>
-<p>Not initialized context raises <code class="xref py py-class docutils literal notranslate"><span class="pre">ContextIsNotInitializedError</span></code>,</p>
+<p>Not initialized context raises
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ContextIsNotInitializedError</span></code>,</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -373,7 +382,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">((</span>
-            <span class="p">(</span><span class="s1">&#39;/installations/(?P&lt;installation_id&gt;\d+)/access_tokens&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_tokens</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;/installations/(?P&lt;installation_id&gt;\d+)/access_tokens&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">access_tokens</span><span class="p">),</span>
         <span class="p">))</span>
 
     <span class="nd">@json</span>
@@ -419,7 +429,10 @@
 <dt id="nanohttp.decorators.etag">
 <code class="descclassname">nanohttp.decorators.</code><code class="descname">etag</code><span class="sig-paren">(</span><em>*args</em>, <em>tag: Union[str</em>, <em>int</em>, <em>&lt;built-in function callable&gt;</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#etag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.etag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate <code class="docutils literal notranslate"><span class="pre">If-None-Match</span></code> and response with <code class="docutils literal notranslate"><span class="pre">ETag</span></code> header</p>
-<p>tag is getting from <code class="docutils literal notranslate"><span class="pre">tag</span></code> argument or response object <code class="docutils literal notranslate"><span class="pre">__etag__</span></code> attribute</p>
+<dl class="docutils">
+<dt>tag is getting from <code class="docutils literal notranslate"><span class="pre">tag</span></code> argument or response object <code class="docutils literal notranslate"><span class="pre">__etag__</span></code></dt>
+<dd>attribute</dd>
+</dl>
 </dd></dl>
 
 <dl class="data">
@@ -528,142 +541,142 @@
 <div class="section" id="module-nanohttp.exceptions">
 <span id="exceptions-module"></span><h2>exceptions Module<a class="headerlink" href="#module-nanohttp.exceptions" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpAccepted">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpAccepted</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpAccepted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpAccepted" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPAccepted">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPAccepted</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPAccepted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPAccepted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpBadGatewayError">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpBadGatewayError</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpBadGatewayError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpBadGatewayError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPBadGatewayError">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPBadGatewayError</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPBadGatewayError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPBadGatewayError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpBadRequest">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpBadRequest</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpBadRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpBadRequest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPBadRequest">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPBadRequest</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPBadRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPBadRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpConflict">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpConflict</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpConflict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpConflict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPConflict">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPConflict</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPConflict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPConflict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpCreated">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpCreated</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpCreated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpCreated" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPCreated">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPCreated</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPCreated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPCreated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpForbidden">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpForbidden</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpForbidden"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpForbidden" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPForbidden">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPForbidden</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPForbidden"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPForbidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpFound">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpFound</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpRedirect" title="nanohttp.exceptions.HttpRedirect"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpRedirect</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPFound">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPFound</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPRedirect" title="nanohttp.exceptions.HTTPRedirect"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPRedirect</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpGone">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpGone</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpGone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpGone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPGone">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPGone</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPGone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPGone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpInternalServerError">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpInternalServerError</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpInternalServerError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpInternalServerError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPInternalServerError">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPInternalServerError</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPInternalServerError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPInternalServerError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpKnownStatus">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpKnownStatus</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpKnownStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpKnownStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpStatus" title="nanohttp.exceptions.HttpStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPKnownStatus">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPKnownStatus</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPKnownStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPKnownStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPStatus" title="nanohttp.exceptions.HTTPStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpMethodNotAllowed">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpMethodNotAllowed</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpMethodNotAllowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpMethodNotAllowed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPMethodNotAllowed">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPMethodNotAllowed</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPMethodNotAllowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPMethodNotAllowed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpMovedPermanently">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpMovedPermanently</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpMovedPermanently"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpMovedPermanently" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpRedirect" title="nanohttp.exceptions.HttpRedirect"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpRedirect</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPMovedPermanently">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPMovedPermanently</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPMovedPermanently"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPMovedPermanently" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPRedirect" title="nanohttp.exceptions.HTTPRedirect"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPRedirect</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpNoContent">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNoContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNoContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNoContent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPNoContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPNoContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPNoContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPNoContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpNonAuthoritativeInformation">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNonAuthoritativeInformation</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNonAuthoritativeInformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNonAuthoritativeInformation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPNonAuthoritativeInformation">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPNonAuthoritativeInformation</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPNonAuthoritativeInformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPNonAuthoritativeInformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpNotFound">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNotFound</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNotFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNotFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPNotFound">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPNotFound</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPNotFound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpNotModified">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpNotModified</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpNotModified"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpNotModified" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPNotModified">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPNotModified</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPNotModified"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPNotModified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpPartialContent">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpPartialContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpPartialContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpPartialContent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPPartialContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPPartialContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPPartialContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPPartialContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpPreconditionFailed">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpPreconditionFailed</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpPreconditionFailed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpPreconditionFailed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPPreconditionFailed">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPPreconditionFailed</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPPreconditionFailed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPPreconditionFailed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpRedirect">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpRedirect</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpRedirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpRedirect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPRedirect">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPRedirect</code><span class="sig-paren">(</span><em>location</em>, <em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPRedirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPRedirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 <p>This is an abstract class for all redirects.</p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpResetContent">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpResetContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpResetContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpResetContent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpSuccess" title="nanohttp.exceptions.HttpSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpSuccess</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPResetContent">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPResetContent</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPResetContent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPResetContent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPSuccess" title="nanohttp.exceptions.HTTPSuccess"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPSuccess</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpStatus">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpStatus</code><span class="sig-paren">(</span><em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpStatus" title="Permalink to this definition">¶</a></dt>
+<dt id="nanohttp.exceptions.HTTPStatus">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPStatus</code><span class="sig-paren">(</span><em>status=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpSuccess">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpSuccess</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpSuccess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpSuccess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPSuccess">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPSuccess</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPSuccess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPSuccess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 <dl class="exception">
-<dt id="nanohttp.exceptions.HttpUnauthorized">
-<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HttpUnauthorized</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HttpUnauthorized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HttpUnauthorized" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HttpKnownStatus" title="nanohttp.exceptions.HttpKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpKnownStatus</span></code></a></p>
+<dt id="nanohttp.exceptions.HTTPUnauthorized">
+<em class="property">exception </em><code class="descclassname">nanohttp.exceptions.</code><code class="descname">HTTPUnauthorized</code><span class="sig-paren">(</span><em>status_text=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/exceptions.html#HTTPUnauthorized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.exceptions.HTTPUnauthorized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#nanohttp.exceptions.HTTPKnownStatus" title="nanohttp.exceptions.HTTPKnownStatus"><code class="xref py py-class docutils literal notranslate"><span class="pre">nanohttp.exceptions.HTTPKnownStatus</span></code></a></p>
 </dd></dl>
 
 </div>
@@ -711,7 +724,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -731,7 +744,12 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>

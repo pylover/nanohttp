@@ -173,7 +173,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">nanohttp.contexts</span> <span class="k">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">context</span>
-<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HttpStatus</span>
+<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HTTPStatus</span>
 <span class="kn">from</span> <span class="nn">nanohttp.configuration</span> <span class="k">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">nanohttp.constants</span> <span class="k">import</span> <span class="n">NO_CONTENT_STATUSES</span>
 
@@ -182,7 +182,8 @@
 
 
 <div class="viewcode-block" id="Application"><a class="viewcode-back" href="../../api/index.html#nanohttp.application.Application">[docs]</a><span class="k">class</span> <span class="nc">Application</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Application main handler &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Application main handler</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1">#: Application logger based on python builtin logging module</span>
     <span class="n">__logger__</span> <span class="o">=</span> <span class="n">logger</span>
@@ -191,8 +192,7 @@
     <span class="n">__root__</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Application.__init__"><a class="viewcode-back" href="../../api/index.html#nanohttp.application.Application.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize application and calling ``app_init`` hook.</span>
+        <span class="sd">&quot;&quot;&quot;Initialize application and calling ``app_init`` hook.</span>
 
 <span class="sd">        .. note:: ``__root__`` attribute will set by ``root`` parameter.</span>
 
@@ -202,7 +202,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;app_init&#39;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Call the hook</span>
+        <span class="sd">&quot;&quot;&quot;Call the hook</span>
 
 <span class="sd">        :param name: Hook name</span>
 <span class="sd">        :param args: Pass to the hook positional arguments</span>
@@ -212,12 +212,13 @@
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_handle_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This method should return a tuple of (status, resp_generator) and or raise the exception.</span>
+        <span class="sd">&quot;&quot;&quot;This method should return a tuple of (status, resp_generator) and or</span>
+<span class="sd">         raise the exception.</span>
 
 <span class="sd">        :param ex: The exception to examine</span>
 <span class="sd">        :return: status, resp_generator</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">HttpStatus</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">HTTPStatus</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">ex</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">ex</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Internal Server Error&#39;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -226,7 +227,9 @@
         <span class="k">raise</span> <span class="n">ex</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Method that `WSGI &lt;https://www.python.org/dev/peps/pep-0333/#id15&gt;`_ server calls &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Method that</span>
+<span class="sd">        `WSGI &lt;https://www.python.org/dev/peps/pep-0333/#id15&gt;`_ server calls</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Entering the context</span>
         <span class="n">context_</span> <span class="o">=</span> <span class="n">Context</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="n">context_</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
@@ -252,18 +255,22 @@
             <span class="n">response_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__root__</span><span class="p">(</span><span class="o">*</span><span class="n">remaining_paths</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">response_body</span><span class="p">:</span>
-                <span class="c1"># The goal is to yield an iterable, to encode and iter over it at the end of this method.</span>
+                <span class="c1"># The goal is to yield an iterable, to encode and iter over it</span>
+                <span class="c1"># at the end of this method.</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
                     <span class="c1"># Generators are iterable !</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="n">response_body</span>
 
-                    <span class="c1"># Trying to get at least one element from the generator, to force the method call till the second</span>
+                    <span class="c1"># Trying to get at least one element from the generator,</span>
+                    <span class="c1"># to force the method call till the second</span>
                     <span class="c1"># `yield` statement</span>
                     <span class="n">buffer</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">response_iterable</span><span class="p">)</span>
 
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
-                    <span class="c1"># Mocking the body inside an iterable to prevent the iteration over the str character by character</span>
-                    <span class="c1"># For more info check the pull-request #34, https://github.com/Carrene/nanohttp/pull/34</span>
+                    <span class="c1"># Mocking the body inside an iterable to prevent</span>
+                    <span class="c1"># the iteration over the str character by character</span>
+                    <span class="c1"># For more info check the pull-request</span>
+                    <span class="c1"># #34, https://github.com/Carrene/nanohttp/pull/34</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -271,8 +278,9 @@
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="n">response_body</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-            <span class="c1"># the self._handle_exception may raise the error again, if the error is not subclass of the HttpStatus,</span>
-            <span class="c1"># Otherwise, a tuple of the status code and response body will be returned.</span>
+            <span class="c1"># the self._handle_exception may raise the error again, if the</span>
+            <span class="c1"># error is not subclass of the HTTPStatusOtherwise,</span>
+            <span class="c1"># a tuple of the status code and response body will be returned.</span>
             <span class="n">status</span><span class="p">,</span> <span class="n">response_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_exception</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
@@ -296,7 +304,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
-        <span class="c1"># It seems we have to transfer a body, so this function should yield a generator of the body chunks.</span>
+        <span class="c1"># It seems we have to transfer a body, so this function should yield</span>
+        <span class="c1"># a generator of the body chunks.</span>
         <span class="k">def</span> <span class="nf">_response</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -309,9 +318,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex_</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Exception while serving the response.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s1">&#39;Exception while serving the response.&#39;</span>
+                <span class="p">)</span>
                 <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-                    <span class="c1"># FIXME: Proper way to handle exceptions after start_response</span>
+                    <span class="c1"># FIXME: Proper way to handle exceptions after</span>
+                    <span class="c1"># start_response</span>
                     <span class="k">yield</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex_</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
                 <span class="k">raise</span> <span class="n">ex_</span>
 
@@ -321,8 +333,9 @@
 
         <span class="k">return</span> <span class="n">_response</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: nocover</span>
         <span class="k">pass</span></div>
+
 </pre></div>
 
            </div>
@@ -357,7 +370,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -377,7 +390,12 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>

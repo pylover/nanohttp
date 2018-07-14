@@ -112,6 +112,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#rest-controller">Rest Controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regex-controller">Regex Controller</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="requests.html">Requests</a></li>
@@ -262,6 +263,28 @@ but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="regex-controller">
+<h2>Regex Controller<a class="headerlink" href="#regex-controller" title="Permalink to this headline">¶</a></h2>
+<p>For who want to handle complex URLs, nanohttp also supports
+<a class="reference external" href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a> dispatcher
+and here is a easy way to play with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">RegexRouteController</span><span class="p">,</span> <span class="n">json</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">RegexRouteController</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">((</span>
+            <span class="p">(</span><span class="s1">&#39;/user/(?P&lt;installation_id&gt;\d+)/access_tokens&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_tokens</span><span class="p">),</span>
+        <span class="p">))</span>
+
+    <span class="nd">@json</span>
+    <span class="k">def</span> <span class="nf">access_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">installation_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">installationId</span><span class="o">=</span><span class="n">installation_id</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -306,7 +329,7 @@ but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -326,7 +349,12 @@ but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>

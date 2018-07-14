@@ -196,12 +196,13 @@
 
 <span class="c1"># FIXME: use __slots__</span>
 <div class="viewcode-block" id="Context"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context">[docs]</a><span class="k">class</span> <span class="nc">Context</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A Global context for Request and Response.</span>
+    <span class="sd">&quot;&quot;&quot;A Global context for Request and Response.</span>
 
-<span class="sd">    Context are initialized and entering on every request (referring to nanohttp application lifecycle).</span>
+<span class="sd">    Context are initialized and entering on every request (referring to</span>
+<span class="sd">     nanohttp application lifecycle).</span>
 
-<span class="sd">    Context also supports to use stack nested (&gt;=0.16.6), its useful on testing.</span>
+<span class="sd">    Context also supports to use stack nested (&gt;=0.16.6), its useful on</span>
+<span class="sd">    testing.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -252,13 +253,15 @@
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_content_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot; Request content length &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request content length</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CONTENT_LENGTH&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot; Request content type &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request content type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CONTENT_TYPE&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">content_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -266,7 +269,8 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">response_content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot; Response content type property &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Response content type property</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">content_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -277,41 +281,51 @@
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">; charset=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">; charset=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Context.get_current"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.get_current">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_current</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Context&#39;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Get current context</span>
+        <span class="sd">&quot;&quot;&quot;Get current context</span>
 
-<span class="sd">            Not initialized context raises :class:`.ContextIsNotInitializedError`,</span>
+<span class="sd">            Not initialized context raises</span>
+<span class="sd">            :class:`.ContextIsNotInitializedError`,</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="s1">&#39;nanohttp_context&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">ContextIsNotInitializedError</span><span class="p">(</span><span class="s2">&quot;Context is not initialized yet.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ContextIsNotInitializedError</span><span class="p">(</span>
+                <span class="s2">&quot;Context is not initialized yet.&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span></div>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; `HTTP Request method &lt;https://tools.ietf.org/html/rfc7231#section-4.3&gt;`_ &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;`HTTP Request method</span>
+<span class="sd">        &lt;https://tools.ietf.org/html/rfc7231#section-4.3&gt;`_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;REQUEST_METHOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Request path &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="p">]</span>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Request full URI (includes query string)&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request full URI (includes query string)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">request_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">include_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Request Scheme (http|https) &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request Scheme (http|https)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">guess_scheme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Request query string &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Request query string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s1">&#39;QUERY_STRING&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span>
 
@@ -323,10 +337,10 @@
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Request form values</span>
+        <span class="sd">&quot;&quot;&quot;Request form values</span>
 
-<span class="sd">        .. note:: if using `multipart/form-data` uploaded file will reproduce as ``cgi.FieldStorage``.</span>
+<span class="sd">        .. note:: if using `multipart/form-data` uploaded file will reproduce</span>
+<span class="sd">         as ``cgi.FieldStorage``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">parse_any_form</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span>
@@ -336,21 +350,27 @@
 
     <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SimpleCookie&#39;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Cookies &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Cookies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">SimpleCookie</span><span class="p">()</span>
         <span class="k">if</span> <span class="s1">&#39;HTTP_COOKIE&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HTTP_COOKIE&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">result</span>
 
 <div class="viewcode-block" id="Context.encode_response"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.encode_response">[docs]</a>    <span class="k">def</span> <span class="nf">encode_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Encode response buffer with encoding definition on current context &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Encode response buffer with encoding definition on current</span>
+<span class="sd">        context</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">buffer</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;The returned response should has the `encode` attribute, such as `str`.&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s1">&#39;The returned response should has the `encode` attribute, &#39;</span>
+                <span class="s1">&#39;such as `str`.&#39;</span>
+            <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">none_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_NONE_MATCH&#39;</span><span class="p">)</span>
@@ -358,7 +378,7 @@
         <span class="n">expired</span> <span class="o">=</span> <span class="n">etag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">none_match</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">force</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">expired</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HttpNotModified</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPNotModified</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">expired</span>
 
@@ -370,7 +390,10 @@
         <span class="n">ok</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span><span class="n">etag</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span> <span class="ow">and</span> <span class="n">throw</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="p">(</span><span class="n">throw</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">throw</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="k">else</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HttpPreconditionFailed</span><span class="p">)()</span>
+            <span class="k">raise</span> <span class="p">(</span>
+                <span class="n">throw</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">throw</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPPreconditionFailed</span>
+            <span class="p">)()</span>
 
         <span class="k">if</span> <span class="n">add_headers</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">etag</span><span class="p">(</span><span class="n">etag</span><span class="p">)</span>
@@ -378,13 +401,17 @@
         <span class="k">return</span> <span class="n">ok</span>
 
     <span class="k">def</span> <span class="nf">etag_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_revalidate</span><span class="p">(</span><span class="n">etag</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_MATCH&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">t</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_revalidate</span><span class="p">(</span>
+            <span class="n">etag</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_MATCH&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">t</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">etag_none_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="n">throw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_revalidate</span><span class="p">(</span>
             <span class="n">etag</span><span class="p">,</span>
             <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_NONE_MATCH&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">t</span><span class="p">,</span>
-            <span class="n">throw</span><span class="o">=</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HttpNotModified</span> <span class="k">if</span> <span class="n">throw</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="n">throw</span><span class="p">,</span>
+            <span class="n">throw</span><span class="o">=</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPNotModified</span> <span class="k">if</span> <span class="n">throw</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="n">throw</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
 
@@ -446,7 +473,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -466,7 +493,12 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>

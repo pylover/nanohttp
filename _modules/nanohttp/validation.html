@@ -171,7 +171,7 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">from</span> <span class="nn">nanohttp</span> <span class="k">import</span> <span class="n">context</span>
-<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HttpStatus</span><span class="p">,</span> <span class="n">HttpBadRequest</span>
+<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">HTTPBadRequest</span>
 
 
 <div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">:</span>
@@ -253,9 +253,9 @@
 
     <span class="k">def</span> <span class="nf">create_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">HttpBadRequest</span>
+            <span class="k">return</span> <span class="n">HTTPBadRequest</span>
 
-        <span class="k">return</span> <span class="n">HttpStatus</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">HTTPStatus</span><span class="p">(</span>
             <span class="n">status</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.status_code}</span><span class="s1"> </span><span class="si">{self.status_text}</span><span class="s1">&#39;</span>
         <span class="p">)</span></div>
 
@@ -412,7 +412,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -432,7 +432,12 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>

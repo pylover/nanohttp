@@ -174,7 +174,7 @@
 <span class="kn">from</span> <span class="nn">.configuration</span> <span class="k">import</span> <span class="n">settings</span>
 
 
-<div class="viewcode-block" id="HttpStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpStatus">[docs]</a><span class="k">class</span> <span class="nc">HttpStatus</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPStatus">[docs]</a><span class="k">class</span> <span class="nc">HTTPStatus</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -196,45 +196,45 @@
             <span class="k">return</span> <span class="n">stack_trace</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpKnownStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpKnownStatus">[docs]</a><span class="k">class</span> <span class="nc">HttpKnownStatus</span><span class="p">(</span><span class="n">HttpStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPKnownStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPKnownStatus">[docs]</a><span class="k">class</span> <span class="nc">HTTPKnownStatus</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">code</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{code}</span><span class="s1"> {status_text or text}&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HttpBadRequest"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpBadRequest">[docs]</a><span class="k">class</span> <span class="nc">HttpBadRequest</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPBadRequest"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPBadRequest">[docs]</a><span class="k">class</span> <span class="nc">HTTPBadRequest</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;400 Bad Request&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpUnauthorized"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpUnauthorized">[docs]</a><span class="k">class</span> <span class="nc">HttpUnauthorized</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPUnauthorized"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPUnauthorized">[docs]</a><span class="k">class</span> <span class="nc">HTTPUnauthorized</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;401 Unauthorized&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpForbidden"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpForbidden">[docs]</a><span class="k">class</span> <span class="nc">HttpForbidden</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPForbidden"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPForbidden">[docs]</a><span class="k">class</span> <span class="nc">HTTPForbidden</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;403 Forbidden&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpNotFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNotFound">[docs]</a><span class="k">class</span> <span class="nc">HttpNotFound</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPNotFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPNotFound">[docs]</a><span class="k">class</span> <span class="nc">HTTPNotFound</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;404 Not Found&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpMethodNotAllowed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpMethodNotAllowed">[docs]</a><span class="k">class</span> <span class="nc">HttpMethodNotAllowed</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPMethodNotAllowed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPMethodNotAllowed">[docs]</a><span class="k">class</span> <span class="nc">HTTPMethodNotAllowed</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;405 Method Not Allowed&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpConflict"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpConflict">[docs]</a><span class="k">class</span> <span class="nc">HttpConflict</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPConflict"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPConflict">[docs]</a><span class="k">class</span> <span class="nc">HTTPConflict</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;409 Conflict&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpGone"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpGone">[docs]</a><span class="k">class</span> <span class="nc">HttpGone</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPGone"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPGone">[docs]</a><span class="k">class</span> <span class="nc">HTTPGone</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;410 Gone&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpPreconditionFailed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpPreconditionFailed">[docs]</a><span class="k">class</span> <span class="nc">HttpPreconditionFailed</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPPreconditionFailed"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPPreconditionFailed">[docs]</a><span class="k">class</span> <span class="nc">HTTPPreconditionFailed</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;412 Precondition Failed&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpRedirect"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpRedirect">[docs]</a><span class="k">class</span> <span class="nc">HttpRedirect</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPRedirect"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPRedirect">[docs]</a><span class="k">class</span> <span class="nc">HTTPRedirect</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is an abstract class for all redirects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -244,51 +244,51 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="HttpMovedPermanently"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpMovedPermanently">[docs]</a><span class="k">class</span> <span class="nc">HttpMovedPermanently</span><span class="p">(</span><span class="n">HttpRedirect</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPMovedPermanently"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPMovedPermanently">[docs]</a><span class="k">class</span> <span class="nc">HTTPMovedPermanently</span><span class="p">(</span><span class="n">HTTPRedirect</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;301 Moved Permanently&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpFound">[docs]</a><span class="k">class</span> <span class="nc">HttpFound</span><span class="p">(</span><span class="n">HttpRedirect</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPFound"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPFound">[docs]</a><span class="k">class</span> <span class="nc">HTTPFound</span><span class="p">(</span><span class="n">HTTPRedirect</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;302 Found&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpNotModified"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNotModified">[docs]</a><span class="k">class</span> <span class="nc">HttpNotModified</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPNotModified"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPNotModified">[docs]</a><span class="k">class</span> <span class="nc">HTTPNotModified</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;304 Not Modified&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpInternalServerError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpInternalServerError">[docs]</a><span class="k">class</span> <span class="nc">HttpInternalServerError</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPInternalServerError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPInternalServerError">[docs]</a><span class="k">class</span> <span class="nc">HTTPInternalServerError</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;500 Internal Server Error&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpBadGatewayError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpBadGatewayError">[docs]</a><span class="k">class</span> <span class="nc">HttpBadGatewayError</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPBadGatewayError"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPBadGatewayError">[docs]</a><span class="k">class</span> <span class="nc">HTTPBadGatewayError</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;502 Bad Gateway&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpSuccess"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpSuccess">[docs]</a><span class="k">class</span> <span class="nc">HttpSuccess</span><span class="p">(</span><span class="n">HttpKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPSuccess"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPSuccess">[docs]</a><span class="k">class</span> <span class="nc">HTTPSuccess</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpCreated"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpCreated">[docs]</a><span class="k">class</span> <span class="nc">HttpCreated</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPCreated"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPCreated">[docs]</a><span class="k">class</span> <span class="nc">HTTPCreated</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;201 Created&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpAccepted"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpAccepted">[docs]</a><span class="k">class</span> <span class="nc">HttpAccepted</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPAccepted"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPAccepted">[docs]</a><span class="k">class</span> <span class="nc">HTTPAccepted</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;202 Accepted&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpNonAuthoritativeInformation"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNonAuthoritativeInformation">[docs]</a><span class="k">class</span> <span class="nc">HttpNonAuthoritativeInformation</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPNonAuthoritativeInformation"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPNonAuthoritativeInformation">[docs]</a><span class="k">class</span> <span class="nc">HTTPNonAuthoritativeInformation</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;203 Non-Authoritative Information&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpNoContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpNoContent">[docs]</a><span class="k">class</span> <span class="nc">HttpNoContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPNoContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPNoContent">[docs]</a><span class="k">class</span> <span class="nc">HTTPNoContent</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;204 No Content&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpResetContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpResetContent">[docs]</a><span class="k">class</span> <span class="nc">HttpResetContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPResetContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPResetContent">[docs]</a><span class="k">class</span> <span class="nc">HTTPResetContent</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;205 Reset Content&#39;</span></div>
 
 
-<div class="viewcode-block" id="HttpPartialContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HttpPartialContent">[docs]</a><span class="k">class</span> <span class="nc">HttpPartialContent</span><span class="p">(</span><span class="n">HttpSuccess</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPPartialContent"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPPartialContent">[docs]</a><span class="k">class</span> <span class="nc">HTTPPartialContent</span><span class="p">(</span><span class="n">HTTPSuccess</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;206 Partial Content&#39;</span></div>
 </pre></div>
 
@@ -324,7 +324,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.2a1',
+            VERSION:'1.0.3a1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -344,7 +344,12 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+    <span id="forkongithub">
+      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+    </span>
+
 
 </body>
 </html>
