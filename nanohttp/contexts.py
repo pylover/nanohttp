@@ -194,8 +194,8 @@ class Context:
         return expired
 
     def etag(self, tag):
-        self.response_headers.add_header('Cache-Control', 'must-revalidate')
-        self.response_headers.add_header('ETag', tag)
+        self.response_headers['Cache-Control'] = 'must-revalidate'
+        self.response_headers['ETag'] = tag
 
     def must_revalidate(self, etag, match, throw=True, add_headers=True):
         ok = match(etag)
