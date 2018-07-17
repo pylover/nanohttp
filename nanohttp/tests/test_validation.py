@@ -1,5 +1,6 @@
-import unittest
 import re
+import unittest
+from decimal import Decimal
 
 from nanohttp import HTTPBadRequest, HTTPStatus, Controller, action, validate
 from nanohttp.tests.helpers import WsgiAppTestCase
@@ -165,18 +166,30 @@ class ValidationTestCase(unittest.TestCase):
         validator = RequestValidator(
             fields=dict(
                 param1=dict(type_=int),
-                param2=dict(type_=str)
+                param2=dict(type_=str),
+                param3=dict(type_=Decimal)
             )
         )
 
         self.assertEqual(
-            (dict(param1=123, param2='123'), None),
-            validator(dict(param1='123', param2=123))
+            (dict(param1=123, param2='123', param3=1.23), None),
+            validator(dict(param1='123', param2=123, param3=1.23))
         )
 
         # Param1 bad value(Cannot be converted to int)
         with self.assertRaises(HTTPBadRequest):
-            validator(dict(param1='NotInteger', param2='NotInteger'))
+            validator(
+                dict(
+                    param1='NotInteger',
+                    param2='NotInteger',
+                    param3='NotInteger'
+                )
+            )
+
+        # Param3 bad value(Cannot be converted to decimal)
+        with self.assertRaises(HTTPBadRequest):
+            validator(
+                dict(param1=1, param2='str', param3='NotDecimal'))
 
     def test_validation_query_string(self):
 
