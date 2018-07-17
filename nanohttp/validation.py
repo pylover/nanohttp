@@ -1,5 +1,6 @@
 import re
 import functools
+from _decimal import InvalidOperation
 
 from nanohttp import context
 from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
@@ -105,7 +106,7 @@ class TypeValidator(Criterion):
         type_ = self.expression
         try:
             return type_(value)
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, InvalidOperation):
             raise self.create_exception()
 
 
