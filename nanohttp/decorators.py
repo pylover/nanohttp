@@ -94,8 +94,8 @@ def chunked_encoding(*args, **kwargs):
     trailer = args[0] if args and not callable(args[0]) else None
     if args and callable(args[0]):
         return decorator(args[0])
-    else:
-        return decorator
+
+    return decorator
 
 
 def jsonify(func):
