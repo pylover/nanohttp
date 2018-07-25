@@ -71,24 +71,23 @@ def chunked_encoding(*args, **kwargs):
                     'Trailer', list(trailer.keys())[0]
                 )
             result = func(*args, **kwargs)
-            while True:
-                try:
+
+            try:
+                while True:
                     chunk = next(result)
                     yield f'{len(chunk)}\r\n{chunk}\r\n'
 
-                except StopIteration:
-                    yield '0\r\n'
-                    if trailer and isinstance(trailer, dict):
-                        yield f'{list(trailer.keys())[0]}: '\
-                            f'{list(trailer.values())[0]}\r\n'
-                    yield '\r\n'
-                    break
+            except StopIteration:
+                yield '0\r\n'
+                if trailer and isinstance(trailer, dict):
+                    yield f'{list(trailer.keys())[0]}: '\
+                        f'{list(trailer.values())[0]}\r\n'
+                yield '\r\n'
 
-                except Exception as ex:
-                    yield str(ex)
-                    yield '0\r\n'
-                    yield '\r\n'
-                    break
+            except Exception as ex:
+                yield str(ex)
+                yield '0\r\n'
+                yield '\r\n'
         return wrapper
 
     trailer = args[0] if args and not callable(args[0]) else None
