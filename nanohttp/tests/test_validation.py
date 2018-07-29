@@ -7,6 +7,13 @@ from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp.validation import RequestValidator
 
 
+def custom_validation(input_string):
+    expected_string = 'A sample string'
+    if input_string is not expected_string:
+        return False
+    return True
+
+
 class ValidationTestCase(unittest.TestCase):
 
     def test_validation_required(self):
@@ -223,6 +230,28 @@ class ValidationTestCase(unittest.TestCase):
             validator(dict(param1=29))
         except HTTPStatus as e:
             self.assertEqual(e.status, '666 Bad request')
+
+    def test_callable_validator(self):
+        def f(age):
+            if isinstance(age, int) and (0 < age < 100):
+                return age
+            try:
+                age = int(age)
+            except ValueError:
+                raise ValueError('Invalid type value for age')
+
+            if age > 100 or a < 0:
+                raise ValueError('Age is not in valid range')
+
+       validator = RequestValidator(
+           fields=dict(
+               param1=f
+           )
+       )
+
+       self.asserTrue(param1())
+       with self.assertRaises(ValueError):
+           validator(dict(param1=-1))
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):
