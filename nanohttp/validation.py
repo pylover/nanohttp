@@ -9,7 +9,7 @@ from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
-                 min_length=None, max_length=None):
+                 min_length=None, max_length=None, func=None):
         self.title = title
         self.form = form
         self.query_string = query_string
@@ -35,6 +35,9 @@ class Field:
 
         if max_length:
             self.criteria.append(MaxLengthValidator(max_length))
+
+        if func:
+            self.criteria.append(CallableValidator(func))
 
     def validate(self, container):
         for criterion in self.criteria:
@@ -215,6 +218,15 @@ class RequestValidator:
         return form, query_string
 
 
+class CallableValidator(Criterion):
+
+    def validate(self, func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        if result is False:
+            raise self.create_exception()
+        return result
+
+
 def validate(**fields):
 
     def decorator(func):
@@ -228,3 +240,6 @@ def validate(**fields):
         return wrapper
 
     return decorator
+
+
+
