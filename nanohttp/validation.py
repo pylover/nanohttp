@@ -85,7 +85,7 @@ class Criterion:
 
     def create_exception(self):
         if self.status_code == 400:
-            return HTTPBadRequest
+            return HTTPBadRequest(self.status_text)
 
         return HTTPStatus(
             status=f'{self.status_code} {self.status_text}'
