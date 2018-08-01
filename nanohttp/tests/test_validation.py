@@ -210,7 +210,8 @@ class ValidationTestCase(unittest.TestCase):
             fields=dict(
                 param1=dict(
                     type_=(int, '999 Type error'),
-                    minimum=(30, '666')
+                    minimum=(30, '666'),
+                    maximum=(40, '400 greater than maximum'),
                 )
             )
         )
@@ -223,6 +224,10 @@ class ValidationTestCase(unittest.TestCase):
             validator(dict(param1=29))
         except HTTPStatus as e:
             self.assertEqual(e.status, '666 Bad request')
+        try:
+            validator(dict(param1=41))
+        except HTTPStatus as e:
+            self.assertEqual(e.status, '400 greater than maximum')
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):
