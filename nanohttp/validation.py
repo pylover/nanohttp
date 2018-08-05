@@ -98,8 +98,11 @@ class RequiredValidator(Criterion):
     def __init__(self, expression):
         if isinstance(expression, str):
             error = expression
-        else:
+        elif isinstance(expression, bool):
             error = '400 Bad request'
+        else:
+            raise ValueError('Only bool and or string will be accepted.')
+
 
         parsed_error = error.split(' ', 1)
 
