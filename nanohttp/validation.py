@@ -9,7 +9,7 @@ from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
-                 min_length=None, max_length=None, func=None):
+                 min_length=None, max_length=None, callback=None):
         self.title = title
         self.form = form
         self.query_string = query_string
@@ -36,8 +36,8 @@ class Field:
         if max_length:
             self.criteria.append(MaxLengthValidator(max_length))
 
-        if func:
-            self.criteria.append(CallableValidator(func))
+        if callback:
+            self.criteria.append(CallableValidator(callback))
 
     def validate(self, container):
         for criterion in self.criteria:
@@ -65,10 +65,14 @@ class Criterion:
             self.status_text = 'Bad request'
 
     def validate(self, field: Field, container: dict) -> None:
-        value = container.get(field.title)
-        if value is None:
+        value = container.get(
+        if field.title not in container:
             return
-        container[field.title] = self._validate(value, container, field)
+        container[field.title] = self._validate(
+            container[field.title],
+            container,
+            field
+        )
 
     def _validate(self, value, container: dict, field: Field
                   ):  # pragma: no cover
@@ -189,18 +193,13 @@ class PatternValidator(Criterion):
 
 class RequestValidator:
     def __init__(self, fields):
-        default = dict(
-            required=False,
-            form=True,
-            query_string=False
-        )
-
         # Merging default specification
         self.fields = {}
         for field_name, specification in fields.items():
-            default_copy = default.copy()
-            default_copy.update(fields[field_name])
-            self.fields[field_name] = Field(field_name, **specification)
+            kwargs = dict(callback=specification) \
+                if callable(specification) else specification
+
+            self.fields[field_name] = Field(field_name, **kwargs)
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
         for field_name, field in self.fields.items():
@@ -220,8 +219,9 @@ class RequestValidator:
 
 class CallableValidator(Criterion):
 
-    def validate(self, func, *args, **kwargs):
-        result = func(*args, **kwargs)
+    def _validate(self, callback, *args, **kwargs):
+        import pudb; pudb.set_trace()  # XXX BREAKPOINT
+        result = callback(*args, **kwargs)
         if result is False:
             raise self.create_exception()
         return result

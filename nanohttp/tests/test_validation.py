@@ -244,25 +244,21 @@ class ValidationTestCase(unittest.TestCase):
 
     def test_callable_validator(self):
         def f(age):
-            if isinstance(age, int) and (0 < age < 100):
-                return age
-            try:
-                age = int(age)
-            except ValueError:
-                raise ValueError('Invalid type value for age')
-
-            if age > 100 or a < 0:
+            age = int(age)
+            if age < 0:
                 raise ValueError('Age is not in valid range')
+            return age
 
-       validator = RequestValidator(
-           fields=dict(
-               param1=f
-           )
-       )
+        validator = RequestValidator(
+            fields=dict(
+                param1=f
+            )
+        )
 
-       self.asserTrue(param1())
-       with self.assertRaises(ValueError):
-           validator(dict(param1=-1))
+        with self.assertRaises(ValueError):
+            validator(dict(param1=-1))
+
+        self.assertEqual(12, validator(dict(param1=12)))
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):
