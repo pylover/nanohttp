@@ -12,8 +12,12 @@ class ValidationTestCase(unittest.TestCase):
     def test_validation_required(self):
 
         validator = RequestValidator(
-            fields=dict(param1=dict(required=True))
+            fields=dict(
+                param1=dict(required=True)
+            )
         )
+
+        # Trying to pass with param1
         self.assertEqual(
             (dict(param1='value1'), None),
             validator(dict(param1='value1'))
@@ -21,15 +25,18 @@ class ValidationTestCase(unittest.TestCase):
 
         # Trying to pass without param1
         with self.assertRaises(HTTPBadRequest):
-            validator(dict(anotherParam1='value1'))
+            validator(dict(another_param='value1'))
 
+        # Define required validation with custom exception
         validator = RequestValidator(
-            fields=dict(param1=dict(required='600 Custom exception'))
+            fields=dict(
+                param1=dict(required='600 Custom exception')
+            )
         )
 
-        # Trying to pass without param1 and except raise custom exception
+        # Trying to pass with another param without param1
         with self.assertRaises(HTTPStatus('600 Custom exception').__class__):
-            validator(dict(anotherParam1='value1'))
+            validator(dict(another_param='value1'))
 
         # Trying to pass with param1
         self.assertEqual(
