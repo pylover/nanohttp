@@ -16,26 +16,32 @@ class ValidationTestCase(unittest.TestCase):
                 param1=dict(required=True)
             )
         )
+
+        # Trying to pass with param1
         self.assertEqual(
             (dict(param1='value1'), None),
             validator(dict(param1='value1'))
         )
 
-        # Missing param1
+        # Trying to pass without param1
         with self.assertRaises(HTTPBadRequest):
-            validator(dict(anotherParam1='value1'))
+            validator(dict(another_param='value1'))
 
-        # Required false
+        # Define required validation with custom exception
         validator = RequestValidator(
             fields=dict(
-                param1=dict(required=False)
+                param1=dict(required='600 Custom exception')
             )
         )
 
-        # Send another param
+        # Trying to pass with another param without param1
+        with self.assertRaises(HTTPStatus('600 Custom exception').__class__):
+            validator(dict(another_param='value1'))
+
+        # Trying to pass with param1
         self.assertEqual(
-            (dict(another_param='value'), None),
-            validator(dict(another_param='value'))
+            (dict(param1='value1'), None),
+            validator(dict(param1='value1'))
         )
 
     def test_validation_max(self):

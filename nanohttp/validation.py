@@ -95,6 +95,24 @@ class Criterion:
 # noinspection PyAbstractClass
 class RequiredValidator(Criterion):
 
+    def __init__(self, expression):
+        if isinstance(expression, str):
+            error = expression
+        elif isinstance(expression, bool):
+            error = '400 Bad request'
+        else:
+            raise ValueError('Only bool and or string will be accepted.')
+
+
+        parsed_error = error.split(' ', 1)
+
+        self.status_code = int(parsed_error[0])
+
+        if len(parsed_error) == 2:
+            self.status_text = parsed_error[1]
+        else:
+            self.status_text = 'Bad request'
+
     def validate(self, field, container):
         if field.title not in container:
             raise self.create_exception()
