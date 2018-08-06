@@ -243,7 +243,7 @@ class ValidationTestCase(unittest.TestCase):
             self.assertEqual(e.status, '400 greater than maximum')
 
     def test_callable_validator(self):
-        def f(age):
+        def f(age, container, field):
             age = int(age)
             if age < 0:
                 raise ValueError('Age is not in valid range')
@@ -258,7 +258,10 @@ class ValidationTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             validator(dict(param1=-1))
 
-        self.assertEqual(12, validator(dict(param1=12)))
+        self.assertEqual(
+            dict(param1=12).items(),
+            validator(dict(param1=12))[0].items()
+        )
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):

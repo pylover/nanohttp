@@ -65,9 +65,10 @@ class Criterion:
             self.status_text = 'Bad request'
 
     def validate(self, field: Field, container: dict) -> None:
-        value = container.get(
-        if field.title not in container:
+        value = container.get(field.title)
+        if value is None:
             return
+
         container[field.title] = self._validate(
             container[field.title],
             container,
@@ -219,12 +220,8 @@ class RequestValidator:
 
 class CallableValidator(Criterion):
 
-    def _validate(self, callback, *args, **kwargs):
-        import pudb; pudb.set_trace()  # XXX BREAKPOINT
-        result = callback(*args, **kwargs)
-        if result is False:
-            raise self.create_exception()
-        return result
+    def _validate(self, value, container, field):
+        return self.expression(value, container, field)
 
 
 def validate(**fields):
