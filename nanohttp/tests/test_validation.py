@@ -233,10 +233,12 @@ class ValidationTestCase(unittest.TestCase):
             validator(dict(param1='NotInteger'))
         except HTTPStatus as e:
             self.assertEqual(e.status, '999 Type error')
+
         try:
             validator(dict(param1=29))
         except HTTPStatus as e:
             self.assertEqual(e.status, '666 Bad request')
+
         try:
             validator(dict(param1=41))
         except HTTPStatus as e:
@@ -262,6 +264,19 @@ class ValidationTestCase(unittest.TestCase):
             dict(param1=12).items(),
             validator(dict(param1=12))[0].items()
         )
+
+    def test_not_none_validator(self):
+        validator = RequestValidator(fields=dict(param1=dict(not_none=True)))
+        with self.assertRaises(HTTPBadRequest):
+            validator(dict(param1=None))
+
+        validator = RequestValidator(
+            fields=dict(param1=dict(not_none='666 param1 is null'))
+        )
+        with self.assertRaises(HTTPStatus) as ctx:
+            validator(dict(param1=None))
+        exception = ctx.exception
+        self.assertEqual('666 param1 is null', str(exception))
 
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):

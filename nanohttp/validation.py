@@ -9,7 +9,8 @@ from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
-                 min_length=None, max_length=None, callback=None):
+                 min_length=None, max_length=None, callback=None,
+                 not_none=None):
         self.title = title
         self.form = form
         self.query_string = query_string
@@ -17,6 +18,9 @@ class Field:
 
         if required:
             self.criteria.append(RequiredValidator(required))
+
+        if not_none:
+            self.criteria.append(NotNoneValidator(not_none))
 
         if type_:
             self.criteria.append(TypeValidator(type_))
@@ -100,29 +104,27 @@ class Criterion:
         )
 
 
-# noinspection PyAbstractClass
-class RequiredValidator(Criterion):
-
+class FlagCriterion(Criterion):
     def __init__(self, expression):
-        if isinstance(expression, str):
-            error = expression
-        elif isinstance(expression, bool):
+        if isinstance(expression, bool):
             error = '400 Bad request'
+        elif isinstance(expression, str):
+            error = expression
         else:
             raise ValueError('Only bool and or string will be accepted.')
 
+        super().__init__((True, error))
 
-        parsed_error = error.split(' ', 1)
 
-        self.status_code = int(parsed_error[0])
-
-        if len(parsed_error) == 2:
-            self.status_text = parsed_error[1]
-        else:
-            self.status_text = 'Bad request'
-
+class RequiredValidator(FlagCriterion):
     def validate(self, field, container):
         if field.title not in container:
+            raise self.create_exception()
+
+
+class NotNoneValidator(FlagCriterion):
+    def validate(self, field, container):
+        if container.get(field.title) is None:
             raise self.create_exception()
 
 
