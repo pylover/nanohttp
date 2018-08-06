@@ -9,7 +9,7 @@ from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
-                 min_length=None, max_length=None):
+                 min_length=None, max_length=None, callback=None):
         self.title = title
         self.form = form
         self.query_string = query_string
@@ -35,6 +35,9 @@ class Field:
 
         if max_length:
             self.criteria.append(MaxLengthValidator(max_length))
+
+        if callback:
+            self.criteria.append(CallableValidator(callback))
 
     def validate(self, container):
         for criterion in self.criteria:
@@ -65,7 +68,12 @@ class Criterion:
         value = container.get(field.title)
         if value is None:
             return
-        container[field.title] = self._validate(value, container, field)
+
+        container[field.title] = self._validate(
+            container[field.title],
+            container,
+            field
+        )
 
     def _validate(self, value, container: dict, field: Field
                   ):  # pragma: no cover
@@ -186,18 +194,13 @@ class PatternValidator(Criterion):
 
 class RequestValidator:
     def __init__(self, fields):
-        default = dict(
-            required=False,
-            form=True,
-            query_string=False
-        )
-
         # Merging default specification
         self.fields = {}
         for field_name, specification in fields.items():
-            default_copy = default.copy()
-            default_copy.update(fields[field_name])
-            self.fields[field_name] = Field(field_name, **specification)
+            kwargs = dict(callback=specification) \
+                if callable(specification) else specification
+
+            self.fields[field_name] = Field(field_name, **kwargs)
 
     def __call__(self, form=None, query_string=None, *args, **kwargs):
         for field_name, field in self.fields.items():
@@ -215,6 +218,12 @@ class RequestValidator:
         return form, query_string
 
 
+class CallableValidator(Criterion):
+
+    def _validate(self, value, container, field):
+        return self.expression(value, container, field)
+
+
 def validate(**fields):
 
     def decorator(func):
@@ -228,3 +237,6 @@ def validate(**fields):
         return wrapper
 
     return decorator
+
+
+

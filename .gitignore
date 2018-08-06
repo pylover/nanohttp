@@ -90,3 +90,6 @@ ENV/
 .idea
 tests/stuff/demo.txt
 
+# Vim
+.*.sw[po]
+
