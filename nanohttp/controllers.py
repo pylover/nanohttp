@@ -6,7 +6,8 @@ import logging
 from os.path import isdir, join, relpath, pardir, exists
 from mimetypes import guess_type
 
-from .exceptions import HTTPNotFound, HTTPMethodNotAllowed, HTTPForbidden
+from .exceptions import HTTPNotFound, HTTPMethodNotAllowed, HTTPForbidden, \
+    HTTPStatus
 from .contexts import context
 from .constants import HTTP_DATETIME_FORMAT
 
@@ -41,19 +42,17 @@ class Controller(object):
 
         return getattr(self, remaining_paths[0], None), remaining_paths[1:]
 
-    # noinspection PyMethodMayBeStatic
     def _validate_handler(self, handler, remaining_paths):
         if not callable(handler) or not hasattr(handler, '__nanohttp__'):
             raise HTTPNotFound()
 
-        # noinspection PyUnresolvedReferences
         manifest = handler.__nanohttp__
 
-        positionals = manifest.get('positional_arguments', None)
+        positionals = manifest.get('positional_arguments')
         positionals_length = len(positionals) if positionals is not None \
             else UNLIMITED
 
-        optionals = manifest.get('optional_arguments', None)
+        optionals = manifest.get('optional_arguments')
         optionals_length = len(optionals) if optionals is not None \
             else UNLIMITED
 
@@ -69,9 +68,25 @@ class Controller(object):
         if verbs is not 'any' and context.method not in verbs:
             raise HTTPMethodNotAllowed()
 
+        prevent_empty_form = manifest.get('prevent_empty_form')
+        if prevent_empty_form and len(context.form) <= 0:
+            raise HTTPStatus(
+                prevent_empty_form \
+                if isinstance(prevent_empty_form, str) \
+                else '400 Empty Form'
+            )
+
+        prevent_form = manifest.get('prevent_form')
+        if prevent_form and len(context.form) > 0:
+            raise HTTPStatus(
+                prevent_form \
+                if isinstance(prevent_form, str) \
+                else '400 Form Not Allowed'
+            )
+
+
         return handler, remaining_paths
 
-    # noinspection PyMethodMayBeStatic
     def _serve_handler(self, handler, remaining_paths):
         context.response_encoding = handler.__nanohttp__.get('encoding', None)
         context.response_content_type = \

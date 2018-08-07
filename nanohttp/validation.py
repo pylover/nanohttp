@@ -6,6 +6,10 @@ from nanohttp import context
 from nanohttp.exceptions import HTTPStatus, HTTPBadRequest
 
 
+NO_EMPTY_FORM = 'NO_EMPTY_FORM'
+NO_FORM = 'NO_FORM'
+
+
 class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
@@ -195,9 +199,10 @@ class PatternValidator(Criterion):
 
 
 class RequestValidator:
-    def __init__(self, fields):
+    def __init__(self, fields, empty_form=None):
         # Merging default specification
         self.fields = {}
+        self.empty_form = empty_form
         for field_name, specification in fields.items():
             kwargs = dict(callback=specification) \
                 if callable(specification) else specification
@@ -227,9 +232,9 @@ class CallableValidator(Criterion):
 
 
 def validate(**fields):
+    validator = RequestValidator(fields)
 
     def decorator(func):
-        validator = RequestValidator(fields)
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -239,6 +244,4 @@ def validate(**fields):
         return wrapper
 
     return decorator
-
-
 

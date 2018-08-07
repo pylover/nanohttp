@@ -8,7 +8,8 @@ from .contexts import context
 
 def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
            content_type: Union[str, None]=None,
-           inner_decorator: Union[callable, None]=None, **kwargs):
+           inner_decorator: Union[callable, None]=None,
+           prevent_empty_form=None, prevent_form=None, **kwargs):
     """
     Base action decorator
 
@@ -47,6 +48,8 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
             positional_arguments=positional_arguments,
             optional_arguments=optional_arguments,
             keywordonly_arguments=keywordonly_arguments,
+            prevent_empty_form=prevent_empty_form,
+            prevent_form=prevent_form,
             default_action='index'
         )
 
