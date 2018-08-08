@@ -63,6 +63,43 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
     return decorator
 
 
+def chunked_encoding(*args, **kwargs):
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            context.response_headers.add_header('Transfer-Encoding', 'chunked')
+            if trailer and isinstance(trailer, dict):
+                context.response_headers.add_header(
+                    'Trailer', list(trailer.keys())[0]
+                )
+            result = func(*args, **kwargs)
+
+            try:
+                while True:
+                    chunk = next(result)
+                    yield f'{len(chunk)}\r\n{chunk}\r\n'
+
+            except StopIteration:
+                yield '0\r\n'
+                if trailer and isinstance(trailer, dict):
+                    yield f'{list(trailer.keys())[0]}: '\
+                        f'{list(trailer.values())[0]}\r\n'
+                yield '\r\n'
+
+            except Exception as ex:
+                yield str(ex)
+                yield '0\r\n'
+                yield '\r\n'
+        return wrapper
+
+    trailer = args[0] if args and not callable(args[0]) else None
+    if args and callable(args[0]):
+        return decorator(args[0])
+
+    return decorator
+
+
 def jsonify(func):
 
     @functools.wraps(func)
