@@ -24,34 +24,37 @@ A few hooks are available:
 - ``begin_response``: After processing request and preparing the response.
 - ``end_response``: Response is ready to send to client.
 
-..  code-block:: python
+.. code-block:: python
 
-    from nanohttp import Application, Controller, context
+   from nanohttp import Application, Controller, context
 
-    class JwtApplication(Application):
-        token_key = 'HTTP_AUTHORIZATION'
-        refresh_token_cookie_key = 'refresh-token'
+   class JwtApplication(Application):
+       token_key = 'HTTP_AUTHORIZATION'
+       refresh_token_cookie_key = 'refresh-token'
 
-        def begin_request(self):
-            if self.token_key in context.environ:
-                encoded_token = context.environ[self.token_key]
-                try:
-                    context.identity = JwtPrincipal.decode(encoded_token)
-                except itsdangerous.SignatureExpired as ex:
-                    refresh_token_encoded = context.cookies.get(self.refresh_token_cookie_key)
-                    if refresh_token_encoded:
-                        # Extracting session_id
-                        session_id = ex.payload.get('sessionId')
-                        if session_id:
-                            context.identity = new_token = self.refresh_jwt_token(refresh_token_encoded, session_id)
-                            if new_token:
-                                context.response_headers.add_header('X-New-JWT-Token', new_token.encode().decode())
+       def begin_request(self):
+           if self.token_key in context.environ:
+               encoded_token = context.environ[self.token_key]
+               try:
+                   context.identity = JwtPrincipal.decode(encoded_token)
+               except itsdangerous.SignatureExpired as ex:
+                   refresh_token_encoded = context.cookies.get(self.refresh_token_cookie_key)
+                   if refresh_token_encoded:
+                       # Extracting session_id
+                       session_id = ex.payload.get('sessionId')
+                       if session_id:
+                           context.identity = new_token = self.refresh_jwt_token(refresh_token_encoded, session_id)
+                           if new_token:
+                               context.response_headers.add_header('X-New-JWT-Token', new_token.encode().decode())
 
-                except itsdangerous.BadData:
-                    pass
+               except itsdangerous.BadData:
+                   pass
 
-            if not hasattr(context, 'identity'):
-                context.identity = None
+           if not hasattr(context, 'identity'):
+               context.identity = None
 
-.. note:: [Pro-tip] in some cases, you can override ``Application._handle_exception`` to
-          handle exception for all requests.
+
+.. note:: [Pro-tip] in some cases, you can override 
+          ``Application._handle_exception`` to handle exception for all 
+          requests.
+

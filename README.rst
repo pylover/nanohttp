@@ -18,40 +18,6 @@ A very micro HTTP framework. `documentation <http://nanohttp.org>`_
 
 
 
-Cookies
--------
-
-Accessing the request cookies:
-
-
-.. code-block:: python
-
-   from nanohttp import context
-
-   counter = context.cookies.get('counter')
-
-Setting cookie:
-
-.. code-block:: python
-
-   from nanohttp import context
-
-   context.cookies['dummy-cookie1'] = 'dummy-value'
-   context.cookies['dummy-cookie1']['http_only'] = True
-
-For more information on how to use cookies, please check the python builtin's 
-`http.cookies <https://docs.python.org/3/library/http.cookies.html>`_.
-
-
-Trailing slashes
-----------------
-
-If the ``Controller.__remove_trailing_slash__`` is ``True``, then all trailing slashes are ignored.
-
-.. code-block:: python
-
-   def test_trailing_slash(self):
-       self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
 
 
 Decorators to indicate http handlers

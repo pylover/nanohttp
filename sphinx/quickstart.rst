@@ -66,9 +66,6 @@ Or
    quickstart(Root())
 
 
-WSGI
-----
-
 Do you need a ``WSGI`` application?
 
 ``wsgi.py``

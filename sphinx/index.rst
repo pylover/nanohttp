@@ -56,7 +56,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   installation/index
+   quickstart
+   installation
+   cli
    guide/index
    api/index
    development/index
