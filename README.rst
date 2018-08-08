@@ -425,7 +425,6 @@ Context
 
 The ``context`` object is a proxy to an instance of ``nanohttp.Context`` which is ``unique per request``.
 
-.. TODO: ADD link to documentation
 
 Hooks
 -----

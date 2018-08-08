@@ -39,4 +39,3 @@ Passing the config file(s) Using python:
 
     quickstart(Root(), config='<YAML config string>')
 
-.. TODO: need more samples for how to using multiple configurations.

@@ -21,4 +21,3 @@ Setting cookie:
 For more information on how to use cookies,
 please check the python builtin's `http.cookies <https://docs.python.org/3/library/http.cookies.html>`_.
 
-.. TODO: Need more details and samples from python documentation.
