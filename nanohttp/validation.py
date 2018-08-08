@@ -232,6 +232,67 @@ class CallableValidator(Criterion):
 
 
 def validate(**fields):
+    """Decorator to validate HTTP Forms and query string.
+
+    .. code-block:: python
+
+       @validate(field1=dict(required=True))
+       def index(self, *, field1):
+           ...
+
+
+    Available parameters for validation is listed below:
+
+    :param required: Boolean or str, indicates the field is required.
+    :param not_none: Boolean or str, Raise when field is given and it's value
+                     is None.
+
+    :param type_: A callable to pass the received value to it as the only
+                  argument and get it in the apprpriate type, Both
+                  ``ValueError`` and `TypeError`` may be raised if the value
+                  cannot casted to the specified type. A good example of this
+                  callable would be the :class:`int`.
+    :param minimum: Numeric, Minimum allowed value.
+    :param maximum: Numeric, Maximum allowed value.
+    :param pattern: Regex pattern to match the value.
+    :param min_length: Only for strings, the minumum allowed length of the
+                       value.
+    :param max_length: Only for strings, the maximum allowed length of the
+                       value.
+    :param callback: A ``callable(value, container, field: Field)`` to be
+                     called while validating the field.
+
+
+    A detailed example:
+
+    .. code-block:: python
+
+       my_validator = validate(
+           title=dict(
+               required='710 Title not in form',
+               max_length=(50, '704 At most 50 characters are valid for title')
+           ),
+           description=dict(
+               max_length=(512, '703 At most 512 characters are valid for description')
+           ),
+           dueDate=dict(
+               pattern=(DATE_PATTERN, '701 Invalid due date format'),
+               required='711 Due date not in form'
+           ),
+           cutoff=dict(
+               pattern=(DATE_PATTERN, '702 Invalid cutoff format'),
+               required='712 Cutoff not in form'
+           ),
+       )
+
+       @json
+       @my_validator
+       def index(self):
+           ...
+
+
+    """
+
     validator = RequestValidator(fields)
 
     def decorator(func):

@@ -20,19 +20,23 @@ Features
 --------
 
 - Very simple, less-code & fast
-- Using object dispatcher instead of regex route dispatcher.
-- Url-Encoded, Multipart and JSON form parsing.
-- No ``request`` and or ``response`` objects is available, everything is combined in ``nanohttp.context``.
-- A very flexible configuration system: `pymlconf <https://github.com/pylover/pymlconf>`_
-- Method(verb) dispatcher.
-- Regex route dispatcher.
-- Powerful validation mechanism.
-- Use Python's `keywordonly` arguments for query strings >= `0.24.0`
+- Object/Attribute URL dispatcher
+- Regex route dispatcher
+- HTTP Method(Verb) dispatcher
+- Url-Encoded, Multipart and JSON form parsing
+- No ``request`` and or ``response`` objects is available, 
+  everything is combined in ``nanohttp.context``
+- A very flexible configuration system: 
+  `pymlconf <https://github.com/pylover/pymlconf>`_
+- Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ 
+  arguments for query strings (>= 0.24.0)
+
 
 Roadmap
 -------
 
-The road map is to keep it simple with 100% code coverage. no built-in template engine and or ORM will be included.
+The road map is to keep it simple with 100% code coverage. no built-in 
+template engine and or ORM will be included.
 
 
 Install
@@ -62,7 +66,8 @@ Quick Start
 
 .. code-block:: python
 
-   from nanohttp import Controller, RestController, context, html, json, HttpFound
+   from nanohttp import Controller, RestController, context, html, json, \
+       HttpFound
 
 
    class TipsControllers(RestController):
@@ -76,7 +81,7 @@ Quick Start
                    title="Tip %s" % tip_id
                )
 
-       @json
+       @json(prevent_empty_form=True)
        def post(self, tip_id: int = None):
            tip_title = context.form.get('title')
            print(tip_id, tip_title)
@@ -89,7 +94,7 @@ Quick Start
    class Root(Controller):
        tips = TipsControllers()
 
-       @html
+       @html(prevent_form='400 Form Not Allowed')
        def index(self):
            yield """
            <html><head><title>nanohttp Demo</title></head><body>
@@ -250,6 +255,7 @@ If the ``Controller.__remove_trailing_slash__`` is ``True``, then all trailing s
    def test_trailing_slash(self):
        self.assert_get('/users/10/jobs/', expected_response='User: 10\nAttr: jobs\n')
 
+
 Decorators to indicate http handlers
 ------------------------------------
 
@@ -262,27 +268,13 @@ Take a look at the code of the ``action`` decorator, all other decorators are de
 
 .. code-block:: python
 
-   def action(*verbs, encoding='utf-8', content_type=None, inner_decorator=None):
-       def _decorator(func):
+   def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
+              content_type: Union[str, None]=None,
+              inner_decorator: Union[callable, None]=None,
+              prevent_empty_form=None, prevent_form=None, **kwargs):
+       ...
 
-           if inner_decorator is not None:
-               func = inner_decorator(func)
 
-           func.__http_methods__ = verbs if verbs else 'any'
-
-           func.__response_encoding__ = encoding
-
-           if content_type:
-               func.__content_type__ = content_type
-
-           return func
-
-       if verbs and callable(verbs[0]):
-           f = verbs[0]
-           verbs = tuple()
-           return _decorator(f)
-       else:
-           return _decorator
 
 Other decorators are defined using ``functools.partial``:
 
@@ -327,6 +319,7 @@ The ``nanohttp.Static`` class is responsible to serve static files:
 
    class Root(Controller):
        static = Static('path/to/static/directory', default_document='index.html')
+
 
 Then you can access static files on ``/static/filename.ext``
 
@@ -373,11 +366,15 @@ A decorator named: `validate` is available to ensure the request parameters.
 
 A complete list of validation options is:
 
-- ``required``: Boolean, indicates the field is required.
-- ``type_``: A callable to pass the received value to it as the only argument and get it in the
-  apprpriate type, Both ``ValueError`` and ``TypeError`` may be raised if the value cannot casted to
-  the specified type. A good example of this callable would be the ``int``.
-  
+
+- ``required``: Boolean or str, indicates the field is required.
+- ``not_none``: Boolean or str, Raise when field is given and it's value is 
+                None.
+- ``type_``: A callable to pass the received value to it as the only argument 
+             and get it in the apprpriate type, Both ``ValueError`` and 
+             ``TypeError`` may be raised if the value cannot casted to the 
+             specified type. A good example of this callable would be the 
+             ``int``.
 - ``minimum``: Numeric, Minimum allowed value.
 - ``maximum``: Numeric, Maximum allowed value.
 - ``pattern``: Regex pattern to match the value.
@@ -389,7 +386,7 @@ Values for those options can be a pair of ``criteria, http status``, for example
 .. code-block:: python
 
    @validate(field1=dict(
-       required=(True, '400 Bad Request'), 
+       required='400 Bad Request', 
        min=(20, '471 Minimum allowed value is 20'),
        max=(100, '472 Maximum allowed value is 100'),
        type_=(int, '470 Only integers are allowed here')
