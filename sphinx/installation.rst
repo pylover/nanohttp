@@ -2,7 +2,7 @@ Installation
 ============
 
 Requirements
-^^^^^^^^^^^^
+------------
 
 nanohttp supports python versions greater than 3.6.x and no have any external 
 requirements, everything is defined in ``setup.py`` and will be installed 
@@ -11,20 +11,20 @@ automatically through the
 
 
 PyPI
-^^^^
+----
 
-..  code-block:: bash
+.. code-block:: bash
 
-    $ pip install nanohttp
+   $ pip install nanohttp
 
 
 From Source
-^^^^^^^^^^^
+-----------
 
-..  code-block:: bash
+.. code-block:: bash
 
-    $ cd path/to/nanohttp
-    $ pip install -e .
+   $ cd path/to/nanohttp
+   $ pip install -e .
 
 
 If you want to be a contributor or run nanohttp tests, should to install through:

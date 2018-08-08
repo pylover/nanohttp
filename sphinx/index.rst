@@ -23,12 +23,16 @@
 .. image:: https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&label=Star
      :target: https://github.com/Carrene/nanohttp
 
+
+########
 nanohttp
---------
+########
+
 A very micro HTTP framework.
 
+********
 Features
---------
+********
 
 - Very simple, less-code & fast
 - Object/Attribute URL dispatcher
@@ -43,15 +47,17 @@ Features
   arguments for query strings (>= 0.24.0)
 
 
+*******
 Roadmap
--------
+*******
 
 The roadmap is to keep it simple with 100% code coverage. no built-in 
 template engine and or ORM will be included.
 
 
+********
 Contents
---------
+********
 
 .. toctree::
    :maxdepth: 2
