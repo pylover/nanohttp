@@ -1,7 +1,8 @@
-import ujson
 import functools
-from typing import Union
 from inspect import signature, Parameter
+from typing import Union
+
+import ujson
 
 from .contexts import context
 
@@ -59,6 +60,43 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
         f = args[0]
         args = tuple()
         return decorator(f)
+
+    return decorator
+
+
+def chunked(trailer_field=None, trailer_value=None):
+    """Enables chunked encoding on an action
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal trailer_field, trailer_value
+            context.response_headers.add_header('Transfer-Encoding', 'chunked')
+            if trailer_field:
+                context.response_headers.add_header('Trailer', trailer_field)
+            result = func(*args, **kwargs)
+            try:
+                while True:
+                    chunk = next(result)
+                    yield f'{len(chunk)}\r\n{chunk}\r\n'
+
+            except StopIteration:
+                yield '0\r\n'
+                if trailer_field and trailer_value:
+                    yield f'{trailer_field}: {trailer_value}\r\n'
+                yield '\r\n'
+
+            except Exception as ex:
+                yield str(ex)
+                yield '0\r\n'
+                yield '\r\n'
+
+        return wrapper
+
+    if callable(trailer_field):
+        func = trailer_field
+        trailer_field = None
+        return decorator(func)
 
     return decorator
 
