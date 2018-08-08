@@ -14,10 +14,21 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
     """
     Base action decorator
 
+    Marks the function as a nanohttp handler/action.
+
     :param verbs: Allowed HTTP methods
     :param encoding: Content encoding
-    :param content_type: Content Type
-    :param inner_decorator: Inner decorator
+    :param content_type: Response Content Type
+    :param inner_decorator: Inner decorator, to put it between this decorator
+                            and the handler.
+    :param prevent_empty_form: Boolean or str, indicates to prevent empty HTTP
+                               form. if str given, a
+                               :class:`.HTTPStatus(<str>)` will be raised.
+                               otherwise :class:`.HTTPBadRequest`.
+    :param prevent_form: Boolean or str, indicates to prevent any HTTP form. if
+                         str given, a :class:`.HTTPStatus(<str>)` will be
+                         raised, otherwise :class:`.HTTPBadRequest`.
+
     """
     def decorator(func):
 
@@ -41,6 +52,9 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
                 positional_arguments.append(parameter.name)
             else:
                 optional_arguments.append((parameter.name, parameter.default))
+
+        if isinstance(verbs, str):
+            verbs = [str]
 
         func.__nanohttp__ = dict(
             verbs=verbs,
