@@ -7,6 +7,7 @@ Guide
 
     quickstart
     configuration
+    cli
     application
     routing
     requests

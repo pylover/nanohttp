@@ -6,36 +6,45 @@ nanohttp have a great human-friendly configuration system with help of
 
 Create a ``demo.yml`` file. The file below is same as the default configuration.
 
-..  code-block:: yaml
+.. code-block:: yaml
 
-    debug: true
+   debug: true
 
-    domain:
+   domain:
 
-    cookie:
-      http_only: false
-      secure: false
+   cookie:
+     http_only: false
+     secure: false
 
 
 You may use ``nanohttp.settings`` anywhere to access the config values.
 
-..  code-block:: python
+.. code-block:: python
 
-    from nanohttp import Controller, html, settings
+   from nanohttp import Controller, html, settings
 
-    class Root(Controller):
+   class Root(Controller):
 
-        @html
-        def index(self):
-            yield '<html><head><title>nanohttp demo</title></head><body>'
-            yield '<h2>debug flag is: %s</h2>' % settings.debug
-            yield '</body></html>'
+       @html
+       def index(self):
+           yield '<html><head><title>nanohttp demo</title></head><body>'
+           yield '<h2>debug flag is: %s</h2>' % settings.debug
+           yield '</body></html>'
+
+Passing the config file(s) using command line:
+
+.. code-block:: bash
+
+   $ nanohttp -c demo.yml [-c another.yml] demo
+
 
 Passing the config file(s) Using python:
 
-..  code-block:: bash
+.. code-block:: bash
 
-    from nanohttp import quickstart
+   from nanohttp import quickstart
 
-    quickstart(Root(), config='<YAML config string>')
+   quickstart(Root(), config='<YAML config string>')
+
+
 

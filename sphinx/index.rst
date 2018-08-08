@@ -42,6 +42,14 @@ Features
 - Use Python's `keywordonly <https://www.python.org/dev/peps/pep-3102/>`_ 
   arguments for query strings (>= 0.24.0)
 
+
+Roadmap
+-------
+
+The roadmap is to keep it simple with 100% code coverage. no built-in 
+template engine and or ORM will be included.
+
+
 Contents
 --------
 
