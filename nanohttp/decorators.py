@@ -1,7 +1,8 @@
-import ujson
 import functools
-from typing import Union
 from inspect import signature, Parameter
+from typing import Union
+
+import ujson
 
 from .contexts import context
 
@@ -72,8 +73,6 @@ def chunked_encoding(trailer_field=None, trailer_value=None):
             nonlocal trailer_field, trailer_value
             context.response_headers.add_header('Transfer-Encoding', 'chunked')
             if trailer_field:
-                if callable(trailer_field):
-                    trailer_field = trailer_field()
                 context.response_headers.add_header('Trailer', trailer_field)
             result = func(*args, **kwargs)
             try:
