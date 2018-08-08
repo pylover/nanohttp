@@ -16,13 +16,13 @@ class ChunkedEncodingTestCase(WsgiAppTestCase):
         yield 'third chunk'
 
     @staticmethod
-    @chunked_encoding({'field': 'value'})
+    @chunked_encoding('field', 'value')
     def trailer():
         yield 'first chunk'
         yield 'second chunk'
 
     @staticmethod
-    @chunked_encoding({'field': 'value'})
+    @chunked_encoding('field', 'value')
     def error():
         yield 'first chunk'
         yield 1/0
@@ -49,7 +49,6 @@ class ChunkedEncodingTestCase(WsgiAppTestCase):
             self.assertEqual(next(output_generator), '0\r\n')
             self.assertEqual(next(output_generator), 'field: value\r\n')
             self.assertEqual(next(output_generator), '\r\n')
-
             self.assertEqual(context.response_headers['trailer'], 'field')
 
     def test_error(self):

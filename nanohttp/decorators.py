@@ -63,18 +63,19 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
     return decorator
 
 
-def chunked_encoding(*args, **kwargs):
-
+def chunked_encoding(trailer_field=None, trailer_value=None):
+    """Enables chunked encoding on an action
+    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            nonlocal trailer_field, trailer_value
             context.response_headers.add_header('Transfer-Encoding', 'chunked')
-            if trailer and isinstance(trailer, dict):
-                context.response_headers.add_header(
-                    'Trailer', list(trailer.keys())[0]
-                )
+            if trailer_field:
+                if callable(trailer_field):
+                    trailer_field = trailer_field()
+                context.response_headers.add_header('Trailer', trailer_field)
             result = func(*args, **kwargs)
-
             try:
                 while True:
                     chunk = next(result)
@@ -82,20 +83,21 @@ def chunked_encoding(*args, **kwargs):
 
             except StopIteration:
                 yield '0\r\n'
-                if trailer and isinstance(trailer, dict):
-                    yield f'{list(trailer.keys())[0]}: '\
-                        f'{list(trailer.values())[0]}\r\n'
+                if trailer_field and trailer_value:
+                    yield f'{trailer_field}: {trailer_value}\r\n'
                 yield '\r\n'
 
             except Exception as ex:
                 yield str(ex)
                 yield '0\r\n'
                 yield '\r\n'
+
         return wrapper
 
-    trailer = args[0] if args and not callable(args[0]) else None
-    if args and callable(args[0]):
-        return decorator(args[0])
+    if callable(trailer_field):
+        func = trailer_field
+        trailer_field = None
+        return decorator(func)
 
     return decorator
 
