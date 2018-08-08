@@ -21,7 +21,6 @@ class ContextStack(list):
         self.append(item)
 
 
-# FIXME: use __slots__
 class Context:
     """A Global context for Request and Response.
 

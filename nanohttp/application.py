@@ -153,8 +153,6 @@ class Application:
                     'Exception while serving the response.'
                 )
                 if settings.debug:
-                    # FIXME: Proper way to handle exceptions after
-                    # start_response
                     yield str(ex_).encode()
                 raise ex_
 
