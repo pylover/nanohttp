@@ -64,7 +64,7 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
     return decorator
 
 
-def chunked_encoding(trailer_field=None, trailer_value=None):
+def chunked(trailer_field=None, trailer_value=None):
     """Enables chunked encoding on an action
     """
     def decorator(func):
