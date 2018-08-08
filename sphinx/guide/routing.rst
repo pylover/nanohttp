@@ -26,6 +26,10 @@ handle request.
        def name(self):
            return '<h1>children controller</h1>'
 
+       @html
+       def edit(self, name):
+           return '<h1>children edited</h1>'
+
    class Root(Controller):
        children = ChildController()
 
@@ -37,10 +41,14 @@ Final path can be like:
 
 .. code-block:: text
 
-    /                   -> Root.index()
-    /children           -> Root.children.index()
-    /children/name      -> Root.children.name()
+    /                      -> Root.index()
+    /children              -> Root.children.index()
+    /children/name         -> Root.children.name()
+    /children/edit/name    -> Root.children.edit(name)
 
+
+.. Note:: Remaining url parts will be passed as positional argument to the 
+          handler method.
 
 .. _routing-rest_controller:
 
