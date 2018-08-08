@@ -22,7 +22,7 @@ class Controller(object):
     """
 
     __nanohttp__ = dict(
-        verbs='any',
+        verbs=['any'],
         encoding='utf8',
         default_action='index'
     )
@@ -65,7 +65,7 @@ class Controller(object):
             ):
             raise HTTPNotFound()
 
-        if verbs is not 'any' and context.method not in verbs:
+        if verbs != ['any'] and context.method not in verbs:
             raise HTTPMethodNotAllowed()
 
         prevent_empty_form = manifest.get('prevent_empty_form')
@@ -125,7 +125,7 @@ class Static(Controller):
     """Serves static files
     """
     __nanohttp__ = dict(
-        verbs='any',
+        verbs=['any'],
         encoding=None,
         default_action='index'
     )

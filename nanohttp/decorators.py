@@ -31,6 +31,7 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
 
     """
     def decorator(func):
+        nonlocal verbs
 
         if inner_decorator is not None:
             func = inner_decorator(func, *args, **kwargs)
@@ -54,7 +55,7 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
                 optional_arguments.append((parameter.name, parameter.default))
 
         if isinstance(verbs, str):
-            verbs = [str]
+            verbs = [verbs]
 
         func.__nanohttp__ = dict(
             verbs=verbs,

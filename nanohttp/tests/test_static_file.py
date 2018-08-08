@@ -1,3 +1,4 @@
+import unittest
 from os.path import join
 
 from nanohttp import Controller, Static
@@ -21,3 +22,8 @@ class StaticFileTestCase(WsgiAppTestCase):
         self.assert_get('/static/not-exists', status=404)
         self.assert_get('/static/..', status=403)
         self.assert_get('/assets/', status=403)
+
+
+if __name__ == '__main__':  # pragma: no cover
+    unittest.main()
+
