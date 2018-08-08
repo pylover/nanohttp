@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -99,7 +99,9 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Development</a></li>
@@ -189,12 +191,7 @@
     <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hasitem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
 
-
-<span class="c1"># FIXME: use __slots__</span>
 <div class="viewcode-block" id="Context"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context">[docs]</a><span class="k">class</span> <span class="nc">Context</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A Global context for Request and Response.</span>
 
@@ -226,8 +223,16 @@
     <span class="c1">#: Current :class:`.Application` instance</span>
     <span class="n">application</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1">#: Nested contexts stack</span>
-    <span class="n">__stack__</span> <span class="o">=</span> <span class="n">ContextStack</span><span class="p">()</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__stack__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Nested contexts stack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">THREADLOCAL_STACK_ATTRIBUTE</span> <span class="o">=</span> <span class="s1">&#39;nanohttp_context_stack&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="n">THREADLOCAL_STACK_ATTRIBUTE</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="n">THREADLOCAL_STACK_ATTRIBUTE</span><span class="p">,</span> <span class="n">ContextStack</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="n">THREADLOCAL_STACK_ATTRIBUTE</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -248,24 +253,24 @@
 
     <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="o">.</span><span class="n">hasitem</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.request_content_length"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.request_content_length">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_content_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Request content length</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CONTENT_LENGTH&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.request_content_type"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.request_content_type">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Request content type</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">content_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CONTENT_TYPE&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">content_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">response_content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
@@ -297,32 +302,32 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.method"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.method">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;`HTTP Request method</span>
 <span class="sd">        &lt;https://tools.ietf.org/html/rfc7231#section-4.3&gt;`_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;REQUEST_METHOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;REQUEST_METHOD&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.path"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.path">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH_INFO&#39;</span><span class="p">]</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.request_uri"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.request_uri">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request full URI (includes query string)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">request_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">include_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">request_uri</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">include_query</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.request_scheme"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.request_scheme">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">request_scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request Scheme (http|https)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">guess_scheme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">guess_scheme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.query"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.query">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request query string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -333,9 +338,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;QUERY_STRING&#39;</span><span class="p">],</span>
             <span class="n">keep_blank_values</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">strict_parsing</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.form"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.form">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request form values</span>
 
@@ -346,16 +351,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span>
             <span class="n">content_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_content_length</span><span class="p">,</span>
             <span class="n">content_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request_content_type</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
-    <span class="nd">@LazyAttribute</span>
+<div class="viewcode-block" id="Context.cookies"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.cookies">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;SimpleCookie&#39;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Cookies</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">SimpleCookie</span><span class="p">()</span>
         <span class="k">if</span> <span class="s1">&#39;HTTP_COOKIE&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
             <span class="n">result</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HTTP_COOKIE&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="Context.encode_response"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.encode_response">[docs]</a>    <span class="k">def</span> <span class="nf">encode_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Encode response buffer with encoding definition on current</span>
@@ -473,7 +478,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

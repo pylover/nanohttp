@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Requests" href="requests.html" />
+    <link rel="next" title="http handlers" href="handlers.html" />
     <link rel="prev" title="Application" href="application.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -101,9 +101,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="application.html">Application</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Routing</a><ul>
@@ -115,10 +116,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#regex-controller">Regex Controller</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="requests.html">Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">http handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html">Serving Static files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forms.html">Accessing Request Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validating requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templates.html">Templates</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
@@ -195,8 +201,9 @@ it can help you to have a pythonic, beautiful, meaningful
 structure with the best performance.</p>
 <div class="section" id="controller">
 <span id="routing-controller"></span><h2>Controller<a class="headerlink" href="#controller" title="Permalink to this headline">¶</a></h2>
-<p>The requested path will be split-ed by <code class="docutils literal notranslate"><span class="pre">/</span></code> and python’s <code class="docutils literal notranslate"><span class="pre">getattr</span></code> will be used on the <code class="docutils literal notranslate"><span class="pre">Root</span></code> controller
-recursively to find specific callable to handle request.</p>
+<p>The requested path will be split-ed by <code class="docutils literal notranslate"><span class="pre">/</span></code> and python’s <code class="docutils literal notranslate"><span class="pre">getattr</span></code> will
+be used on the <code class="docutils literal notranslate"><span class="pre">Root</span></code> controller recursively to find specific callable to
+handle request.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">html</span>
 
 <span class="k">class</span> <span class="nc">ChildController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
@@ -209,6 +216,10 @@ recursively to find specific callable to handle request.</p>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;&lt;h1&gt;children controller&lt;/h1&gt;&#39;</span>
 
+    <span class="nd">@html</span>
+    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;h1&gt;children edited&lt;/h1&gt;&#39;</span>
+
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
     <span class="n">children</span> <span class="o">=</span> <span class="n">ChildController</span><span class="p">()</span>
 
@@ -218,25 +229,35 @@ recursively to find specific callable to handle request.</p>
 </pre></div>
 </div>
 <p>Final path can be like:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/                   -&gt; Root.index()
-/children           -&gt; Root.children.index()
-/children/name      -&gt; Root.children.name()
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/                      -&gt; Root.index()
+/children              -&gt; Root.children.index()
+/children/name         -&gt; Root.children.name()
+/children/edit/name    -&gt; Root.children.edit(name)
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Remaining url parts will be passed as positional argument to the
+handler method.</p>
 </div>
 <div class="section" id="trailing-slashes">
 <span id="routing-rest-controller"></span><h3>Trailing slashes<a class="headerlink" href="#trailing-slashes" title="Permalink to this headline">¶</a></h3>
-<p>If the <code class="docutils literal notranslate"><span class="pre">Controller.__remove_trailing_slash__</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all trailing slashes are ignored.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">Controller.__remove_trailing_slash__</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then all
+trailing slashes are ignored.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_trailing_slash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">assert_get</span><span class="p">(</span><span class="s1">&#39;/users/10/jobs/&#39;</span><span class="p">,</span> <span class="n">expected_response</span><span class="o">=</span><span class="s1">&#39;User: 10</span><span class="se">\n</span><span class="s1">Attr: jobs</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assert_get</span><span class="p">(</span>
+        <span class="s1">&#39;/users/10/jobs/&#39;</span><span class="p">,</span>
+        <span class="n">expected_response</span><span class="o">=</span><span class="s1">&#39;User: 10</span><span class="se">\n</span><span class="s1">Attr: jobs</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="rest-controller">
 <h2>Rest Controller<a class="headerlink" href="#rest-controller" title="Permalink to this headline">¶</a></h2>
-<p>For using nanohttp with <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> rules
-we have a <code class="docutils literal notranslate"><span class="pre">RestController</span></code>, it’s behavior same as basic <a class="reference internal" href="#routing-controller"><span class="std std-ref">Controller</span></a>
-but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
+<p>For using nanohttp with <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">RESTful</a> rules we have a <code class="docutils literal notranslate"><span class="pre">RestController</span></code>, it’s behavior
+same as basic <a class="reference internal" href="#routing-controller"><span class="std std-ref">Controller</span></a> but dispatcher tries to dispatch
+request using HTTP method(verb) at first.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">RestController</span><span class="p">,</span> <span class="n">html</span>
 
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">RestController</span><span class="p">):</span>
@@ -266,8 +287,8 @@ but dispatcher tries to dispatch request using HTTP method(verb) at first.</p>
 <div class="section" id="regex-controller">
 <h2>Regex Controller<a class="headerlink" href="#regex-controller" title="Permalink to this headline">¶</a></h2>
 <p>For who want to handle complex URLs, nanohttp also supports
-<a class="reference external" href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a> dispatcher
-and here is a easy way to play with:</p>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a>
+dispatcher and here is a easy way to play with:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">RegexRouteController</span><span class="p">,</span> <span class="n">json</span>
 
 <span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">RegexRouteController</span><span class="p">):</span>
@@ -295,7 +316,7 @@ and here is a easy way to play with:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="requests.html" class="btn btn-neutral float-right" title="Requests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="handlers.html" class="btn btn-neutral float-right" title="http handlers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="application.html" class="btn btn-neutral" title="Application" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -329,7 +350,7 @@ and here is a easy way to play with:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

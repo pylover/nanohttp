@@ -5,11 +5,15 @@ Guide
 ..  toctree::
     :maxdepth: 1
 
-    quickstart
     configuration
     application
     routing
-    requests
+    handlers
+    static
+    context
+    forms
+    validation
     cookies
     wsgi
     exceptions
+    templates

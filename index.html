@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="installation/index.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
     <link href="_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -100,7 +100,9 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a></li>
@@ -176,39 +178,52 @@
 <div class="section" id="nanohttp">
 <h1>nanohttp<a class="headerlink" href="#nanohttp" title="Permalink to this headline">¶</a></h1>
 <p>A very micro HTTP framework.</p>
-</div>
 <div class="section" id="features">
-<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Very simple, less-code &amp; fast</li>
-<li>Using object dispatcher instead of regex route dispatcher</li>
+<li>Object/Attribute URL dispatcher</li>
+<li>Regex route dispatcher</li>
+<li>HTTP Method(Verb) dispatcher</li>
 <li>Url-Encoded, Multipart and JSON form parsing</li>
-<li>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available, everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code></li>
-<li>A very flexible configuration system: <a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></li>
-<li>Dispatching arguments using the <a class="reference external" href="https://docs.python.org/3/library/typing.html">obj.__annonations__</a></li>
-<li>Method(verb) dispatcher</li>
-<li>Use Python’s <a class="reference external" href="https://www.python.org/dev/peps/pep-3102/">keywordonly</a> arguments for query strings (&gt;= 0.24.0)</li>
+<li>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available,
+everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code></li>
+<li>A very flexible configuration system:
+<a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></li>
+<li>Use Python’s <a class="reference external" href="https://www.python.org/dev/peps/pep-3102/">keywordonly</a>
+arguments for query strings (&gt;= 0.24.0)</li>
 </ul>
 </div>
+<div class="section" id="roadmap">
+<h2>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this headline">¶</a></h2>
+<p>The roadmap is to keep it simple with 100% code coverage. no built-in
+template engine and or ORM will be included.</p>
+</div>
 <div class="section" id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#requirements">Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#pypi">PyPI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#from-source">From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#pypi">PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guide/quickstart.html">Quickstart</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/application.html">Application</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/routing.html">Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guide/requests.html">Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/handlers.html">http handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/static.html">Serving Static files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/forms.html">Accessing Request Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/validation.html">Validating requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/cookies.html">Cookies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/wsgi.html">WSGI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guide/exceptions.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guide/templates.html">Templates</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a><ul>
@@ -228,23 +243,21 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="more/index.html">More</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="more/cli.html">CLI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/templates.html">Templates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/testing.html">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/beginners.html">Beginners</a></li>
-<li class="toctree-l2"><a class="reference internal" href="more/examples.html">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="more/deploy.html">Deploy</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
+</div>
 </div>
 </div>
 
@@ -256,7 +269,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installation/index.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
@@ -288,7 +301,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

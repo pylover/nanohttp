@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -100,7 +100,9 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/index.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development/index.html">Development</a></li>
@@ -184,6 +186,7 @@
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -230,13 +233,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/index.html#nanohttp.configuration.configure">configure() (in module nanohttp.configuration)</a>
+      <li><a href="api/index.html#nanohttp.validation.CallableValidator">CallableValidator (class in nanohttp.validation)</a>
 </li>
-      <li><a href="api/index.html#nanohttp.contexts.Context">Context (class in nanohttp.contexts)</a>
+      <li><a href="api/index.html#nanohttp.decorators.chunked">chunked() (in module nanohttp.decorators)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.configuration.configure">configure() (in module nanohttp.configuration)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context">Context (class in nanohttp.contexts)</a>
+</li>
       <li><a href="api/index.html#nanohttp.controllers.Controller">Controller (class in nanohttp.controllers)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.contexts.Context.cookies">cookies() (nanohttp.contexts.Context method)</a>
 </li>
       <li><a href="api/index.html#nanohttp.validation.Criterion">Criterion (class in nanohttp.validation)</a>
 </li>
@@ -259,6 +268,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.validation.Field">Field (class in nanohttp.validation)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context.form">form() (nanohttp.contexts.Context method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -352,6 +365,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context.method">method() (nanohttp.contexts.Context method)</a>
+</li>
       <li><a href="api/index.html#nanohttp.validation.MinimumValidator">MinimumValidator (class in nanohttp.validation)</a>
 </li>
       <li><a href="api/index.html#nanohttp.validation.MinLengthValidator">MinLengthValidator (class in nanohttp.validation)</a>
@@ -368,15 +383,17 @@
 </li>
       <li><a href="api/index.html#module-nanohttp.contexts">nanohttp.contexts (module)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#module-nanohttp.controllers">nanohttp.controllers (module)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#module-nanohttp.decorators">nanohttp.decorators (module)</a>
 </li>
       <li><a href="api/index.html#module-nanohttp.exceptions">nanohttp.exceptions (module)</a>
 </li>
       <li><a href="api/index.html#module-nanohttp.validation">nanohttp.validation (module)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.validation.NotNoneValidator">NotNoneValidator (class in nanohttp.validation)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -384,7 +401,19 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context.path">path() (nanohttp.contexts.Context method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.validation.PatternValidator">PatternValidator (class in nanohttp.validation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/index.html#nanohttp.contexts.Context.query">query() (nanohttp.contexts.Context method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -394,12 +423,20 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.controllers.RegexRouteController">RegexRouteController (class in nanohttp.controllers)</a>
 </li>
+      <li><a href="api/index.html#nanohttp.contexts.Context.request_content_length">request_content_length() (nanohttp.contexts.Context method)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.contexts.Context.request_content_type">request_content_type() (nanohttp.contexts.Context method)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.contexts.Context.request_scheme">request_scheme() (nanohttp.contexts.Context method)</a>
+</li>
+      <li><a href="api/index.html#nanohttp.contexts.Context.request_uri">request_uri() (nanohttp.contexts.Context method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.validation.RequestValidator">RequestValidator (class in nanohttp.validation)</a>
 </li>
       <li><a href="api/index.html#nanohttp.validation.RequiredValidator">RequiredValidator (class in nanohttp.validation)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/index.html#nanohttp.contexts.Context.response_content_type">response_content_type (nanohttp.contexts.Context attribute)</a>
 </li>
       <li><a href="api/index.html#nanohttp.contexts.Context.response_encoding">response_encoding (nanohttp.contexts.Context attribute)</a>
@@ -481,7 +518,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -99,7 +99,9 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guide/index.html">Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../development/index.html">Development</a></li>
@@ -175,7 +177,8 @@
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">isdir</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">relpath</span><span class="p">,</span> <span class="n">pardir</span><span class="p">,</span> <span class="n">exists</span>
 <span class="kn">from</span> <span class="nn">mimetypes</span> <span class="k">import</span> <span class="n">guess_type</span>
 
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">HTTPNotFound</span><span class="p">,</span> <span class="n">HTTPMethodNotAllowed</span><span class="p">,</span> <span class="n">HTTPForbidden</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">HTTPNotFound</span><span class="p">,</span> <span class="n">HTTPMethodNotAllowed</span><span class="p">,</span> <span class="n">HTTPForbidden</span><span class="p">,</span> \
+    <span class="n">HTTPStatus</span>
 <span class="kn">from</span> <span class="nn">.contexts</span> <span class="k">import</span> <span class="n">context</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="k">import</span> <span class="n">HTTP_DATETIME_FORMAT</span>
 
@@ -190,7 +193,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">__nanohttp__</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">verbs</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">,</span>
+        <span class="n">verbs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">],</span>
         <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
         <span class="n">default_action</span><span class="o">=</span><span class="s1">&#39;index&#39;</span>
     <span class="p">)</span>
@@ -210,19 +213,17 @@
 
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">),</span> <span class="n">remaining_paths</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
-    <span class="c1"># noinspection PyMethodMayBeStatic</span>
     <span class="k">def</span> <span class="nf">_validate_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span> <span class="s1">&#39;__nanohttp__&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">HTTPNotFound</span><span class="p">()</span>
 
-        <span class="c1"># noinspection PyUnresolvedReferences</span>
         <span class="n">manifest</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span>
 
-        <span class="n">positionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;positional_arguments&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">positionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;positional_arguments&#39;</span><span class="p">)</span>
         <span class="n">positionals_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">positionals</span><span class="p">)</span> <span class="k">if</span> <span class="n">positionals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
             <span class="k">else</span> <span class="n">UNLIMITED</span>
 
-        <span class="n">optionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optional_arguments&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">optionals</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;optional_arguments&#39;</span><span class="p">)</span>
         <span class="n">optionals_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">optionals</span><span class="p">)</span> <span class="k">if</span> <span class="n">optionals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
             <span class="k">else</span> <span class="n">UNLIMITED</span>
 
@@ -235,12 +236,28 @@
             <span class="p">):</span>
             <span class="k">raise</span> <span class="n">HTTPNotFound</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">verbs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;any&#39;</span> <span class="ow">and</span> <span class="n">context</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">verbs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">verbs</span> <span class="o">!=</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">context</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">verbs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">HTTPMethodNotAllowed</span><span class="p">()</span>
+
+        <span class="n">prevent_empty_form</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prevent_empty_form&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prevent_empty_form</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPStatus</span><span class="p">(</span>
+                <span class="n">prevent_empty_form</span> \
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prevent_empty_form</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> \
+                <span class="k">else</span> <span class="s1">&#39;400 Empty Form&#39;</span>
+            <span class="p">)</span>
+
+        <span class="n">prevent_form</span> <span class="o">=</span> <span class="n">manifest</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prevent_form&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prevent_form</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPStatus</span><span class="p">(</span>
+                <span class="n">prevent_form</span> \
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prevent_form</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> \
+                <span class="k">else</span> <span class="s1">&#39;400 Form Not Allowed&#39;</span>
+            <span class="p">)</span>
+
 
         <span class="k">return</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span>
 
-    <span class="c1"># noinspection PyMethodMayBeStatic</span>
     <span class="k">def</span> <span class="nf">_serve_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">remaining_paths</span><span class="p">):</span>
         <span class="n">context</span><span class="o">.</span><span class="n">response_encoding</span> <span class="o">=</span> <span class="n">handler</span><span class="o">.</span><span class="n">__nanohttp__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">=</span> \
@@ -279,7 +296,7 @@
     <span class="sd">&quot;&quot;&quot;Serves static files</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">__nanohttp__</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">verbs</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">,</span>
+        <span class="n">verbs</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">],</span>
         <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">default_action</span><span class="o">=</span><span class="s1">&#39;index&#39;</span>
     <span class="p">)</span>
@@ -406,7 +423,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

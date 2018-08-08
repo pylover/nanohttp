@@ -42,7 +42,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Application" href="application.html" />
-    <link rel="prev" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Guide" href="index.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -101,16 +101,22 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="application.html">Application</a></li>
 <li class="toctree-l2"><a class="reference internal" href="routing.html">Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="requests.html">Requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">http handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html">Serving Static files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forms.html">Accessing Request Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validating requests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templates.html">Templates</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
@@ -206,6 +212,10 @@
         <span class="k">yield</span> <span class="s1">&#39;&lt;/body&gt;&lt;/html&gt;&#39;</span>
 </pre></div>
 </div>
+<p>Passing the config file(s) using command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nanohttp -c demo.yml <span class="o">[</span>-c another.yml<span class="o">]</span> demo
+</pre></div>
+</div>
 <p>Passing the config file(s) Using python:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>from nanohttp import quickstart
 
@@ -225,7 +235,7 @@ quickstart<span class="o">(</span>Root<span class="o">()</span>, <span class="nv
         <a href="application.html" class="btn btn-neutral float-right" title="Application" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -256,7 +266,7 @@ quickstart<span class="o">(</span>Root<span class="o">()</span>, <span class="nv
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

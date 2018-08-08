@@ -72,20 +72,22 @@ validations Module
 
 .. automodule:: nanohttp.validation
 
+
 Field
 ^^^^^
 
 .. autoclass:: Field
 .. autoclass:: Criterion
 .. autoclass:: RequiredValidator
+.. autoclass:: NotNoneValidator
 .. autoclass:: TypeValidator
 .. autoclass:: MinLengthValidator
 .. autoclass:: MaxLengthValidator
 .. autoclass:: MinimumValidator
 .. autoclass:: MaximumValidator
 .. autoclass:: PatternValidator
+.. autoclass:: CallableValidator
 .. autoclass:: RequestValidator
-.. autofunction:: validate
 
 
 exceptions Module

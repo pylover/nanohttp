@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>More &mdash; nanohttp Documentation</title>
+  <title>Context &mdash; nanohttp Documentation</title>
   
 
   
@@ -41,8 +41,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Testing" href="testing.html" />
-    <link rel="prev" title="Contributor Covenant Code of Conduct" href="../development/contributor_covenant.html" />
+    <link rel="next" title="Accessing Request Payload" href="forms.html" />
+    <link rel="prev" title="Serving Static files" href="static.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -104,15 +104,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">More</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beginners.html">Beginners</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html">Deploy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="routing.html">Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">http handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html">Serving Static files</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forms.html">Accessing Request Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validating requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="templates.html">Templates</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../more/index.html">More</a></li>
 </ul>
 
             
@@ -158,7 +167,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>More</li>
+          <li><a href="index.html">Guide</a> &raquo;</li>
+        
+      <li>Context</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,19 +186,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="more">
-<h1>More<a class="headerlink" href="#more" title="Permalink to this headline">¶</a></h1>
-<p>Some more knowledge about nanohttp.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginners.html">Beginners</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#running">Running</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#configure-web-server">Configure web server</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="context">
+<h1>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h1>
+<p>nanohttp have one simple concept to working with requests and responses.
+Each request will pass into a global object called as <code class="docutils literal notranslate"><span class="pre">context</span></code> and response
+will generating from that.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal notranslate"><span class="pre">context</span></code> object is a proxy to an instance of
+<code class="docutils literal notranslate"><span class="pre">nanohttp.Context</span></code> which is <code class="docutils literal notranslate"><span class="pre">unique</span> <span class="pre">per</span> <span class="pre">request</span></code>.</p>
 </div>
 </div>
 
@@ -199,10 +206,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="testing.html" class="btn btn-neutral float-right" title="Testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="forms.html" class="btn btn-neutral float-right" title="Accessing Request Payload" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../development/contributor_covenant.html" class="btn btn-neutral" title="Contributor Covenant Code of Conduct" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="static.html" class="btn btn-neutral" title="Serving Static files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

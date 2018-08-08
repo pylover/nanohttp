@@ -19,7 +19,7 @@
     </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Examples &mdash; nanohttp Documentation</title>
+  <title>Accessing Request Payload &mdash; nanohttp Documentation</title>
   
 
   
@@ -41,8 +41,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Deploy" href="deploy.html" />
-    <link rel="prev" title="Beginners" href="beginners.html" />
+    <link rel="next" title="Validating requests" href="validation.html" />
+    <link rel="prev" title="Context" href="context.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
 
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.0
+                1.1
               </div>
             
           
@@ -101,19 +101,27 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../guide/index.html">Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">More</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html">Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="routing.html">Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">http handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static.html">Serving Static files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Accessing Request Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validating requests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookies.html">Cookies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wsgi.html">WSGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="templates.html">Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beginners.html">Beginners</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html">Deploy</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/index.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../more/index.html">More</a></li>
 </ul>
 
             
@@ -159,9 +167,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="index.html">More</a> &raquo;</li>
+          <li><a href="index.html">Guide</a> &raquo;</li>
         
-      <li>Examples</li>
+      <li>Accessing Request Payload</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,8 +186,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="accessing-request-payload">
+<h1>Accessing Request Payload<a class="headerlink" href="#accessing-request-payload" title="Permalink to this headline">¶</a></h1>
+<p>Request payload will representing in <code class="docutils literal notranslate"><span class="pre">context.form</span></code>, and supported request
+formats are <code class="docutils literal notranslate"><span class="pre">query</span></code>, <code class="docutils literal notranslate"><span class="pre">multipart/form-data</span></code>,
+<code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code> and <code class="docutils literal notranslate"><span class="pre">json</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">text</span>
+
+<span class="k">class</span> <span class="nc">TipsControllers</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+
+    <span class="nd">@text</span>
+    <span class="k">def</span> <span class="nf">tip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tip_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">tip_title</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;Tip: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tip_title</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Query strings always directly can accessible with <code class="docutils literal notranslate"><span class="pre">context.query</span></code>.</p>
+</div>
 </div>
 
 
@@ -190,10 +215,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="deploy.html" class="btn btn-neutral float-right" title="Deploy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="validation.html" class="btn btn-neutral float-right" title="Validating requests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="beginners.html" class="btn btn-neutral" title="Beginners" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="context.html" class="btn btn-neutral" title="Context" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -224,7 +249,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.3a1',
+            VERSION:'1.1.0a2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
