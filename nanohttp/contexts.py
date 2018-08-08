@@ -20,10 +20,6 @@ class ContextStack(list):
     def push(self, item):
         self.append(item)
 
-    @property
-    def hasitem(self):
-        return self
-
 
 # FIXME: use __slots__
 class Context:
@@ -57,8 +53,16 @@ class Context:
     #: Current :class:`.Application` instance
     application = None
 
-    #: Nested contexts stack
-    __stack__ = ContextStack()
+    @property
+    def __stack__(self):
+        """Nested contexts stack
+        """
+        THREADLOCAL_STACK_ATTRIBUTE = 'nanohttp_context_stack'
+        if not hasattr(self.thread_local, THREADLOCAL_STACK_ATTRIBUTE):
+            setattr(
+                self.thread_local, THREADLOCAL_STACK_ATTRIBUTE, ContextStack()
+            )
+        return getattr(self.thread_local, THREADLOCAL_STACK_ATTRIBUTE)
 
     def __init__(self, environ, application=None):
         """
@@ -79,7 +83,7 @@ class Context:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del self.thread_local.nanohttp_context
-        if self.__stack__.hasitem:
+        if self.__stack__:
             self.thread_local.nanohttp_context = self.__stack__.pop()
 
     @LazyAttribute
