@@ -1,6 +1,7 @@
 
-Payload
--------
+Accessing Request Payload
+========================
+
 Request payload will representing in ``context.form``, and supported request 
 formats are ``query``, ``multipart/form-data``, 
 ``application/x-www-form-urlencoded`` and ``json``.

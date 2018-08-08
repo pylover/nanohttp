@@ -9,8 +9,11 @@ Guide
     application
     routing
     handlers
+    static
     context
     forms
+    validation
     cookies
     wsgi
     exceptions
+    templates
