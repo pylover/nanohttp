@@ -14,7 +14,7 @@ with open(
 
 
 dependencies = [
-    'pymlconf >= 0.8.9',
+    'pymlconf >= 1.0.0b0',
     'ujson'
 ]
 

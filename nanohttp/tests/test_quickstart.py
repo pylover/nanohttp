@@ -41,7 +41,7 @@ class QuickstartTestCase(WsgiAppTestCase):
         shutdown()
 
     def test_before_configure(self):
-        settings.__class__._set_instance(None)
+        settings.__class__._instancei = None
         shutdown = quickstart(
             port=self.port,
             block=False,

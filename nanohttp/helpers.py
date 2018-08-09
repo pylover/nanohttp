@@ -6,7 +6,7 @@ from os.path import isdir, join
 
 import pymlconf
 
-from .configuration import settings
+from .configuration import settings, configure
 from . import exceptions
 
 
@@ -78,14 +78,14 @@ def load_controller_from_file(specifier):
     return controller
 
 
-def quickstart(controller=None, application=None, host='localhost',  port=8080,
+def quickstart(controller=None, application=None, host='localhost', port=8080,
                block=True, config=None):
     from wsgiref.simple_server import make_server
 
     try:
-        settings.proxied_object
+        settings.debug
     except pymlconf.ConfigurationNotInitializedError:
-        settings.load()
+        configure()
 
     if config:
         settings.merge(config)

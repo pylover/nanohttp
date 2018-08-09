@@ -26,14 +26,6 @@ def parse_arguments(argv=None):
     )
 
     parser.add_argument(
-        '-d',
-        '--config-directory',
-        action='append',
-        default=[],
-        help='This option may be passed multiple times.'
-    )
-
-    parser.add_argument(
         '-b',
         '--bind',
         default=DEFAULT_ADDRESS,
@@ -85,7 +77,6 @@ def main(argv=None):
 
         configure(
             files=args.config_file,
-            dirs=args.config_directory,
             force=True
         )
 
