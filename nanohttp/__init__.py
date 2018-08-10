@@ -1,5 +1,3 @@
-
-
 from .exceptions import HTTPStatus, HTTPBadRequest, HTTPUnauthorized, \
     HTTPForbidden, HTTPNotFound, HTTPMethodNotAllowed, HTTPConflict, HTTPGone,\
     HTTPRedirect, HTTPMovedPermanently, HTTPFound, HTTPInternalServerError, \
@@ -16,4 +14,4 @@ from .configuration import settings, configure
 from .application import Application
 from .validation import validate
 
-__version__ = '1.2.0b1'
+__version__ = '1.3.0'
