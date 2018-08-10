@@ -8,8 +8,7 @@ from .exceptions import HTTPStatus, HTTPBadRequest, HTTPUnauthorized, \
     HTTPPartialContent
 from .controllers import Controller, RestController, Static, \
     RegexRouteController
-from .decorators import action, html, json, xml, binary, text, ifmatch, etag, \
-    chunked
+from .decorators import action, html, json, xml, binary, text, chunked
 from .helpers import quickstart, LazyAttribute
 from .cli import main
 from .contexts import context, ContextIsNotInitializedError

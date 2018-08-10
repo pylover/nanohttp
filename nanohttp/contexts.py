@@ -206,49 +206,6 @@ class Context:
                 'such as `str`.'
             )
 
-    def expired(self, etag, force=False):
-        none_match = self.environ.get('HTTP_IF_NONE_MATCH')
-        match = self.environ.get('HTTP_IF_MATCH')
-        expired = etag not in (none_match, match)
-
-        if force and not expired:
-            raise exceptions.HTTPNotModified()
-
-        return expired
-
-    def etag(self, tag):
-        self.response_headers['Cache-Control'] = 'must-revalidate'
-        self.response_headers['ETag'] = tag
-
-    def must_revalidate(self, etag, match, throw=True, add_headers=True):
-        ok = match(etag)
-
-        if not ok and throw:
-            raise (
-                throw if not isinstance(throw, bool)
-                else exceptions.HTTPPreconditionFailed
-            )()
-
-        if add_headers:
-            self.etag(etag)
-
-        return ok
-
-    def etag_match(self, etag, **kwargs):
-        return self.must_revalidate(
-            etag,
-            lambda t: self.environ.get('HTTP_IF_MATCH') == t,
-            **kwargs
-        )
-
-    def etag_none_match(self, etag, throw=True, **kwargs):
-        return self.must_revalidate(
-            etag,
-            lambda t: self.environ.get('HTTP_IF_NONE_MATCH') != t,
-            throw=exceptions.HTTPNotModified if throw is True else throw,
-            **kwargs
-        )
-
 
 class ContextProxy(Context):
 
