@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.2
+                1.3
               </div>
             
           
@@ -375,50 +375,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s1">&#39;The returned response should has the `encode` attribute, &#39;</span>
                 <span class="s1">&#39;such as `str`.&#39;</span>
-            <span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="n">none_match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_NONE_MATCH&#39;</span><span class="p">)</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_MATCH&#39;</span><span class="p">)</span>
-        <span class="n">expired</span> <span class="o">=</span> <span class="n">etag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">none_match</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">force</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">expired</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPNotModified</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">expired</span>
-
-    <span class="k">def</span> <span class="nf">etag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Cache-Control&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;must-revalidate&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;ETag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tag</span>
-
-    <span class="k">def</span> <span class="nf">must_revalidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">throw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">add_headers</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="n">ok</span> <span class="o">=</span> <span class="n">match</span><span class="p">(</span><span class="n">etag</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span> <span class="ow">and</span> <span class="n">throw</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="p">(</span>
-                <span class="n">throw</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">throw</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span>
-                <span class="k">else</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPPreconditionFailed</span>
-            <span class="p">)()</span>
-
-        <span class="k">if</span> <span class="n">add_headers</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">etag</span><span class="p">(</span><span class="n">etag</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ok</span>
-
-    <span class="k">def</span> <span class="nf">etag_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_revalidate</span><span class="p">(</span>
-            <span class="n">etag</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_MATCH&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">t</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">etag_none_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etag</span><span class="p">,</span> <span class="n">throw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">must_revalidate</span><span class="p">(</span>
-            <span class="n">etag</span><span class="p">,</span>
-            <span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;HTTP_IF_NONE_MATCH&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">t</span><span class="p">,</span>
-            <span class="n">throw</span><span class="o">=</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPNotModified</span> <span class="k">if</span> <span class="n">throw</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="n">throw</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span></div>
+            <span class="p">)</span></div></div>
 
 
 <span class="k">class</span> <span class="nc">ContextProxy</span><span class="p">(</span><span class="n">Context</span><span class="p">):</span>
@@ -478,7 +435,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.2.0b1',
+            VERSION:'1.3.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

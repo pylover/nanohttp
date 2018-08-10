@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.2
+                1.3
               </div>
             
           
@@ -248,7 +248,7 @@
 <h3>configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
 <dl class="function">
 <dt id="nanohttp.configuration.configure">
-<code class="descclassname">nanohttp.configuration.</code><code class="descname">configure</code><span class="sig-paren">(</span><em>*args</em>, <em>files=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/configuration.html#configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.configuration.configure" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.configuration.</code><code class="descname">configure</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/configuration.html#configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.configuration.configure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load configurations</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -500,26 +500,10 @@ raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPB
 <dd><p>Enables chunked encoding on an action</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="nanohttp.decorators.etag">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">etag</code><span class="sig-paren">(</span><em>*args</em>, <em>tag: Union[str</em>, <em>int</em>, <em>&lt;built-in function callable&gt;</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#etag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.etag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate <code class="docutils literal notranslate"><span class="pre">If-None-Match</span></code> and response with <code class="docutils literal notranslate"><span class="pre">ETag</span></code> header</p>
-<dl class="docutils">
-<dt>tag is getting from <code class="docutils literal notranslate"><span class="pre">tag</span></code> argument or response object <code class="docutils literal notranslate"><span class="pre">__etag__</span></code></dt>
-<dd>attribute</dd>
-</dl>
-</dd></dl>
-
 <dl class="data">
 <dt id="nanohttp.decorators.html">
 <code class="descclassname">nanohttp.decorators.</code><code class="descname">html</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='text/html')</em><a class="headerlink" href="#nanohttp.decorators.html" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTML action decorator</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nanohttp.decorators.ifmatch">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">ifmatch</code><span class="sig-paren">(</span><em>tag: Union[str, int, &lt;built-in function callable&gt;]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#ifmatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.ifmatch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate <code class="docutils literal notranslate"><span class="pre">If-Match</span></code> header with given tag argument</p>
 </dd></dl>
 
 <dl class="data">
@@ -870,7 +854,7 @@ called while validating the field.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.2.0b1',
+            VERSION:'1.3.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
