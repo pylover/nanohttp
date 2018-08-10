@@ -271,6 +271,9 @@ class ValidationTestCase(unittest.TestCase):
         exception = ctx.exception
         self.assertEqual('666 param1 is null', str(exception))
 
+        with self.assertRaises(TypeError):
+            RequestValidator(fields=dict(param1=dict(not_none=23)))
+
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):
     class Root(Controller):

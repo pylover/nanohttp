@@ -115,7 +115,7 @@ class FlagCriterion(Criterion):
         elif isinstance(expression, str):
             error = expression
         else:
-            raise ValueError('Only bool and or string will be accepted.')
+            raise TypeError('Only bool and or string will be accepted.')
 
         super().__init__((True, error))
 
