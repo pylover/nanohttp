@@ -7,13 +7,6 @@ from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp.validation import RequestValidator
 
 
-def custom_validation(input_string):
-    expected_string = 'A sample string'
-    if input_string is not expected_string:
-        return False
-    return True
-
-
 class ValidationTestCase(unittest.TestCase):
 
     def test_validation_required(self):

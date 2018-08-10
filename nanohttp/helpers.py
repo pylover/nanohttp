@@ -34,9 +34,6 @@ class LazyAttribute(object):
     def __init__(self, f):
         self.f = f
 
-    def __doc__(self):
-        return self.f.__doc__
-
     def __get__(self, obj, t=None):
         f = self.f
         if obj is None:
