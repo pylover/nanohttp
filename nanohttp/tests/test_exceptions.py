@@ -4,7 +4,7 @@ import unittest
 import ujson
 
 from nanohttp import Controller, html, HTTPBadRequest, json, HTTPStatus, \
-    settings
+    settings, HTTPNotModified
 from nanohttp.tests.helpers import WsgiAppTestCase
 
 
@@ -27,6 +27,10 @@ class ExceptionTestCase(WsgiAppTestCase):
         def err(self):
             return 1 / 0
 
+        @html
+        def not_modified(self):
+            raise HTTPNotModified()
+
     def test_exception(self):
         response, content = self.assert_get('/', status=400)
         self.assertIsNotNone(content)
@@ -45,6 +49,8 @@ class ExceptionTestCase(WsgiAppTestCase):
 
         response, content = self.assert_get('/data', status=400)
         self.assertNotIn('stackTrace', ujson.loads(content))
+
+        self.assert_get('/not_modified', status=304)
 
     def test_custom_exception(self):
         response, content = self.assert_get('/custom', status=462)
