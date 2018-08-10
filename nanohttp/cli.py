@@ -5,7 +5,7 @@ from os.path import relpath, basename
 
 import nanohttp
 from .helpers import quickstart, load_controller_from_file
-from .configuration import configure
+from .configuration import configure, settings
 
 DEFAULT_CONFIG_FILE = 'nanohttp.yml'
 DEFAULT_ADDRESS = '8080'
@@ -22,6 +22,7 @@ def parse_arguments(argv=None):
         '--config-file',
         action='append',
         default=[],
+        dest='config_files',
         help='This option may be passed multiple times.'
     )
 
@@ -75,10 +76,10 @@ def main(argv=None):
         if relpath(args.directory, '.') != '.':
             chdir(args.directory)
 
-        configure(
-            files=args.config_file,
-            force=True
-        )
+        configure(force=True)
+
+        for f in args.config_files:
+            settings.load_file(f)
 
         quickstart(
             controller=load_controller_from_file(args.controller),

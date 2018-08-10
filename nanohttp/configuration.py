@@ -14,7 +14,7 @@ cookie:
 """
 
 
-def configure(*args, files=None, **kwargs):
+def configure(*args, **kwargs):
     """Load configurations
 
     .. seealso:: `pymlconf Documentations
@@ -27,8 +27,4 @@ def configure(*args, files=None, **kwargs):
     """
 
     settings.initialize(BUILTIN_CONFIGURATION, *args, **kwargs)
-
-    if files:
-        for f in files:
-            settings.load_file(f)
 
