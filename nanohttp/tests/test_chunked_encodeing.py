@@ -27,7 +27,6 @@ class ChunkedEncodingTestCase(WsgiAppTestCase):
     def error_action():
         yield 'first chunk'
         yield 1/0
-        yield 'third chunk'
 
     def test_chunked(self):
         output_generator = self.chunked_action()
