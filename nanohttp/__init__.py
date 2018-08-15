@@ -12,6 +12,6 @@ from .cli import main
 from .contexts import context, ContextIsNotInitializedError
 from .configuration import settings, configure
 from .application import Application
-from .validation import validate
+from .validation import validate, RequestValidator
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
