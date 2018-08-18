@@ -128,7 +128,10 @@ class RequiredValidator(FlagCriterion):
 
 class NotNoneValidator(FlagCriterion):
     def validate(self, field, container):
-        if container.get(field.title) is None:
+        if field.title not in container:
+            return
+
+        if container[field.title] is None:
             raise self.create_exception()
 
 
