@@ -14,11 +14,14 @@ class Field:
     def __init__(self, title, form=True, query_string=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
                  min_length=None, max_length=None, callback=None,
-                 not_none=None):
+                 not_none=None, readonly=None):
         self.title = title
         self.form = form
         self.query_string = query_string
         self.criteria = []
+
+        if readonly:
+            self.criteria.append(ReadonlyValidator(readonly))
 
         if required:
             self.criteria.append(RequiredValidator(required))
@@ -132,6 +135,12 @@ class NotNoneValidator(FlagCriterion):
             return
 
         if container[field.title] is None:
+            raise self.create_exception()
+
+
+class ReadonlyValidator(FlagCriterion):
+    def validate(self, field, container):
+        if field.title in container:
             raise self.create_exception()
 
 

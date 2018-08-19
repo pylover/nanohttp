@@ -274,6 +274,19 @@ class ValidationTestCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             RequestValidator(fields=dict(param1=dict(not_none=23)))
 
+    def test_readonly_validator(self):
+        validator = RequestValidator(fields=dict(param1=dict(readonly=True)))
+        with self.assertRaises(HTTPBadRequest):
+            validator(dict(param1=None))
+
+        validator = RequestValidator(
+            fields=dict(param1=dict(not_none='666 param1 is readonly'))
+        )
+        with self.assertRaises(HTTPStatus) as ctx:
+            validator(dict(param1=None))
+        exception = ctx.exception
+        self.assertEqual('666 param1 is readonly', str(exception))
+
 
 class ValidationDecoratorTestCase(WsgiAppTestCase):
     class Root(Controller):
