@@ -285,7 +285,10 @@ def validate(**fields):
                max_length=(50, '704 At most 50 characters are valid for title')
            ),
            description=dict(
-               max_length=(512, '703 At most 512 characters are valid for description')
+               max_length=(
+                   512,
+                   '703 At most 512 characters are valid for description'
+               )
            ),
            dueDate=dict(
                pattern=(DATE_PATTERN, '701 Invalid due date format'),
