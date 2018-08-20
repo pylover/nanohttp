@@ -456,7 +456,10 @@
 <span class="sd">               max_length=(50, &#39;704 At most 50 characters are valid for title&#39;)</span>
 <span class="sd">           ),</span>
 <span class="sd">           description=dict(</span>
-<span class="sd">               max_length=(512, &#39;703 At most 512 characters are valid for description&#39;)</span>
+<span class="sd">               max_length=(</span>
+<span class="sd">                   512,</span>
+<span class="sd">                   &#39;703 At most 512 characters are valid for description&#39;</span>
+<span class="sd">               )</span>
 <span class="sd">           ),</span>
 <span class="sd">           dueDate=dict(</span>
 <span class="sd">               pattern=(DATE_PATTERN, &#39;701 Invalid due date format&#39;),</span>
@@ -523,7 +526,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.4.0',
+            VERSION:'1.4.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

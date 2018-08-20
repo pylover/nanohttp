@@ -355,13 +355,13 @@ as <code class="docutils literal notranslate"><span class="pre">cgi.FieldStorage
 
 <dl class="method">
 <dt id="nanohttp.contexts.Context.request_content_length">
-<code class="descname">request_content_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[int, NoneType]<a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.request_content_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.request_content_length" title="Permalink to this definition">¶</a></dt>
+<code class="descname">request_content_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional[int]<a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.request_content_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.request_content_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request content length</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="nanohttp.contexts.Context.request_content_type">
-<code class="descname">request_content_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[str, NoneType]<a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.request_content_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.request_content_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">request_content_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="reference internal" href="../_modules/nanohttp/contexts.html#Context.request_content_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.contexts.Context.request_content_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request content type</p>
 </dd></dl>
 
@@ -461,7 +461,7 @@ as <code class="docutils literal notranslate"><span class="pre">cgi.FieldStorage
 <span id="decorators-module"></span><h2>decorators Module<a class="headerlink" href="#module-nanohttp.decorators" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="nanohttp.decorators.action">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Union[str</em>, <em>NoneType] = None</em>, <em>inner_decorator: Union[&lt;built-in function callable&gt;</em>, <em>NoneType] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = None</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base action decorator</p>
 <p>Marks the function as a nanohttp handler/action.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -488,9 +488,9 @@ raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPB
 </table>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="nanohttp.decorators.binary">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">binary</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='application/octet-stream', encoding=None)</em><a class="headerlink" href="#nanohttp.decorators.binary" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">binary</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = None</em>, <em>content_type: Optional[str] = 'application/octet-stream'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binary-data action decorator</p>
 </dd></dl>
 
@@ -500,28 +500,28 @@ raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPB
 <dd><p>Enables chunked encoding on an action</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="nanohttp.decorators.html">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">html</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='text/html')</em><a class="headerlink" href="#nanohttp.decorators.html" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">html</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/html'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.html" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTML action decorator</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="nanohttp.decorators.json">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">json</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='application/json', inner_decorator=&lt;function jsonify&gt;)</em><a class="headerlink" href="#nanohttp.decorators.json" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">json</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/json'</em>, <em>inner_decorator: Optional[callable] = &lt;function jsonify&gt;</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.json" title="Permalink to this definition">¶</a></dt>
 <dd><p>JSON action decorator</p>
 <p>accepts list, dict, int, str or objects have <code class="docutils literal notranslate"><span class="pre">to_dict</span></code> method.</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="nanohttp.decorators.text">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">text</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='text/plain')</em><a class="headerlink" href="#nanohttp.decorators.text" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">text</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/plain'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plain Text action decorator</p>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="nanohttp.decorators.xml">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">xml</code><em class="property"> = functools.partial(&lt;function action&gt;, content_type='application/xml')</em><a class="headerlink" href="#nanohttp.decorators.xml" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">xml</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/xml'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.xml" title="Permalink to this definition">¶</a></dt>
 <dd><p>XML action decorator</p>
 </dd></dl>
 
@@ -572,7 +572,10 @@ called while validating the field.</li>
         <span class="n">max_length</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="s1">&#39;704 At most 50 characters are valid for title&#39;</span><span class="p">)</span>
     <span class="p">),</span>
     <span class="n">description</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">max_length</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="s1">&#39;703 At most 512 characters are valid for description&#39;</span><span class="p">)</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="p">(</span>
+            <span class="mi">512</span><span class="p">,</span>
+            <span class="s1">&#39;703 At most 512 characters are valid for description&#39;</span>
+        <span class="p">)</span>
     <span class="p">),</span>
     <span class="n">dueDate</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
         <span class="n">pattern</span><span class="o">=</span><span class="p">(</span><span class="n">DATE_PATTERN</span><span class="p">,</span> <span class="s1">&#39;701 Invalid due date format&#39;</span><span class="p">),</span>
@@ -854,7 +857,7 @@ called while validating the field.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.4.0',
+            VERSION:'1.4.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
