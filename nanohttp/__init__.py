@@ -3,7 +3,7 @@ from .exceptions import HTTPStatus, HTTPBadRequest, HTTPUnauthorized, \
     HTTPRedirect, HTTPMovedPermanently, HTTPFound, HTTPInternalServerError, \
     HTTPNotModified, HTTPBadGatewayError, HTTPCreated, HTTPAccepted,\
     HTTPNonAuthoritativeInformation, HTTPNoContent, HTTPResetContent,\
-    HTTPPartialContent
+    HTTPPartialContent, HTTPKnownStatus
 from .controllers import Controller, RestController, Static, \
     RegexRouteController
 from .decorators import action, html, json, xml, binary, text, chunked
@@ -14,4 +14,4 @@ from .configuration import settings, configure
 from .application import Application
 from .validation import validate, RequestValidator
 
-__version__ = '1.4.1'
+__version__ = '1.4.2'
