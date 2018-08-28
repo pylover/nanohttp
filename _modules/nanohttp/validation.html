@@ -182,13 +182,13 @@
 
 
 <div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">type_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">min_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">not_none</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">form</span> <span class="o">=</span> <span class="n">form</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">query_string</span> <span class="o">=</span> <span class="n">query_string</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">readonly</span><span class="p">:</span>
@@ -372,8 +372,8 @@
 <div class="viewcode-block" id="PatternValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.PatternValidator">[docs]</a><span class="k">class</span> <span class="nc">PatternValidator</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>\
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>\
+        <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span> \
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> \
             <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span>
         <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_exception</span><span class="p">()</span>
@@ -392,21 +392,18 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
-            <span class="k">if</span> <span class="n">query_string</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">query_string</span><span class="p">:</span>
-                <span class="n">query_string</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">query_string</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">query</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">form</span> \
                     <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
-                    <span class="ow">and</span> <span class="p">(</span>
-                        <span class="n">query_string</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">query_string</span>
-                    <span class="p">):</span>
-                <span class="n">form</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="p">(</span><span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">query</span><span class="p">):</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">form</span><span class="p">,</span> <span class="n">query_string</span></div>
-
+        <span class="k">return</span> <span class="n">form</span><span class="p">,</span> <span class="n">query</span></div>
 
 <div class="viewcode-block" id="CallableValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.CallableValidator">[docs]</a><span class="k">class</span> <span class="nc">CallableValidator</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
 
@@ -485,7 +482,7 @@
 
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">validator</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">validator</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapper</span>
@@ -526,7 +523,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.4.2',
+            VERSION:'1.4.3',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
