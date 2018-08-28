@@ -157,7 +157,6 @@ class TypeValidator(Criterion):
 class MinLengthValidator(Criterion):
 
     def _validate(self, value, container, field):
-        value = str(value)
         if len(value) < self.expression:
             raise self.create_exception()
 
@@ -167,7 +166,6 @@ class MinLengthValidator(Criterion):
 class MaxLengthValidator(Criterion):
 
     def _validate(self, value, container, field):
-        value = str(value)
         if len(value) > self.expression:
             raise self.create_exception()
 

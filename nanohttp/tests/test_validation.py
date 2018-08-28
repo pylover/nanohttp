@@ -107,7 +107,7 @@ class ValidationTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (dict(param1='1234'), None),
-            validator(dict(param1=1234))
+            validator(dict(param1='1234'))
         )
 
         # Shorter than Expectation
@@ -130,7 +130,7 @@ class ValidationTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (dict(param1='1234'), None),
-            validator(dict(param1=1234))
+            validator(dict(param1='1234'))
         )
 
         # Longer than Expectation
@@ -305,6 +305,11 @@ class ValidationDecoratorTestCase(WsgiAppTestCase):
             field2=dict(
                 required=True,
                 type_=int
+            ),
+            field3=dict(
+                required=True,
+                type_=lambda v: v.encode(),
+                min_length=1
             )
         )
         @text(methods='post')
@@ -312,16 +317,18 @@ class ValidationDecoratorTestCase(WsgiAppTestCase):
             query1 = context.query['query1']
             field1 = context.form['field1']
             field2 = context.form['field2']
+            field3 = context.form['field3']
             yield \
                 f'{type(query1).__name__}: {query1}, '\
                 f'{type(field1).__name__}: {field1}, ' \
-                f'{type(field2).__name__}: {field2}'
+                f'{type(field2).__name__}: {field2}, ' \
+                f'{type(field3).__name__}: {field3}'
 
     def test_validation_decorator(self):
         response, body = self.assert_post(
             '/?query1=1',
-            fields=dict(field1='2.3', field2='2'),
-            expected_response='int: 1, float: 2.3, int: 2'
+            fields=dict(field1='2.3', field2='2', field3='ab'),
+            expected_response='int: 1, float: 2.3, int: 2, bytes: b\'ab\''
         )
 
 
