@@ -11,13 +11,13 @@ NO_FORM = 'NO_FORM'
 
 
 class Field:
-    def __init__(self, title, form=True, query_string=False, required=None,
+    def __init__(self, title, form=True, query=False, required=None,
                  type_=None, minimum=None, maximum=None, pattern=None,
                  min_length=None, max_length=None, callback=None,
                  not_none=None, readonly=None):
         self.title = title
         self.form = form
-        self.query_string = query_string
+        self.query = query
         self.criteria = []
 
         if readonly:
@@ -201,8 +201,8 @@ class MaximumValidator(Criterion):
 class PatternValidator(Criterion):
 
     def _validate(self, value, container, field):
-        pattern = re.compile(self.expression)\
-            if isinstance(self.expression, str)\
+        pattern = re.compile(self.expression) \
+            if isinstance(self.expression, str) \
             else self.expression
         if pattern.match(value) is None:
             raise self.create_exception()
@@ -221,21 +221,18 @@ class RequestValidator:
 
             self.fields[field_name] = Field(field_name, **kwargs)
 
-    def __call__(self, form=None, query_string=None, *args, **kwargs):
+    def __call__(self, form=None, query=None, *args, **kwargs):
         for field_name, field in self.fields.items():
 
-            if query_string and field.query_string:
-                query_string = field.validate(query_string)
+            if query and field.query:
+                field.validate(query)
 
             if field.form \
                     and field.title is not None \
-                    and (
-                        query_string is None or field.title not in query_string
-                    ):
-                form = field.validate(form)
+                    and (query is None or field.title not in query):
+                field.validate(form)
 
-        return form, query_string
-
+        return form, query
 
 class CallableValidator(Criterion):
 
@@ -314,7 +311,7 @@ def validate(**fields):
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            validator(form=context.form, query_string=context.query)
+            validator(form=context.form, query=context.query)
             return func(*args, **kwargs)
 
         return wrapper

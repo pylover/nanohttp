@@ -2,7 +2,8 @@ import re
 import unittest
 from decimal import Decimal
 
-from nanohttp import HTTPBadRequest, HTTPStatus, Controller, action, validate
+from nanohttp import HTTPBadRequest, HTTPStatus, Controller, text, validate, \
+    context
 from nanohttp.tests.helpers import WsgiAppTestCase
 from nanohttp.validation import RequestValidator
 
@@ -202,13 +203,13 @@ class ValidationTestCase(unittest.TestCase):
         # Accept query_string
         validator = RequestValidator(
             fields=dict(
-                param1=dict(query_string=True),
+                param1=dict(query=True),
             )
         )
 
         self.assertEqual(
             (None, dict(param1='value')),
-            validator(query_string=dict(param1='value'))
+            validator(query=dict(param1='value'))
         )
 
     def test_validation_custom_status(self):
@@ -292,16 +293,36 @@ class ValidationDecoratorTestCase(WsgiAppTestCase):
     class Root(Controller):
 
         @validate(
-            param1=dict(
-                required=True
+            query1=dict(
+                required=True,
+                type_=int,
+                query=True
+            ),
+            field1=dict(
+                required=True,
+                type_=float
+            ),
+            field2=dict(
+                required=True,
+                type_=int
             )
         )
-        @action()
+        @text(methods='post')
         def index(self):
-            return ''
+            query1 = context.query['query1']
+            field1 = context.form['field1']
+            field2 = context.form['field2']
+            yield \
+                f'{type(query1).__name__}: {query1}, '\
+                f'{type(field1).__name__}: {field1}, ' \
+                f'{type(field2).__name__}: {field2}'
 
     def test_validation_decorator(self):
-        self.assert_post('/?param1=1', expected_response='')
+        response, body = self.assert_post(
+            '/?query1=1',
+            fields=dict(field1='2.3', field2='2'),
+            expected_response='int: 1, float: 2.3, int: 2'
+        )
 
 
 if __name__ == '__main__':  # pragma: no cover

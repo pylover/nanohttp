@@ -9,3 +9,4 @@ sphinx-autobuild
 sphinx-serve
 sphinxcontrib-googleanalytics
 nose-pudb
+ipython

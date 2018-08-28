@@ -10,8 +10,8 @@ from .configuration import settings, configure
 from . import exceptions
 
 
-class LazyAttribute(object):
-    """ ``attribute`` decorator is intended to promote a
+class LazyAttribute:
+    """ ``LazyAttribute`` decorator is intended to promote a
         function call to object attribute. This means the
         function is called once and replaced with
         returned value.
