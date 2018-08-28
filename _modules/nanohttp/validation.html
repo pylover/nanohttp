@@ -328,7 +328,6 @@
 <div class="viewcode-block" id="MinLengthValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.MinLengthValidator">[docs]</a><span class="k">class</span> <span class="nc">MinLengthValidator</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">:</span>
             <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_exception</span><span class="p">()</span>
 
@@ -338,7 +337,6 @@
 <div class="viewcode-block" id="MaxLengthValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.MaxLengthValidator">[docs]</a><span class="k">class</span> <span class="nc">MaxLengthValidator</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">container</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">:</span>
             <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_exception</span><span class="p">()</span>
 
@@ -523,7 +521,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.4.3',
+            VERSION:'1.4.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
