@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.4
+                1.5
               </div>
             
           
@@ -212,6 +212,9 @@
         <span class="n">positional_arguments</span><span class="p">,</span> <span class="n">optional_arguments</span><span class="p">,</span> <span class="n">keywordonly_arguments</span> <span class="o">=</span> \
             <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="n">action_signature</span> <span class="o">=</span> <span class="n">signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="n">positional_unlimited</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">optional_unlimited</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">action_signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;self&#39;</span><span class="p">:</span>
                 <span class="k">continue</span>
@@ -220,6 +223,12 @@
                 <span class="n">keywordonly_arguments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">parameter</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
                 <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">parameter</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">:</span>
+                <span class="n">positional_unlimited</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">elif</span> <span class="n">parameter</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">:</span>
+                <span class="n">optional_unlimited</span> <span class="o">=</span> <span class="kc">True</span>
+
             <span class="k">elif</span> <span class="n">parameter</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                 <span class="n">positional_arguments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -232,8 +241,10 @@
             <span class="n">verbs</span><span class="o">=</span><span class="n">verbs</span><span class="p">,</span>
             <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
             <span class="n">content_type</span><span class="o">=</span><span class="n">content_type</span><span class="p">,</span>
-            <span class="n">positional_arguments</span><span class="o">=</span><span class="n">positional_arguments</span><span class="p">,</span>
-            <span class="n">optional_arguments</span><span class="o">=</span><span class="n">optional_arguments</span><span class="p">,</span>
+            <span class="n">positional_arguments</span><span class="o">=</span> \
+                <span class="kc">None</span> <span class="k">if</span> <span class="n">positional_unlimited</span> <span class="k">else</span> <span class="n">positional_arguments</span><span class="p">,</span>
+            <span class="n">optional_arguments</span><span class="o">=</span> \
+                <span class="kc">None</span> <span class="k">if</span> <span class="n">optional_unlimited</span> <span class="k">else</span> <span class="n">optional_arguments</span><span class="p">,</span>
             <span class="n">keywordonly_arguments</span><span class="o">=</span><span class="n">keywordonly_arguments</span><span class="p">,</span>
             <span class="n">prevent_empty_form</span><span class="o">=</span><span class="n">prevent_empty_form</span><span class="p">,</span>
             <span class="n">prevent_form</span><span class="o">=</span><span class="n">prevent_form</span><span class="p">,</span>
@@ -361,7 +372,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.4.4',
+            VERSION:'1.5.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
