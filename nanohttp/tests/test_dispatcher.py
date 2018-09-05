@@ -61,12 +61,20 @@ class NoIndexController(Controller):
     pass
 
 
+class IndexParamController(Controller):
+
+    @text
+    def index(self, *args):
+        yield '/'.join(args)
+
+
 class DispatcherTestCase(WsgiAppTestCase):
 
     class Root(Controller):
         no_index = NoIndexController()
         articles = ArticleController()
         regex = AwesomeRegexController()
+        params = IndexParamController()
 
         @html
         def index(self):
@@ -187,6 +195,9 @@ class DispatcherTestCase(WsgiAppTestCase):
     def test_regex_route_controller(self):
         self.assert_get('/regex/awesome/badinteger', status=404)
         self.assert_get('/regex/awesome/123', expected_response='123')
+
+    def test_index_parameters(self):
+        self.assert_get('/params/')
 
 
 if __name__ == '__main__':  # pragma: no cover

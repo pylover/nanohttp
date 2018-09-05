@@ -9,12 +9,11 @@ from mimetypes import guess_type
 from .exceptions import HTTPNotFound, HTTPMethodNotAllowed, HTTPForbidden, \
     HTTPStatus
 from .contexts import context
-from .constants import HTTP_DATETIME_FORMAT
+from .constants import HTTP_DATETIME_FORMAT, UNLIMITED
 
 
 logging.basicConfig(level=logging.INFO)
 
-UNLIMITED = -1
 
 
 class Controller(object):

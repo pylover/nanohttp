@@ -41,6 +41,9 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
         positional_arguments, optional_arguments, keywordonly_arguments = \
             [], [], []
         action_signature = signature(func)
+        positional_unlimited = False
+        optional_unlimited = False
+
         for name, parameter in action_signature.parameters.items():
             if name == 'self':
                 continue
@@ -49,6 +52,12 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
                 keywordonly_arguments.append(
                     (parameter.name, parameter.default)
                 )
+            elif parameter.kind == Parameter.VAR_POSITIONAL:
+                positional_unlimited = True
+
+            elif parameter.kind == Parameter.VAR_KEYWORD:
+                optional_unlimited = True
+
             elif parameter.default is Parameter.empty:
                 positional_arguments.append(parameter.name)
             else:
@@ -61,8 +70,10 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
             verbs=verbs,
             encoding=encoding,
             content_type=content_type,
-            positional_arguments=positional_arguments,
-            optional_arguments=optional_arguments,
+            positional_arguments= \
+                None if positional_unlimited else positional_arguments,
+            optional_arguments= \
+                None if optional_unlimited else optional_arguments,
             keywordonly_arguments=keywordonly_arguments,
             prevent_empty_form=prevent_empty_form,
             prevent_form=prevent_form,
