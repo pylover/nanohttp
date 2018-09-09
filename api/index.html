@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.5
+                1.6
               </div>
             
           
@@ -461,7 +461,7 @@ as <code class="docutils literal notranslate"><span class="pre">cgi.FieldStorage
 <span id="decorators-module"></span><h2>decorators Module<a class="headerlink" href="#module-nanohttp.decorators" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="nanohttp.decorators.action">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = None</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.action" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">action</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = None</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/nanohttp/decorators.html#action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nanohttp.decorators.action" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base action decorator</p>
 <p>Marks the function as a nanohttp handler/action.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -481,6 +481,8 @@ otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPBadReques
 <li><strong>prevent_form</strong> – Boolean or str, indicates to prevent any HTTP form. if
 str given, a <code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPStatus(&lt;str&gt;)</span></code> will be
 raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPBadRequest" title="nanohttp.exceptions.HTTPBadRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPBadRequest</span></code></a>.</li>
+<li><strong>form_whitelist</strong> – A list of allowed form fields. or a
+tuple(list, httpstatus)</li>
 </ul>
 </td>
 </tr>
@@ -490,7 +492,7 @@ raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPB
 
 <dl class="function">
 <dt id="nanohttp.decorators.binary">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">binary</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = None</em>, <em>content_type: Optional[str] = 'application/octet-stream'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.binary" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">binary</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = None</em>, <em>content_type: Optional[str] = 'application/octet-stream'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.binary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binary-data action decorator</p>
 </dd></dl>
 
@@ -502,26 +504,26 @@ raised, otherwise <a class="reference internal" href="#nanohttp.exceptions.HTTPB
 
 <dl class="function">
 <dt id="nanohttp.decorators.html">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">html</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/html'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.html" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">html</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/html'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.html" title="Permalink to this definition">¶</a></dt>
 <dd><p>HTML action decorator</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="nanohttp.decorators.json">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">json</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/json'</em>, <em>inner_decorator: Optional[callable] = &lt;function jsonify&gt;</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.json" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">json</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/json'</em>, <em>inner_decorator: Optional[callable] = &lt;function jsonify&gt;</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.json" title="Permalink to this definition">¶</a></dt>
 <dd><p>JSON action decorator</p>
 <p>accepts list, dict, int, str or objects have <code class="docutils literal notranslate"><span class="pre">to_dict</span></code> method.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="nanohttp.decorators.text">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">text</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/plain'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.text" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">text</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'text/plain'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plain Text action decorator</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="nanohttp.decorators.xml">
-<code class="descclassname">nanohttp.decorators.</code><code class="descname">xml</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/xml'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.xml" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">nanohttp.decorators.</code><code class="descname">xml</code><span class="sig-paren">(</span><em>*args</em>, <em>verbs: Union[str</em>, <em>list</em>, <em>tuple] = 'any'</em>, <em>encoding: str = 'utf-8'</em>, <em>content_type: Optional[str] = 'application/xml'</em>, <em>inner_decorator: Optional[callable] = None</em>, <em>prevent_empty_form=None</em>, <em>prevent_form=None</em>, <em>form_whitelist=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#nanohttp.decorators.xml" title="Permalink to this definition">¶</a></dt>
 <dd><p>XML action decorator</p>
 </dd></dl>
 
@@ -857,7 +859,7 @@ called while validating the field.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.5.0',
+            VERSION:'1.6.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
