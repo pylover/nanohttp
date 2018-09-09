@@ -26,6 +26,10 @@ class FormTestCase(WsgiAppTestCase):
         def noform(self):
             yield ''
 
+        @text(form_whitelist=(['a', 'b'], '798 Only a & b'))
+        def strict(self):
+            yield ''
+
 
     def test_simple_query_string(self):
         self.assert_post('/?a=1&b=&c=2', expected_response='a: 1, b: , c: 2')
@@ -123,6 +127,18 @@ class FormTestCase(WsgiAppTestCase):
             '/noform',
             fields={'a': 'a'},
             status=443
+        )
+
+    def test_form_whitelist(self):
+        self.assert_post(
+            '/strict',
+            fields={'c': 'c'},
+            status=798,
+        )
+
+        self.assert_post(
+            '/strict',
+            fields={'a': 'a'},
         )
 
 

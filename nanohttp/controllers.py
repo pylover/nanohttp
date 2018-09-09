@@ -83,6 +83,18 @@ class Controller(object):
                 else '400 Form Not Allowed'
             )
 
+        form_whitelist = manifest.get('form_whitelist')
+        if form_whitelist:
+            if isinstance(form_whitelist, tuple):
+                form_whitelist, status = form_whitelist
+            else:
+                status = None
+
+            for k in context.form:
+                if k not in form_whitelist:
+                    raise HTTPStatus(
+                        status or f'400 Field: {k} Not Allowed'
+                    )
 
         return handler, remaining_paths
 

@@ -10,7 +10,8 @@ from .contexts import context
 def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
            content_type: Union[str, None]=None,
            inner_decorator: Union[callable, None]=None,
-           prevent_empty_form=None, prevent_form=None, **kwargs):
+           prevent_empty_form=None, prevent_form=None, form_whitelist=None,
+           **kwargs):
     """
     Base action decorator
 
@@ -28,7 +29,8 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
     :param prevent_form: Boolean or str, indicates to prevent any HTTP form. if
                          str given, a :class:`.HTTPStatus(<str>)` will be
                          raised, otherwise :class:`.HTTPBadRequest`.
-
+    :param form_whitelist: A list of allowed form fields. or a
+                           tuple(list, httpstatus)
     """
     def decorator(func):
         nonlocal verbs
@@ -77,6 +79,7 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
             keywordonly_arguments=keywordonly_arguments,
             prevent_empty_form=prevent_empty_form,
             prevent_form=prevent_form,
+            form_whitelist=form_whitelist,
             default_action='index'
         )
 
