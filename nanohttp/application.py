@@ -2,6 +2,7 @@
 import sys
 import types
 import logging
+from collections import Iterable
 
 from nanohttp.contexts import Context, context
 from nanohttp.exceptions import HTTPStatus
@@ -88,7 +89,15 @@ class Application:
             if response_body:
                 # The goal is to yield an iterable, to encode and iter over it
                 # at the end of this method.
-                if isinstance(response_body, types.GeneratorType):
+
+                if isinstance(response_body, (str, bytes)):
+                    # Mocking the body inside an iterable to prevent
+                    # the iteration over the str character by character
+                    # For more info check the pull-request
+                    # #34, https://github.com/Carrene/nanohttp/pull/34
+                    response_iterable = (response_body, )
+
+                elif isinstance(response_body, types.GeneratorType):
                     # Generators are iterable !
                     response_iterable = response_body
 
@@ -97,14 +106,15 @@ class Application:
                     # `yield` statement
                     buffer = next(response_iterable)
 
-                elif isinstance(response_body, (str, bytes)):
-                    # Mocking the body inside an iterable to prevent
-                    # the iteration over the str character by character
-                    # For more info check the pull-request
-                    # #34, https://github.com/Carrene/nanohttp/pull/34
-                    response_iterable = (response_body, )
+                elif isinstance(response_body, Iterable):
+                    # Creating an iterator from iterable!
+                    response_iterable = iter(response_body)
 
                 else:
+                    raise ValueError(
+                        'Controller\'s action/handler response must be '
+                        'generator and or iterable'
+                    )
                     # Assuming the body is an iterable.
                     response_iterable = response_body
 
