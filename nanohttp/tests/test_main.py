@@ -45,13 +45,11 @@ class EntryPointTestCase(unittest.TestCase):
         filename = path.join(here, 'stuff/sample.yml')
 
         args = [
-
             'nanohttp',
             f'-C', self.module_dir,
             f'--bind', str(self.port),
             f'--config-file', filename,
             ':Static',
-
         ]
         t = threading.Thread(target=main, args=(args,), daemon=True)
         t.start()
@@ -59,6 +57,42 @@ class EntryPointTestCase(unittest.TestCase):
         time.sleep(.2)
         self.assertEqual('value', settings.custom_key)
 
+    def test_configuration_cli_option_o_flag(self):
+
+        filename = path.join(here, 'stuff/sample.yml')
+
+        args = [
+            'nanohttp',
+            f'-C', self.module_dir,
+            f'--bind', str(self.port),
+            f'--config-file', filename,
+            f'--option', 'custom_key=hello',
+            ':Static',
+        ]
+        t = threading.Thread(target=main, args=(args,), daemon=True)
+        t.start()
+
+        time.sleep(.5)
+        self.assertEqual('hello', settings.custom_key)
+
+    def test_invalid_configuration_cli_option_o_flag(self):
+
+        filename = path.join(here, 'stuff/sample.yml')
+
+        args = [
+            'nanohttp',
+            f'-C', self.module_dir,
+            f'--bind', str(self.port),
+            f'--config-file', filename,
+            f'--option', 'invalid.key=hello',
+            ':Static',
+        ]
+        t = threading.Thread(target=main, args=(args,), daemon=True)
+        t.start()
+
+        time.sleep(.5)
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
+

@@ -4,6 +4,7 @@ from os import chdir
 from os.path import relpath, basename
 
 import nanohttp
+import yaml
 from .helpers import quickstart, load_controller_from_file
 from .configuration import configure, settings
 
@@ -58,6 +59,17 @@ def parse_arguments(argv=None):
              '`:CLASS` is `:Root` if omitted.'
     )
 
+    parser.add_argument(
+        '-o', '--option',
+        action='append',
+        metavar='key1.key2=value',
+        dest='options',
+        default=[],
+        help= \
+            'Configuration value to override. this option could be passed ' \
+            'multiple times.'
+    )
+
     return parser.parse_args(argv[1:])
 
 
@@ -80,6 +92,18 @@ def main(argv=None):
 
         for f in args.config_files:
             settings.load_file(f)
+
+
+        try:
+            for option in args.options:
+                key, value = option.split('=')
+                value = yaml.load(value)
+                if isinstance(value, str):
+                    value = f'"{value}"'
+
+                exec(f'settings.{key} = {value}')
+        except AttributeError:
+            print(f'Invalid configuration option: {key}', file=sys.stderr)
 
         quickstart(
             controller=load_controller_from_file(args.controller),
