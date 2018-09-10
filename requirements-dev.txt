@@ -1,4 +1,4 @@
-bddrest
+bddrest >= 2.0.4
 coverage
 coveralls
 sphinx

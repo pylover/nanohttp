@@ -15,6 +15,9 @@ class HTTPStatus(Exception):
         super().__init__(self.status)
 
     def render(self):
+        if not settings.debug:
+            return self.status.split(' ', 1)[1]
+
         stack_trace = traceback.format_exc()
         if context.response_content_type == 'application/json':
             return ujson.encode(

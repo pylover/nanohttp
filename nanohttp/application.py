@@ -43,21 +43,6 @@ class Application:
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
-    def _handle_exception(self, ex):
-        """This method should return a tuple of (status, resp_generator) and or
-         raise the exception.
-
-        :param ex: The exception to examine
-        :return: status, resp_generator
-        """
-        if isinstance(ex, HTTPStatus):
-            return ex.status, ex.render()
-
-        self.__logger__.exception('Internal Server Error', exc_info=True)
-        self._hook('end_response')
-        context.__exit__(*sys.exc_info())
-        raise ex
-
     def __call__(self, environ, start_response):
         """Method that
         `WSGI <https://www.python.org/dev/peps/pep-0333/#id15>`_ server calls
@@ -70,7 +55,6 @@ class Application:
         status = '200 OK'
         buffer = None
         response_iterable = None
-        exc_info = None
 
         try:
             self._hook('begin_request')
@@ -122,11 +106,28 @@ class Application:
         except Exception as ex:
             # the self._handle_exception may raise the error again, if the
             # error is not subclass of the HTTPStatusOtherwise,
-            # a tuple of the status code and response body will be returned.
-            exc_info = sys.exc_info()
-            status, response_body = self._handle_exception(ex)
-            buffer = None
-            response_iterable = (response_body, )
+            if isinstance(ex, HTTPStatus):
+                exc_info=None
+                status, response_body = ex.status, ex.render()
+            else:
+                self.__logger__.exception(
+                    'Internal Server Error',
+                    exc_info=True
+                )
+                exc_info=sys.exc_info()
+                status = '500 Internal Server Error'
+                if settings.debug:
+                    response_body = traceback.format_exc()
+                else:
+                    response_body = status
+            start_response(
+                status,
+                [("content-type", "text/plain")],
+                exc_info=exc_info
+            )
+            self._hook('end_response')
+            context.__exit__(*sys.exc_info())
+            return response_body
 
         self._hook('begin_response')
 
@@ -142,7 +143,6 @@ class Application:
             start_response(
                 status,
                 context_.response_headers.items(),
-                exc_info=exc_info
             )
             # This is only header, and body should not be transferred.
             # So the context is also should be destroyed
@@ -152,7 +152,6 @@ class Application:
             start_response(
                 status,
                 context_.response_headers.items(),
-                exc_info=exc_info
             )
 
         # It seems we have to transfer a body, so this function should yield

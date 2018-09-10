@@ -14,3 +14,5 @@
   * json
   * other ...
 
+
+- Exceptions
