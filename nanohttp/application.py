@@ -70,6 +70,7 @@ class Application:
         status = '200 OK'
         buffer = None
         response_iterable = None
+        exc_info = None
 
         try:
             self._hook('begin_request')
@@ -122,6 +123,7 @@ class Application:
             # the self._handle_exception may raise the error again, if the
             # error is not subclass of the HTTPStatusOtherwise,
             # a tuple of the status code and response body will be returned.
+            exc_info = sys.exc_info()
             status, response_body = self._handle_exception(ex)
             buffer = None
             response_iterable = (response_body, )
@@ -137,13 +139,21 @@ class Application:
         # Sometimes don't need to transfer any body, for example the 304 case.
         if status[:3] in NO_CONTENT_STATUSES:
             del context_.response_headers['Content-Type']
-            start_response(status, context_.response_headers.items())
+            start_response(
+                status,
+                context_.response_headers.items(),
+                exc_info=exc_info
+            )
             # This is only header, and body should not be transferred.
             # So the context is also should be destroyed
             context.__exit__(*sys.exc_info())
             return []
         else:
-            start_response(status, context_.response_headers.items())
+            start_response(
+                status,
+                context_.response_headers.items(),
+                exc_info=exc_info
+            )
 
         # It seems we have to transfer a body, so this function should yield
         # a generator of the body chunks.
