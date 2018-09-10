@@ -1,12 +1,11 @@
-wsgi_intercept
-nose
+bddrest
 coverage
 coveralls
-httplib2
 sphinx
 sphinx_rtd_theme
 sphinx-autobuild
 sphinx-serve
 sphinxcontrib-googleanalytics
-nose-pudb
+pytest-pudb
+pytest-cov
 ipython
