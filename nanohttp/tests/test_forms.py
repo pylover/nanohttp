@@ -30,6 +30,10 @@ class FormTestCase(WsgiAppTestCase):
         def strict(self):
             yield ''
 
+        @text(form_whitelist=['a', 'b'])
+        def strict_default(self):
+            yield ''
+
 
     def test_simple_query_string(self):
         self.assert_post('/?a=1&b=&c=2', expected_response='a: 1, b: , c: 2')
@@ -136,11 +140,19 @@ class FormTestCase(WsgiAppTestCase):
             status=798,
         )
 
+
         self.assert_post(
             '/strict',
             fields={'a': 'a'},
         )
 
+        self.assert_post(
+            '/strict_default',
+            fields={'c': 'c'},
+            status=400
+        )
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()
+
