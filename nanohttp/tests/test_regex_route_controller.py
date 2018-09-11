@@ -4,7 +4,7 @@ from nanohttp import RegexRouteController, action
 from nanohttp.tests.helpers import Given, when
 
 
-def test_rest_controller():
+def test_regex_controller():
     class Root(RegexRouteController):
         def __init__(self):
             super().__init__((

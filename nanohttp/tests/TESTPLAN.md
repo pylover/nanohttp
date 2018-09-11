@@ -8,8 +8,8 @@
   + Query string as KWONLY 
   + Object dispatcher
   + REST
-  * RegexRoute
-  * static
+  + RegexRoute
+  + static
 
 
 - Decorators
