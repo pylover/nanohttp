@@ -60,7 +60,11 @@ def test_default_handler_with_keyword_arguments():
         def index(self, **kw):
             yield ', '.join(f'{k}={v}' for k, v in kw.items())
 
+    from pudb import set_trace; set_trace()
     with Given(Root()):
         assert status == '200 OK'
         assert response.text == ''
+
+        when('/a')
+        assert status == 404
 
