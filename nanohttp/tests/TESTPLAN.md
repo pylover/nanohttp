@@ -7,7 +7,7 @@
   + Raising statuses rather than 200
   + Query string as KWONLY 
   + Object dispatcher
-  * REST
+  + REST
   * RegexRoute
   * static
 
