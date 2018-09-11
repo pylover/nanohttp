@@ -42,3 +42,30 @@ def test_rest_controller():
 
         when('/private', verb='GET')
         assert status == 404
+
+
+def test_nested_rest_controllers():
+    class BarController(RestController):
+        @action
+        def get(self, *args):
+            yield f'Bars, {", ".join(args)}'
+
+    class Root(RestController):
+        bars = BarController()
+
+        @action
+        def get(self, *args):
+            yield f'{", ".join(args)}'
+
+    with Given(Root()):
+        assert status == 200
+        assert response.text == ''
+
+        when('/bars')
+        assert status == 200
+        assert response.text == 'Bars, '
+
+        when('/bars/a')
+        assert status == 200
+        assert response.text == 'Bars, a'
+
