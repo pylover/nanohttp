@@ -6,7 +6,7 @@ from nanohttp.tests.helpers import Given, when
 
 def test_default_handler():
     class Root(Controller):
-        @action(verbs=['get', 'post'])
+        @action
         def index(self):
             yield 'Index'
 
@@ -16,9 +16,4 @@ def test_default_handler():
 
         when(url='/a')
         assert status == '404 Not Found'
-
-        # TODO: move it to test action decorator
-        when(verb='PUT')
-        assert status == '405 Method Not Allowed'
-
 

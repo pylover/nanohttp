@@ -6,11 +6,14 @@
   * Vary Url Parameters(*args, **kwargs)
   * Query string as KWONLY 
   * Raising statuses rather than 200
+  * Object dispatcher
   * REST
   * RegexRoute
+  * static
+
 
 - Decorators
-  * action
+  * action: verbs, empty_form & etc
   * json
   * other ...
 
