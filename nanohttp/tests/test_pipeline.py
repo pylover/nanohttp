@@ -5,7 +5,7 @@ from nanohttp import Controller, action
 
 def test_default_handler(given, when):
     class Root(Controller):
-        @action
+        @action(verbs=['get', 'post'])
         def index(self):
             yield 'Index'
 
@@ -15,3 +15,7 @@ def test_default_handler(given, when):
 
         when(url='/a')
         assert status == '404 Not Found'
+
+        when(verb='PUT')
+        assert status == '405 Method Not Allowed'
+
