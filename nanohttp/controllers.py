@@ -46,22 +46,13 @@ class Controller(object):
             raise HTTPNotFound()
 
         manifest = handler.__nanohttp__
-
-        positionals = manifest.get('positional_arguments')
-        positionals_length = len(positionals) if positionals is not None \
-            else UNLIMITED
-
-        optionals = manifest.get('optional_arguments')
-        optionals_length = len(optionals) if optionals is not None \
-            else UNLIMITED
-
-        available_arguments = len(remaining_paths)
+        min_arguments = manifest.get('minimum_allowed_arguments')
+        max_arguments = manifest.get('maximum_allowed_arguments')
+        args_len = len(remaining_paths)
         verbs = manifest.get('verbs', 'any')
 
-        if UNLIMITED not in (optionals_length, positionals_length) and (
-                positionals_length > available_arguments or
-                available_arguments > (positionals_length + optionals_length)
-            ):
+        if min_arguments > args_len or \
+                (max_arguments != UNLIMITED and max_arguments < args_len):
             raise HTTPNotFound()
 
         if verbs != ['any'] and context.method not in verbs:

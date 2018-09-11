@@ -5,6 +5,7 @@ from typing import Union
 import ujson
 
 from .contexts import context
+from .constants import UNLIMITED
 
 
 def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
@@ -65,17 +66,14 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
             else:
                 optional_arguments.append((parameter.name, parameter.default))
 
-        if isinstance(verbs, str):
-            verbs = [verbs]
-
         func.__nanohttp__ = dict(
-            verbs=verbs,
+            verbs=[verbs] if isinstance(verbs, str) else  verbs,
             encoding=encoding,
             content_type=content_type,
-            positional_arguments= \
-                None if positional_unlimited else positional_arguments,
-            optional_arguments= \
-                None if optional_unlimited else optional_arguments,
+            minimum_allowed_arguments=len(positional_arguments),
+            maximum_allowed_arguments= \
+                UNLIMITED if positional_unlimited else \
+                len(positional_arguments) + len(optional_arguments),
             keywordonly_arguments=keywordonly_arguments,
             prevent_empty_form=prevent_empty_form,
             prevent_form=prevent_form,
