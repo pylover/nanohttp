@@ -13,7 +13,16 @@ def test_fixed_length_url_parameter(given, when):
         assert status == '200 OK'
         assert response.text == '1, 2'
 
+        # Extra trailing slash
+        when('/1/2/')
+        assert status == '200 OK'
+        assert response.text == '1, 2'
+
         # Insufficient URL parameters
         when('/1')
         assert status == '404 Not Found'
+
+        # Extra URL parameters
+        when('/1/2/3')
+        assert status  == '404 Not Found'
 
