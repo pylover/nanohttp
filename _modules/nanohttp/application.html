@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                1.7
+                1.8
               </div>
             
           
@@ -241,7 +241,6 @@
         <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">response_iterable</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">exc_info</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;begin_request&#39;</span><span class="p">)</span>
@@ -294,7 +293,6 @@
             <span class="c1"># the self._handle_exception may raise the error again, if the</span>
             <span class="c1"># error is not subclass of the HTTPStatusOtherwise,</span>
             <span class="c1"># a tuple of the status code and response body will be returned.</span>
-            <span class="n">exc_info</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
             <span class="n">status</span><span class="p">,</span> <span class="n">response_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_exception</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
@@ -310,21 +308,13 @@
         <span class="c1"># Sometimes don&#39;t need to transfer any body, for example the 304 case.</span>
         <span class="k">if</span> <span class="n">status</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NO_CONTENT_STATUSES</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span>
-            <span class="n">start_response</span><span class="p">(</span>
-                <span class="n">status</span><span class="p">,</span>
-                <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
-                <span class="n">exc_info</span><span class="o">=</span><span class="n">exc_info</span>
-            <span class="p">)</span>
+            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
             <span class="c1"># This is only header, and body should not be transferred.</span>
             <span class="c1"># So the context is also should be destroyed</span>
             <span class="n">context</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">start_response</span><span class="p">(</span>
-                <span class="n">status</span><span class="p">,</span>
-                <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
-                <span class="n">exc_info</span><span class="o">=</span><span class="n">exc_info</span>
-            <span class="p">)</span>
+            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
         <span class="c1"># It seems we have to transfer a body, so this function should yield</span>
         <span class="c1"># a generator of the body chunks.</span>
@@ -390,7 +380,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../',
-            VERSION:'1.7.0',
+            VERSION:'1.8.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
