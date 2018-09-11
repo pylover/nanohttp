@@ -17,3 +17,5 @@ def test_default_handler():
         when(url='/a')
         assert status == '404 Not Found'
 
+        when(url='/a/')
+        assert status == '404 Not Found'

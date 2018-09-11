@@ -3,8 +3,9 @@
   + Default(Root) handler
   + No parameter
   + Fixed Url parameter
-  * Vary Url Parameters(*args, **kwargs)
+  + Vary Url Parameters(*args, **kwargs)
   * Query string as KWONLY 
+  * Query string inside form?
   * Raising statuses rather than 200
   * Object dispatcher
   * REST
