@@ -4,10 +4,9 @@
   + No parameter
   + Fixed Url parameter
   + Vary Url Parameters(*args, **kwargs)
-  * Query string as KWONLY 
-  * Query string inside form?
-  * Raising statuses rather than 200
-  * Object dispatcher
+  + Raising statuses rather than 200
+  + Query string as KWONLY 
+  + Object dispatcher
   * REST
   * RegexRoute
   * static
@@ -21,3 +20,6 @@
 
 - Exceptions
   * Status codes and error messages
+
+- Form
+  * Query string inside form?

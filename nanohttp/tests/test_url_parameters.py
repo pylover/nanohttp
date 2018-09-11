@@ -88,9 +88,6 @@ def test_both_vary_optional_and_positional_arguments_url_parameters():
         @action
         def index(self, *a, **kw):
             yield ', '.join(a)
-            if a and kw:
-                yield ', '
-            yield ', '.join(f'{k}={v}' for k, v in kw.items())
 
     with Given(Root()):
         assert status == 200

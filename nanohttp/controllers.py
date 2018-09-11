@@ -23,7 +23,9 @@ class Controller(object):
     __nanohttp__ = dict(
         verbs=['any'],
         encoding='utf8',
-        default_action='index'
+        default_action='index',
+        minimum_allowed_arguments=0,
+        maximum_allowed_arguments=UNLIMITED
     )
 
     def _get_default_handler(self, remaining_paths):
@@ -190,20 +192,17 @@ class RegexRouteController(Controller):
 
     .. code-block:: python
 
-        class Root(RegexRouteController):
+       class Root(RegexRouteController):
 
-            def __init__(self):
-                super().__init__((
-                    ('/installations/(?P<installation_id>\d+)/access_tokens',
-                    self.access_tokens),
-                ))
+           def __init__(self):
+               super().__init__((
+                   (r'/installations/(?P<installation_id>\\d+)/access_tokens',
+                   self.access_tokens),
+               ))
 
-            @json
-            def access_tokens(self, installation_id: int):
-                return dict(
-                    installationId=installation_id
-                )
-
+           @json
+           def access_tokens(self, installation_id: int):
+               return dict(installationId=installation_id)
 
     """
 
