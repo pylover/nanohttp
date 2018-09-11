@@ -11,7 +11,6 @@
   + RegexRoute
   + static
 
-
 - Decorators
   * action: verbs, empty_form & etc
   * json
