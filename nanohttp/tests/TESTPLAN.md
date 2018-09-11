@@ -1,8 +1,8 @@
 
 - Controllers
-  * Default(Root) handler
-  * No parameter
-  * Fixed Url parameter
+  + Default(Root) handler
+  + No parameter
+  + Fixed Url parameter
   * Vary Url Parameters(*args, **kwargs)
   * Query string as KWONLY 
   * Raising statuses rather than 200
@@ -16,3 +16,4 @@
 
 
 - Exceptions
+  * Status codes and error messages
