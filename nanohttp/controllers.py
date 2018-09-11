@@ -45,7 +45,6 @@ class Controller(object):
         if not callable(handler) or not hasattr(handler, '__nanohttp__'):
             raise HTTPNotFound()
 
-        from pudb import set_trace; set_trace()
         manifest = handler.__nanohttp__
 
         positionals = manifest.get('positional_arguments')
