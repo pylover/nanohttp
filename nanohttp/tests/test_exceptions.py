@@ -1,8 +1,8 @@
 from bddrest import status, response
 
-from nanohttp import Controller, action, HTTPStatus, settings, configure, \
-    json, HTTPBadRequest, HTTPMovedPermanently, HTTPFound
-from nanohttp.tests.helpers import Given, when
+from nanohttp import Controller, action, HTTPStatus, json, HTTPBadRequest, \
+    HTTPMovedPermanently
+from nanohttp.tests.helpers import Given
 
 
 def test_http_status_debug_mode():

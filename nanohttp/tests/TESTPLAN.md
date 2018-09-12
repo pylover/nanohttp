@@ -18,7 +18,7 @@
 
 
 - Exceptions
-  * Status codes and error messages
+  + Status codes and error messages
 
 - Form
   * Query string inside form?
