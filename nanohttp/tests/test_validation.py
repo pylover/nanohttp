@@ -1,3 +1,6 @@
+import re
+from decimal import Decimal
+
 import pytest
 from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus
 
@@ -63,7 +66,6 @@ def test_validation_min():
     )
 
     assert dict(param1=11) == validator(dict(param1=11))[0]
-
     with pytest.raises(HTTPBadRequest):
          validator(dict(param1='11'))
 
@@ -93,113 +95,98 @@ def test_validation_max_length():
         )
     )
     assert dict(param1='abcd') == validator(dict(param1='abcd'))[0]
-    assert dict(param1='1234') == validator(dict(param1='1234'))[0]
 
     # Longer than Expectation
     with pytest.raises(HTTPBadRequest):
         validator(dict(param1='abbcde'))
 
-#def test_validation_pattern():
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(pattern='^\D{10}$')
-#        )
-#    )
-#
-#    self.assertEqual(
-#        (dict(param1='abcdeFGHIJ'), None),
-#        validator(dict(param1='abcdeFGHIJ'))
-#    )
-#
-#    # Param1 not matching
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(dict(param1='asc'))
-#
-#def test_validation_pattern_compiled():
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(pattern=re.compile(r'^\d{10}$'))
-#        )
-#    )
-#
-#    self.assertEqual(
-#        (dict(param1='0123456789'), None),
-#        validator(dict(param1='0123456789'))
-#    )
-#
-#    # Param1 not matching
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(dict(param1='12345'))
-#
-#def test_validation_type():
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(type_=int),
-#            param2=dict(type_=str),
-#            param3=dict(type_=Decimal)
-#        )
-#    )
-#
-#    self.assertEqual(
-#        (dict(param1=123, param2='123', param3=1.23), None),
-#        validator(dict(param1='123', param2=123, param3=1.23))
-#    )
-#
-#    # Param1 bad value(Cannot be converted to int)
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(
-#            dict(
-#                param1='NotInteger',
-#                param2='NotInteger',
-#                param3='NotInteger'
-#            )
-#        )
-#
-#    # Param3 bad value(Cannot be converted to decimal)
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(
-#            dict(param1=1, param2='str', param3='NotDecimal'))
-#
-#def test_validation_query_string():
-#
-#    # Accept query_string
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(query=True),
-#        )
-#    )
-#
-#    self.assertEqual(
-#        (None, dict(param1='value')),
-#        validator(query=dict(param1='value'))
-#    )
-#
-#def test_validation_custom_status():
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(
-#                type_=(int, '999 Type error'),
-#                minimum=(30, '666'),
-#                maximum=(40, '400 greater than maximum'),
-#            )
-#        )
-#    )
-#
-#    try:
-#        validator(dict(param1='NotInteger'))
-#    except HTTPStatus as e:
-#        self.assertEqual(e.status, '999 Type error')
-#
-#    try:
-#        validator(dict(param1=29))
-#    except HTTPStatus as e:
-#        self.assertEqual(e.status, '666 Bad request')
-#
-#    try:
-#        validator(dict(param1=41))
-#    except HTTPStatus as e:
-#        self.assertEqual(e.status, '400 greater than maximum')
-#
+
+def test_validation_pattern():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(pattern=r'^\D{5}$')
+        )
+    )
+
+    assert dict(param1='abcdJ') == validator(dict(param1='abcdJ'))[0]
+
+    # Param1 not matching
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param1='asc'))
+
+
+def test_validation_pattern_compiled():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(pattern=re.compile(r'^\d{5}$'))
+        )
+    )
+
+    assert dict(param1='01234') == validator(dict(param1='01234'))[0]
+
+    # Param1 not matching
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param1='123456'))
+
+
+def test_validation_type():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(type_=int),
+            param2=dict(type_=str),
+            param3=dict(type_=Decimal)
+        )
+    )
+
+    assert dict(param1=123, param2='123', param3=1.23) == \
+        validator(dict(param1='123', param2=123, param3=1.23))[0]
+
+    # Param1 bad value(Cannot be converted to int)
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(
+            param1='NotInteger',
+        ))
+
+    # Param3 bad value(Cannot be converted to decimal)
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param3='NotDecimal'))
+
+
+def test_validation_query_string():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(query=True),
+        )
+    )
+
+    # Accept query_string
+    assert dict(param1='value') == validator(query=dict(param1='value'))[1]
+
+
+def test_validation_custom_status():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(
+                type_=(int, '999 Type error'),
+                minimum=(3, '666'),
+                maximum=(4, '667 greater than maximum'),
+            )
+        )
+    )
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(param1='NotInteger'))
+    assert str(ctx.value) == '999 Type error'
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(param1=2))
+    assert str(ctx.value) == '666 Bad request'
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(param1=5))
+    assert str(ctx.value) == '667 greater than maximum'
+
+
 #def test_callable_validator():
 #    def f(age, container, field):
 #        age = int(age)
@@ -213,7 +200,7 @@ def test_validation_max_length():
 #        )
 #    )
 #
-#    with self.assertRaises(ValueError):
+#    with pytest.raises(ValueError):
 #        validator(dict(param1=-1))
 #
 #    self.assertEqual(
@@ -223,29 +210,29 @@ def test_validation_max_length():
 #
 #def test_not_none_validator():
 #    validator = RequestValidator(fields=dict(param1=dict(not_none=True)))
-#    with self.assertRaises(HTTPBadRequest):
+#    with pytest.raises(HTTPBadRequest):
 #        validator(dict(param1=None))
 #
 #    validator = RequestValidator(
 #        fields=dict(param1=dict(not_none='666 param1 is null'))
 #    )
-#    with self.assertRaises(HTTPStatus) as ctx:
+#    with pytest.raises(HTTPStatus) as ctx:
 #        validator(dict(param1=None))
 #    exception = ctx.exception
 #    self.assertEqual('666 param1 is null', str(exception))
 #
-#    with self.assertRaises(TypeError):
+#    with pytest.raises(TypeError):
 #        RequestValidator(fields=dict(param1=dict(not_none=23)))
 #
 #def test_readonly_validator():
 #    validator = RequestValidator(fields=dict(param1=dict(readonly=True)))
-#    with self.assertRaises(HTTPBadRequest):
+#    with pytest.raises(HTTPBadRequest):
 #        validator(dict(param1=None))
 #
 #    validator = RequestValidator(
 #        fields=dict(param1=dict(not_none='666 param1 is readonly'))
 #    )
-#    with self.assertRaises(HTTPStatus) as ctx:
+#    with pytest.raises(HTTPStatus) as ctx:
 #        validator(dict(param1=None))
 #    exception = ctx.exception
 #    self.assertEqual('666 param1 is readonly', str(exception))
