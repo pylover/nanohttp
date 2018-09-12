@@ -1,9 +1,14 @@
 import os
+import time
 import tempfile
-from os import path
 import shutil
+import socket
+from os import path
+from multiprocessing import Process
 
 import pytest
+
+from nanohttp import main
 
 
 @pytest.fixture
@@ -36,4 +41,39 @@ def make_temp_directory():
 
     for d in temp_directories:
         shutil.rmtree(d)
+
+
+@pytest.fixture
+def free_port():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((socket.gethostname(), 0))
+        return s.getsockname()[1]
+    finally:
+        s.close()
+
+
+@pytest.fixture
+def clitool(free_port):
+    class Tool:
+        subprocess = None
+        def execute(self, *a):
+            port = free_port
+            args = ['nanohttp', f'-b{port}']
+            args.extend(a)
+            self.subprocess = Process(target=main, args=(args, ))
+            self.subprocess.start()
+            time.sleep(.5)
+            return f'http://localhost:{port}/'
+
+        def terminate(self):
+            self.subprocess.terminate()
+            self.subprocess.join(1)
+            if self.subprocess.exitcode is None:
+                self.subprocess.kill()
+
+    tool = Tool()
+    yield tool
+    tool.terminate()
+
 
