@@ -191,15 +191,15 @@ class Context:
             result.load(self.environ['HTTP_COOKIE'])
         return result
 
-    def encode_response(self, buffer):
+    def encode_response(self, buff):
         """Encode response buffer with encoding definition on current
         context
         """
         try:
             if self.response_encoding:
-                return buffer.encode(self.response_encoding)
+                return buff.encode(self.response_encoding)
             else:
-                return buffer
+                return buff
         except AttributeError:  # pragma: no cover
             raise TypeError(
                 'The returned response should has the `encode` attribute, '
