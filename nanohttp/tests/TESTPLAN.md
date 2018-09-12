@@ -14,7 +14,7 @@
 - Decorators
   + action: verbs, empty_form & etc
   + json
-  * other ...
+  + other ...
 
 
 - Exceptions

@@ -26,5 +26,8 @@ def configure(*args, **kwargs):
                    ``pymlconf.DeferredRoot.load``
     """
 
-    settings.initialize(BUILTIN_CONFIGURATION, *args, **kwargs)
+    settings.initialize(BUILTIN_CONFIGURATION, **kwargs)
+    for a in args:
+        settings.merge(a)
+
 

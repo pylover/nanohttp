@@ -11,7 +11,6 @@ python: 3.6
 branches:
   only:
   - master
-  - develop
   - nightly
   - /^v([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$/
 
