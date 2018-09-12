@@ -80,7 +80,7 @@ def test_action_decorator_prevent_empty_form():
         when('/custom_status', form=None)
         assert status == 777
 
-        when(form=dict(a=1))
+        when('/custom_status', form=dict(a=1))
         assert status == 200
 
 
@@ -105,6 +105,9 @@ def test_action_decorator_form_whitelist():
 
         when('/custom_status', form=dict(c=2))
         assert status == 888
+
+        when('/custom_status', form=dict(a=2))
+        assert status == 200
 
 
 def test_html_decorator():
