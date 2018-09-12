@@ -11,7 +11,7 @@ def test_validation_required():
     )
 
     # Trying to pass with param1
-    assert (dict(param1='value1'), None) ==  validator(dict(param1='value1'))
+    assert dict(param1='value1') == validator(dict(param1='value1'))[0]
 
     # Trying to pass without param1
     with pytest.raises(HTTPBadRequest):
@@ -29,7 +29,7 @@ def test_validation_required():
         validator(dict(another_param='value1'))
 
     # Trying to pass with param1
-    assert (dict(param1='value1'), None) ==  validator(dict(param1='value1'))
+    assert dict(param1='value1') == validator(dict(param1='value1'))[0]
 
 
 def test_validation_max():
@@ -39,8 +39,8 @@ def test_validation_max():
             param1=dict(maximum=10)
         )
     )
-    assert (dict(param1=9), None) == validator(dict(param1=9))
-    assert (dict(param1=None), None) == validator(dict(param1=None))
+    assert dict(param1=9) == validator(dict(param1=9))[0]
+    assert dict(param1=None) == validator(dict(param1=None))[0]
 
     with pytest.raises(HTTPBadRequest):
          validator(dict(param1='9'))
@@ -62,7 +62,8 @@ def test_validation_min():
         )
     )
 
-    assert (dict(param1=11), None) == validator(dict(param1=11))
+    assert dict(param1=11) == validator(dict(param1=11))[0]
+
     with pytest.raises(HTTPBadRequest):
          validator(dict(param1='11'))
 
@@ -78,36 +79,26 @@ def test_validation_min_length():
             param1=dict(min_length=3)
         )
     )
-    assert (dict(param1='abc'), None) == validator(dict(param1='abc'))
+    assert dict(param1='abc') == validator(dict(param1='abc'))[0]
 
     # Shorter than Expectation
     with pytest.raises(HTTPBadRequest):
         validator(dict(param1='ab'))
 
 
-#def test_validation_max_length():
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(max_length=4)
-#        )
-#    )
-#    self.assertEqual(
-#        (dict(param1='abc'), None),
-#        validator(dict(param1='abc'))
-#    )
-#    self.assertEqual(
-#        (dict(param1='abcd'), None),
-#        validator(dict(param1='abcd'))
-#    )
-#    self.assertEqual(
-#        (dict(param1='1234'), None),
-#        validator(dict(param1='1234'))
-#    )
-#
-#    # Longer than Expectation
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(dict(param1='abbcde'))
-#
+def test_validation_max_length():
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(max_length=4)
+        )
+    )
+    assert dict(param1='abcd') == validator(dict(param1='abcd'))[0]
+    assert dict(param1='1234') == validator(dict(param1='1234'))[0]
+
+    # Longer than Expectation
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param1='abbcde'))
+
 #def test_validation_pattern():
 #    validator = RequestValidator(
 #        fields=dict(
