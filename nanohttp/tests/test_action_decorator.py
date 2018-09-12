@@ -1,6 +1,6 @@
 from bddrest import status, response, given
 
-from nanohttp import Controller, action
+from nanohttp import Controller, action, html, json, text, xml, binary
 from nanohttp.tests.helpers import Given, when
 
 
@@ -98,4 +98,69 @@ def test_action_decorator_form_whitelist():
 
         when('/custom_status', form=dict(c=2))
         assert status == 888
+
+
+def test_html_decorator():
+    class Root(Controller):
+        @html
+        def index(self):
+            yield '<html></html>'
+
+    with Given(Root()):
+        assert status == 200
+        assert response.text == '<html></html>'
+        assert response.content_type == 'text/html'
+        assert response.encoding == 'utf-8'
+
+
+def test_json_decorator():
+    class Root(Controller):
+        @json
+        def index(self, a, b):
+            return dict(a=a, b=b)
+
+    with Given(Root(), '/1/2'):
+        assert status == 200
+        assert response.json == dict(a='1', b='2')
+        assert response.content_type == 'application/json'
+        assert response.encoding == 'utf-8'
+
+
+def test_text_decorator():
+    class Root(Controller):
+        @text
+        def index(self):
+            yield 'abc'
+
+    with Given(Root()):
+        assert status == 200
+        assert response.text == 'abc'
+        assert response.content_type == 'text/plain'
+        assert response.encoding == 'utf-8'
+
+
+def test_xml_decorator():
+    class Root(Controller):
+        @xml
+        def index(self):
+            yield '<xml></xml>'
+
+    with Given(Root()):
+        assert status == 200
+        assert response.text == '<xml></xml>'
+        assert response.content_type == 'application/xml'
+        assert response.encoding == 'utf-8'
+
+
+def test_binary_decorator():
+    class Root(Controller):
+        @binary
+        def index(self):
+            yield b'abc'
+
+    with Given(Root()):
+        assert status == 200
+        assert response.body == b'abc'
+        assert response.content_type == 'application/octet'
+        assert response.encoding is None
 
