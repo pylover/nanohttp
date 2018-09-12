@@ -1,4 +1,4 @@
-from bddrest import status, response
+from bddrest import status, response, given
 
 from nanohttp import Controller, action
 from nanohttp.tests.helpers import Given, when
@@ -75,4 +75,27 @@ def test_action_decorator_prevent_empty_form():
 
         when('/custom_status', form=None)
         assert status == 777
+
+
+def test_action_decorator_form_whitelist():
+    class Root(Controller):
+        @action(form_whitelist=['a', 'b'])
+        def index(self):
+            yield 'default'
+
+        @action(form_whitelist=(['a', 'b'], '888 Only a & b accepted'))
+        def custom_status(self):
+            yield 'custom'
+
+    with Given(Root(), verb='POST', form=dict(a=1)):
+        assert status == 200
+
+        when(form=given + dict(b=2))
+        assert status == 200
+
+        when(form=given + dict(c=2))
+        assert status == 400
+
+        when('/custom_status', form=dict(c=2))
+        assert status == 888
 
