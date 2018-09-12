@@ -53,49 +53,38 @@ def test_validation_max():
     with pytest.raises(HTTPBadRequest):
         validator(dict(param1='a'))
 
-#def test_validation_min():
-#
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(minimum=10)
-#        )
-#    )
-#
-#    self.assertEqual((dict(param1=11), None), validator(dict(param1=11)))
-#    with self.assertRaises(HTTPBadRequest):
-#        self.assertEqual(
-#            (dict(param1=11), None),
-#            validator(dict(param1='11'))
-#        )
-#
-#    # Less than Expectation
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(dict(param1=9))
-#
-#def test_validation_min_length():
-#
-#    validator = RequestValidator(
-#        fields=dict(
-#            param1=dict(min_length=3)
-#        )
-#    )
-#    self.assertEqual(
-#        (dict(param1='abcd'), None),
-#        validator(dict(param1='abcd'))
-#    )
-#    self.assertEqual(
-#        (dict(param1='abc'), None),
-#        validator(dict(param1='abc'))
-#    )
-#    self.assertEqual(
-#        (dict(param1='1234'), None),
-#        validator(dict(param1='1234'))
-#    )
-#
-#    # Shorter than Expectation
-#    with self.assertRaises(HTTPBadRequest):
-#        validator(dict(param1='ab'))
-#
+
+def test_validation_min():
+
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(minimum=10)
+        )
+    )
+
+    assert (dict(param1=11), None) == validator(dict(param1=11))
+    with pytest.raises(HTTPBadRequest):
+         validator(dict(param1='11'))
+
+    # Less than Expectation
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param1=9))
+
+
+def test_validation_min_length():
+
+    validator = RequestValidator(
+        fields=dict(
+            param1=dict(min_length=3)
+        )
+    )
+    assert (dict(param1='abc'), None) == validator(dict(param1='abc'))
+
+    # Shorter than Expectation
+    with pytest.raises(HTTPBadRequest):
+        validator(dict(param1='ab'))
+
+
 #def test_validation_max_length():
 #    validator = RequestValidator(
 #        fields=dict(
