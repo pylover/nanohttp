@@ -1,7 +1,8 @@
+import pytest
 from bddrest import status, response
 
 from nanohttp import Controller, action, HTTPStatus, json, HTTPBadRequest, \
-    HTTPMovedPermanently
+    HTTPMovedPermanently, HTTPNotModified
 from nanohttp.tests.helpers import Given
 
 
@@ -61,6 +62,16 @@ def test_http_bad_request():
         assert response.text == 'My Bad'
 
 
+def test_http_not_modified():
+    class Root(Controller):
+        @action
+        def index(self):
+            raise HTTPNotModified()
+
+    with Given(Root()):
+        assert status == 304
+
+
 def test_http_redirect():
     class Root(Controller):
         @action
@@ -72,4 +83,29 @@ def test_http_redirect():
         assert response.text == 'Moved Permanently'
         assert response.headers['Location'] == 'http://example.com'
 
+
+def test_unhandled_exceptions_debug_mode():
+    class E(Exception):
+        pass
+
+    class Root(Controller):
+        @action
+        def index(self):
+            raise E()
+
+    with pytest.raises(E):
+        Given(Root())
+
+
+def test_unhandled_exceptions_no_debug_mode():
+    class E(Exception):
+        pass
+
+    class Root(Controller):
+        @action
+        def index(self):
+            raise E()
+
+    with pytest.raises(E):
+        Given(Root(), configuration='debug: false')
 

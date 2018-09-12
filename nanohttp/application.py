@@ -44,6 +44,41 @@ class Application:
         if hasattr(self, name):
             return getattr(self, name)(*args, **kwargs)
 
+    def _handle_exception(self, ex, start_response):
+
+        response_headers = [("content-type", "text/plain")],
+        if isinstance(ex, HTTPStatus):
+            exc_info=None
+            status = ex.status
+            response_body = ex.render()
+            if ex.headers:
+                response_headers = ex.headers
+        else:
+            self.__logger__.exception(
+                'Internal Server Error',
+                exc_info=True
+            )
+            exc_info=sys.exc_info()
+            status = '500 Internal Server Error'
+            if settings.debug:
+                response_body = traceback.format_exc()
+            else:
+                response_body = status
+
+        start_response(
+            status,
+            response_headers,
+            exc_info=exc_info
+        )
+        self._hook('end_response')
+        context.__exit__(*sys.exc_info())
+
+        # Sometimes don't need to transfer any body, for example the 304 case.
+        if status[:3] in NO_CONTENT_STATUSES:
+            return []
+
+        return [response_body]
+
     def __call__(self, environ, start_response):
         """Method that
         `WSGI <https://www.python.org/dev/peps/pep-0333/#id15>`_ server calls
@@ -101,39 +136,9 @@ class Application:
                         'Controller\'s action/handler response must be '
                         'generator and or iterable'
                     )
-                    # Assuming the body is an iterable.
-                    response_iterable = response_body
 
         except Exception as ex:
-            # the self._handle_exception may raise the error again, if the
-            # error is not subclass of the HTTPStatusOtherwise,
-            response_headers = [("content-type", "text/plain")],
-            if isinstance(ex, HTTPStatus):
-                exc_info=None
-                status = ex.status
-                response_body = ex.render()
-                if ex.headers:
-                    response_headers = ex.headers
-            else:
-                self.__logger__.exception(
-                    'Internal Server Error',
-                    exc_info=True
-                )
-                exc_info=sys.exc_info()
-                status = '500 Internal Server Error'
-                if settings.debug:
-                    response_body = traceback.format_exc()
-                else:
-                    response_body = status
-
-            start_response(
-                status,
-                response_headers,
-                exc_info=exc_info
-            )
-            self._hook('end_response')
-            context.__exit__(*sys.exc_info())
-            return response_body
+            return self._handle_exception(ex, start_response)
 
         self._hook('begin_response')
 
@@ -143,22 +148,10 @@ class Application:
             for line in cookie.split('\r\n'):
                 context_.response_headers.add_header(*line.split(': ', 1))
 
-        # Sometimes don't need to transfer any body, for example the 304 case.
-        if status[:3] in NO_CONTENT_STATUSES:
-            del context_.response_headers['Content-Type']
-            start_response(
-                status,
-                context_.response_headers.items(),
-            )
-            # This is only header, and body should not be transferred.
-            # So the context is also should be destroyed
-            context.__exit__(*sys.exc_info())
-            return []
-        else:
-            start_response(
-                status,
-                context_.response_headers.items(),
-            )
+        start_response(
+            status,
+            context_.response_headers.items(),
+        )
 
         # It seems we have to transfer a body, so this function should yield
         # a generator of the body chunks.

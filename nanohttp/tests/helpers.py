@@ -5,13 +5,16 @@ import bddrest
 from nanohttp import Application, configure, settings
 
 
-def Given(controller_factory, *args, configuration=None, **kwargs):
+def Given(controller, *args, configuration=None, **kwargs):
     if configuration:
         configure(configuration, force=True)
     else:
         configure(force=True)
 
-    application = Application(controller_factory)
+    if isinstance(controller, Application):
+        application = controller
+    else:
+        application = Application(controller)
     return bddrest.Given(application, None, *args, **kwargs)
 
 
