@@ -8,17 +8,15 @@ from .contexts import context
 from .constants import UNLIMITED
 
 
-def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
-           content_type: Union[str, None]=None,
-           inner_decorator: Union[callable, None]=None,
-           prevent_empty_form=None, prevent_form=None, form_whitelist=None,
-           **kwargs):
+def action(*args, verbs='any', encoding='utf-8', content_type=None,
+           inner_decorator=None, prevent_empty_form=None, prevent_form=None,
+           form_whitelist=None, **kwargs):
     """
     Base action decorator
 
     Marks the function as a nanohttp handler/action.
 
-    :param verbs: Allowed HTTP methods
+    :param verbs: Allowed HTTP methods as list or tuple of strings.
     :param encoding: Content encoding
     :param content_type: Response Content Type
     :param inner_decorator: Inner decorator, to put it between this decorator
@@ -67,7 +65,7 @@ def action(*args, verbs: Union[str, list, tuple]='any', encoding: str='utf-8',
                 optional_arguments.append((parameter.name, parameter.default))
 
         func.__nanohttp__ = dict(
-            verbs=[verbs] if isinstance(verbs, str) else  verbs,
+            verbs=[verbs] if isinstance(verbs, str) else verbs,
             encoding=encoding,
             content_type=content_type,
             minimum_allowed_arguments=len(positional_arguments),
