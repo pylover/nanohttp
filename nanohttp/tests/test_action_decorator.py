@@ -1,3 +1,4 @@
+import pytest
 from bddrest import status, response, given
 
 from nanohttp import Controller, action, html, json, text, xml, binary
@@ -50,6 +51,9 @@ def test_action_decorator_prevent_form():
         when('/custom_status', form=dict(a=1))
         assert status == 777
 
+        when('/custom_status')
+        assert status == 200
+
 
 def test_action_decorator_prevent_empty_form():
     class Root(Controller):
@@ -75,6 +79,9 @@ def test_action_decorator_prevent_empty_form():
 
         when('/custom_status', form=None)
         assert status == 777
+
+        when(form=dict(a=1))
+        assert status == 200
 
 
 def test_action_decorator_form_whitelist():
@@ -126,6 +133,12 @@ def test_json_decorator():
                     return dict(c=1)
             return A()
 
+        @json
+        def badobject(self):
+            class A:
+                pass
+            return A()
+
     with Given(Root(), '/1/2'):
         assert status == 200
         assert response.json == dict(a='1', b='2')
@@ -135,6 +148,9 @@ def test_json_decorator():
         when('/custom')
         assert status == 200
         assert response.json == dict(c=1)
+
+        with pytest.raises(ValueError):
+            when('/badobject')
 
 
 def test_text_decorator():
