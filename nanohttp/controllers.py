@@ -155,12 +155,12 @@ class Static(Controller):
             raise HTTPForbidden()
 
         if isdir(physical_path):
-            if self.default_document:
-                physical_path = join(physical_path, self.default_document)
-                if not exists(physical_path):
-                    raise HTTPForbidden
-            else:
-                raise HTTPForbidden()
+            if not self.default_document:
+                raise HTTPNotFound()
+
+            physical_path = join(physical_path, self.default_document)
+            if not (self.default_document and exists(physical_path)):
+                raise HTTPNotFound()
 
         context.response_headers.add_header(
             'Content-Type',

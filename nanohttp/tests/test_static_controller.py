@@ -30,3 +30,13 @@ def test_static_controller(make_temp_directory):
         when('/a/../a/a2')
         assert status == 200
 
+        # When default document is not exists
+        static.default_document = 'BadFile'
+        when('/')
+        assert status == 404
+
+        # When default document is not given
+        static.default_document = None
+        when('/')
+        assert status == 404
+

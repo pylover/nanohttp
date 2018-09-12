@@ -16,6 +16,20 @@ def test_basic_pipeline():
         assert response.text == 'Index: http, http://bddrest-interceptor/'
 
 
+def test_no_default_handler():
+    class Root(Controller):
+        @action
+        def foo(self):
+            yield 'Foo'
+
+    with Given(Root(), '/foo'):
+        assert status == 200
+        assert response.text == 'Foo'
+
+        when('/')
+        assert status == 404
+
+
 def test_iterable_pipeline():
     class Root(Controller):
         @action
