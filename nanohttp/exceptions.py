@@ -7,6 +7,7 @@ from .configuration import settings
 
 class HTTPStatus(Exception):
     status = None
+    headers = None
 
     def __init__(self, status=None):
         if status is not None:
@@ -24,6 +25,15 @@ class HTTPStatus(Exception):
         context.response_content_type = 'text/plain'
         return stack_trace if settings.debug \
             else self.status.split(' ', 1)[1]
+
+    @property
+    def headers(self):
+        if context.response_content_type == 'application/json':
+            contenttype = context.response_content_type
+        else:
+            contenttype = 'text/plain;charset=utf-8'
+
+        return [('ContentType', contenttype)]
 
 
 class HTTPKnownStatus(HTTPStatus):
@@ -70,8 +80,13 @@ class HTTPRedirect(HTTPKnownStatus):
     """
 
     def __init__(self, location, *args, **kw):
-        context.response_headers.add_header('Location', location)
+        self._headers = [('Location', location)]
         super().__init__(*args, **kw)
+
+    @property
+    def headers(self):
+        headers = super().headers
+        return headers + self._headers
 
 
 class HTTPMovedPermanently(HTTPRedirect):

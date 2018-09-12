@@ -1,6 +1,7 @@
 from bddrest import status, response
 
-from nanohttp import Controller, action, HTTPStatus, settings, configure, json
+from nanohttp import Controller, action, HTTPStatus, settings, configure, \
+    json, HTTPBadRequest, HTTPMovedPermanently, HTTPFound
 from nanohttp.tests.helpers import Given, when
 
 
@@ -47,4 +48,28 @@ def test_http_status_no_debug_mode_json_content_type():
     with Given(Root(), configuration='debug: false'):
         assert status == '603 Bad Happened'
         assert response.json == {}
+
+
+def test_http_bad_request():
+    class Root(Controller):
+        @action
+        def index(self):
+            raise HTTPBadRequest('My Bad')
+
+    with Given(Root(), configuration='debug: false'):
+        assert status == '400 My Bad'
+        assert response.text == 'My Bad'
+
+
+def test_http_redirect():
+    class Root(Controller):
+        @action
+        def index(self):
+            raise HTTPMovedPermanently('http://example.com')
+
+    with Given(Root(), configuration='debug: false'):
+        assert status == '301 Moved Permanently'
+        assert response.text == 'Moved Permanently'
+        assert response.headers['Location'] == 'http://example.com'
+
 

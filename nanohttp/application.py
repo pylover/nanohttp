@@ -107,9 +107,13 @@ class Application:
         except Exception as ex:
             # the self._handle_exception may raise the error again, if the
             # error is not subclass of the HTTPStatusOtherwise,
+            response_headers = [("content-type", "text/plain")],
             if isinstance(ex, HTTPStatus):
                 exc_info=None
-                status, response_body = ex.status, ex.render()
+                status = ex.status
+                response_body = ex.render()
+                if ex.headers:
+                    response_headers = ex.headers
             else:
                 self.__logger__.exception(
                     'Internal Server Error',
@@ -121,9 +125,10 @@ class Application:
                     response_body = traceback.format_exc()
                 else:
                     response_body = status
+
             start_response(
                 status,
-                [("content-type", "text/plain")],
+                response_headers,
                 exc_info=exc_info
             )
             self._hook('end_response')
