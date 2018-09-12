@@ -1,7 +1,7 @@
 import pytest
 from bddrest import status, response
 
-from nanohttp import Controller, action
+from nanohttp import Controller, action, context
 from nanohttp.tests.helpers import Given, when
 
 
@@ -9,11 +9,11 @@ def test_basic_pipeline():
     class Root(Controller):
         @action
         def index(self):
-            yield 'Index'
+            yield f'Index: {context.request_scheme}, {context.request_uri}'
 
     with Given(Root()):
         assert status == 200
-        assert response.text == 'Index'
+        assert response.text == 'Index: http, http://bddrest-interceptor/'
 
 
 def test_iterable_pipeline():
@@ -46,5 +46,4 @@ def test_empty_response():
     with Given(Root()):
         assert status == 200
         assert response.text == ''
-
 
