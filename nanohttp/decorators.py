@@ -112,9 +112,9 @@ def chunked(trailer_field=None, trailer_value=None):
                 yield '\r\n'
 
             except Exception as ex:
-                yield str(ex)
-                yield '0\r\n'
-                yield '\r\n'
+                exstr = str(ex)
+                yield f'{len(exstr)}\r\n{exstr}'
+                yield '0\r\n\r\n'
 
         return wrapper
 

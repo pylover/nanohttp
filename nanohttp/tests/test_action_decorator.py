@@ -119,11 +119,22 @@ def test_json_decorator():
         def index(self, a, b):
             return dict(a=a, b=b)
 
+        @json
+        def custom(self):
+            class A:
+                def to_dict(self):
+                    return dict(c=1)
+            return A()
+
     with Given(Root(), '/1/2'):
         assert status == 200
         assert response.json == dict(a='1', b='2')
         assert response.content_type == 'application/json'
         assert response.encoding == 'utf-8'
+
+        when('/custom')
+        assert status == 200
+        assert response.json == dict(c=1)
 
 
 def test_text_decorator():
