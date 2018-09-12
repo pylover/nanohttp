@@ -15,19 +15,15 @@ class HTTPStatus(Exception):
         super().__init__(self.status)
 
     def render(self):
-        if not settings.debug:
-            return self.status.split(' ', 1)[1]
-
         stack_trace = traceback.format_exc()
         if context.response_content_type == 'application/json':
             return ujson.encode(
-                dict(
-                    stackTrace=stack_trace) if settings.debug else dict()
+                dict(stackTrace=stack_trace) if settings.debug else dict()
             )
-        else:
-            context.response_encoding = 'utf-8'
-            context.response_content_type = 'text/plain'
-            return stack_trace if settings.debug else ''
+        context.response_encoding = 'utf-8'
+        context.response_content_type = 'text/plain'
+        return stack_trace if settings.debug \
+            else self.status.split(' ', 1)[1]
 
 
 class HTTPKnownStatus(HTTPStatus):
