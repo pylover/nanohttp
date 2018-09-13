@@ -1,6 +1,6 @@
 # nanohttp
 
-A very micro HTTP framework. [documentation](http://nanohttp.org>)
+A very micro HTTP framework. [documentation](http://nanohttp.org)
 
 [![PyPI](http://img.shields.io/pypi/v/nanohttp.svg)](https://pypi.python.org/pypi/nanohttp)
 [![Gitter](https://badges.gitter.im/Carrene/nanohttp.svg)](https://gitter.im/Carrene/nanohttputm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
