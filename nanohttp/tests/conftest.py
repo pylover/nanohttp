@@ -1,9 +1,33 @@
 import os
+import sys
+import time
 import tempfile
-from os import path
 import shutil
+import socket
+from os import path
+from multiprocessing import Process
 
 import pytest
+
+from nanohttp import main
+
+
+@pytest.fixture
+def make_temp_file():
+    temp_files = []
+
+    def _make_temp_file(**kw):
+        """
+        Structure example: {'a.html': 'Hello', 'b': {}}
+        """
+        filename = tempfile.mktemp()
+        temp_files.append(filename)
+        return filename
+
+    yield _make_temp_file
+
+    for f in temp_files:
+        os.remove(f)
 
 
 @pytest.fixture
@@ -36,4 +60,71 @@ def make_temp_directory():
 
     for d in temp_directories:
         shutil.rmtree(d)
+
+
+@pytest.fixture
+def free_port():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((socket.gethostname(), 0))
+        return s.getsockname()[1]
+    finally:
+        s.close()
+
+
+@pytest.fixture
+def clitool(free_port):
+    class Tool:
+        subprocess = None
+        def wrapper(self, args):
+            from pytest_cov.embed import cleanup_on_sigterm
+            cleanup_on_sigterm()
+            sys.exit(main(args))
+
+        def execute(self, *a):
+            port = free_port
+            args = ['nanohttp', f'-b{port}']
+            args.extend(a)
+            self.subprocess = Process(target=self.wrapper, args=(args, ))
+            self.subprocess.start()
+            time.sleep(.2)
+            return f'http://localhost:{port}/'
+
+        def terminate(self):
+            if self.subprocess is None:
+                # Already terminated
+                return
+            self.subprocess.terminate()
+            while self.subprocess.exitcode is None:
+                time.sleep(.1)
+                self.subprocess.join(.3)
+            self.subprocess = None
+
+        @property
+        def exitstatus(self):
+            while self.subprocess.exitcode is None:
+                time.sleep(.1)
+                self.subprocess.join(.3)
+            return self.subprocess.exitcode
+
+    tool = Tool()
+    yield tool
+    tool.terminate()
+
+
+@pytest.fixture
+def controller_file(make_temp_directory):
+    def _create(name='foo.py'):
+        directory = make_temp_directory()
+        filename = path.join(directory, name)
+        with open(filename, 'w') as f:
+            f.write(
+                'from nanohttp import Controller, action\n'
+                'class Root(Controller):\n'
+                '    @action\n'
+                '    def index(self):\n'
+                '        yield \'Index\'\n'
+            )
+        return filename
+    yield _create
 

@@ -1,5 +1,6 @@
 
 import sys
+import signal
 from os import chdir
 from os.path import relpath, basename
 
@@ -80,6 +81,12 @@ def main(argv=None):
         print(nanohttp.__version__)
         return 0
 
+    def signal_handler(signum, frame):
+        print('SIGTERM received')
+        sys.exit(1)
+
+    signal.signal(signal.SIGTERM, signal_handler)
+
     try:
         host, port = args.bind.split(':')\
             if ':' in args.bind else ('', args.bind)
@@ -104,6 +111,7 @@ def main(argv=None):
                 exec(f'settings.{key} = {value}')
         except AttributeError:
             print(f'Invalid configuration option: {key}', file=sys.stderr)
+            return 1
 
         quickstart(
             controller=load_controller_from_file(args.controller),
@@ -112,6 +120,7 @@ def main(argv=None):
         )
     except KeyboardInterrupt:  # pragma: no cover
         print('CTRL+C detected.')
-        return -1
+        return 1
     else:  # pragma: no cover
         return 0
+
