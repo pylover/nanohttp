@@ -111,6 +111,7 @@ def main(argv=None):
                 exec(f'settings.{key} = {value}')
         except AttributeError:
             print(f'Invalid configuration option: {key}', file=sys.stderr)
+            return 1
 
         quickstart(
             controller=load_controller_from_file(args.controller),
@@ -119,6 +120,7 @@ def main(argv=None):
         )
     except KeyboardInterrupt:  # pragma: no cover
         print('CTRL+C detected.')
-        return -1
+        return 1
     else:  # pragma: no cover
         return 0
+
