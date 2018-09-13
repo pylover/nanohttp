@@ -87,8 +87,8 @@ def clitool(free_port):
             args.extend(a)
             self.subprocess = Process(target=self.wrapper, args=(args, ))
             self.subprocess.start()
-            time.sleep(.2)
-            return f'http://localhost:{port}/'
+            time.sleep(1)
+            return f'http://localhost:{port}'
 
         def terminate(self):
             if self.subprocess is None:
