@@ -1,0 +1,7 @@
+[run]
+source=nanohttp
+parallel=True
+concurrency=multiprocessing
+
+[tool:pytest]
+addopts= --cov=nanohttp nanohttp/tests

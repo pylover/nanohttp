@@ -1,5 +1,6 @@
 
 import sys
+import signal
 from os import chdir
 from os.path import relpath, basename
 
@@ -79,6 +80,12 @@ def main(argv=None):
     if args.version:  # pragma: no cover
         print(nanohttp.__version__)
         return 0
+
+    def signal_handler(signum, frame):
+        print('SIGTERM received')
+        sys.exit(1)
+
+    signal.signal(signal.SIGTERM, signal_handler)
 
     try:
         host, port = args.bind.split(':')\

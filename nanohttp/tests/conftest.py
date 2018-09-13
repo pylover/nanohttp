@@ -53,24 +53,31 @@ def free_port():
         s.close()
 
 
+
 @pytest.fixture
 def clitool(free_port):
     class Tool:
         subprocess = None
+        def wrapper(self, args):
+            from pytest_cov.embed import cleanup_on_sigterm
+            cleanup_on_sigterm()
+            return main(args)
+
         def execute(self, *a):
             port = free_port
             args = ['nanohttp', f'-b{port}']
             args.extend(a)
-            self.subprocess = Process(target=main, args=(args, ))
+            self.subprocess = Process(target=self.wrapper, args=(args, ))
             self.subprocess.start()
             time.sleep(.5)
             return f'http://localhost:{port}/'
 
         def terminate(self):
             self.subprocess.terminate()
-            self.subprocess.join(1)
+            time.sleep(.2)
+            self.subprocess.join()
             if self.subprocess.exitcode is None:
-                self.subprocess.kill()
+                self.subprocess.terminate()
 
     tool = Tool()
     yield tool
