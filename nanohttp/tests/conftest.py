@@ -85,9 +85,13 @@ def clitool(free_port):
             port = free_port
             args = ['nanohttp', f'-b{port}']
             args.extend(a)
-            self.subprocess = Process(target=self.wrapper, args=(args, ))
+            self.subprocess = Process(
+                target=self.wrapper,
+                args=(args, ),
+                daemon=True
+            )
             self.subprocess.start()
-            time.sleep(1)
+            time.sleep(.5)
             return f'http://localhost:{port}'
 
         def terminate(self):
@@ -96,6 +100,7 @@ def clitool(free_port):
                 return
             self.subprocess.terminate()
             while self.subprocess.exitcode is None:
+                print('Terminating ...')
                 time.sleep(.1)
                 self.subprocess.join(.3)
             self.subprocess = None
@@ -103,6 +108,7 @@ def clitool(free_port):
         @property
         def exitstatus(self):
             while self.subprocess.exitcode is None:
+                print('Terminating exitstatus...')
                 time.sleep(.1)
                 self.subprocess.join(.3)
             return self.subprocess.exitcode
