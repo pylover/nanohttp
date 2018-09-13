@@ -94,23 +94,22 @@ def clitool(free_port):
             time.sleep(.5)
             return f'http://localhost:{port}'
 
+        def _wait_for(self):
+            if self.subprocess.is_alive():
+                self.subprocess.terminate()
+                while self.subprocess.exitcode is None:
+                    time.sleep(.1)
+                    self.subprocess.join(.3)
+
+
         def terminate(self):
-            if self.subprocess is None:
-                # Already terminated
-                return
-            self.subprocess.terminate()
-            while self.subprocess.exitcode is None:
-                print('Terminating ...')
-                time.sleep(.1)
-                self.subprocess.join(.3)
-            self.subprocess = None
+            if self.subprocess is not None:
+                self._wait_for()
+                self.subprocess = None
 
         @property
         def exitstatus(self):
-            while self.subprocess.exitcode is None:
-                print('Terminating exitstatus...')
-                time.sleep(.1)
-                self.subprocess.join(.3)
+            self._wait_for()
             return self.subprocess.exitcode
 
     tool = Tool()
