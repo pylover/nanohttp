@@ -26,7 +26,8 @@ setup(
     author_email='vahid.mardani@gmail.com',
     url='http://github.com/Carrene/nanohttp',
     description='A very micro http framework.',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',  # This is important!
     install_requires=dependencies,
     packages=find_packages(),
     entry_points={
