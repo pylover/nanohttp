@@ -1,11 +1,5 @@
-bddrest >= 2.0.10
-coverage
-coveralls
-sphinx
-sphinx_rtd_theme
-sphinx-autobuild
-sphinx-serve
-sphinxcontrib-googleanalytics
+-r requirements-ci.txt
+-r requirements-doc.txt
 pytest-pudb
-pytest-cov
 ipython
+

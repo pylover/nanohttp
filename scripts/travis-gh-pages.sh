@@ -24,6 +24,9 @@ GIT="git -C ../${DOC}"
 ${GIT} config user.name "pylover"
 ${GIT} config user.email "$COMMIT_AUTHOR_EMAIL"
 
+# Installing dependencies
+pip install -r requirements-doc.txt
+
 cd sphinx
 make html
 cd ..
