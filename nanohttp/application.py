@@ -166,7 +166,7 @@ class Application:
                         yield context_.encode_response(chunk)
                 else:
                     yield b''
-            except Exception as ex_:  # pragma: no cover
+            except Exception as ex_:
                 self.__logger__.exception(
                     'Exception while serving the response.'
                 )

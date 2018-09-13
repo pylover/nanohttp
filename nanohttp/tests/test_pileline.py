@@ -41,13 +41,24 @@ def test_iterable_pipeline():
         assert response.text == 'ab'
 
 
-def test_bad_response():
+def test_not_iterable_response():
     class Root(Controller):
         @action
         def index(self):
             return 352345352
 
     with pytest.raises(ValueError):
+        Given(Root())
+
+
+def test_iterable_but_bad_response():
+    class Root(Controller):
+        @action
+        def index(self):
+            yield '1'
+            yield 352345352
+
+    with pytest.raises(TypeError):
         Given(Root())
 
 

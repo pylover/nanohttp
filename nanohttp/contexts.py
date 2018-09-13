@@ -200,7 +200,7 @@ class Context:
                 return buff.encode(self.response_encoding)
             else:
                 return buff
-        except AttributeError:  # pragma: no cover
+        except AttributeError:
             raise TypeError(
                 'The returned response should has the `encode` attribute, '
                 'such as `str`.'
