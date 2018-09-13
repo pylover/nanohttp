@@ -1,22 +1,16 @@
-nanohttp
-========
+# nanohttp
 
- 
+A very micro HTTP framework. [documentation](http://nanohttp.org>)
+
 [![PyPI](http://img.shields.io/pypi/v/nanohttp.svg)]
 (https://pypi.python.org/pypi/nanohttp)
 
-[![Gitter](https://badges.gitter.im/Carrene/nanohttp.svg)]
-(https://gitter.im/Carrene/nanohttp?utm_source=badge&utm_medium=badge&utm_camp
-aign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Carrene/nanohttp.svg)](https://gitter.im/Carrene/nanohttputm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/Carrene/nanohttp.svg?branch=master)]
-(https://travis-ci.org/Carrene/nanohttp)
+[![Build Status](https://travis-ci.org/Carrene/nanohttp.svg?branch=master)](https://travis-ci.org/Carrene/nanohttp)
 
-[![Coverage Status](https://coveralls.io/repos/github/Carrene/nanohttp/badge.s
-vg?branch=master)](https://coveralls.io/github/Carrene/nanohttp?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master)](https://coveralls.io/github/Carrene/nanohttp?branch=master)
 
-
-A very micro HTTP framework. `documentation <http://nanohttp.org>`_
 
 ## Contribution
 
