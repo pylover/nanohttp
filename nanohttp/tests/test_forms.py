@@ -29,6 +29,12 @@ def test_http_url_encoded_form():
         assert status == 200
         assert response.text == ', a='
 
+        # Duplicated fields
+        when(body='a=1&a=2', content_type='application/x-www-form-urlencoded')
+        assert status == 200
+        assert response.text == \
+            'application/x-www-form-urlencoded, a=[\'1\', \'2\']'
+
 
 def test_http_multipart_form():
     class Root(Controller):
