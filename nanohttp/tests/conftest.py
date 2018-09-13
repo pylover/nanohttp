@@ -9,7 +9,7 @@ from multiprocessing import Process
 
 import pytest
 
-from nanohttp import main
+from nanohttp import main, quickstart, settings
 
 
 @pytest.fixture
@@ -133,4 +133,20 @@ def controller_file(make_temp_directory):
             )
         return filename
     yield _create
+
+
+@pytest.fixture
+def run_quickstart(free_port):
+    terminators = []
+    settings.__class__._instance = None
+    def wrapper(*args, **kw):
+        terminate = quickstart(*args, block=False, port=free_port, **kw)
+        time.sleep(.1)
+        terminators.append(terminate)
+        return f'http://localhost:{free_port}'
+    yield wrapper
+    for t in terminators:
+        t()
+        time.sleep(.1)
+
 
