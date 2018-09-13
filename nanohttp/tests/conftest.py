@@ -111,3 +111,18 @@ def clitool(free_port):
     yield tool
     tool.terminate()
 
+
+@pytest.fixture
+def controller_file(make_temp_directory):
+    directory = make_temp_directory()
+    filename = path.join(directory, 'foo.py')
+    with open(filename, 'w') as f:
+        f.write(
+            'from nanohttp import Controller, action\n'
+            'class Root(Controller):\n'
+            '    @action\n'
+            '    def index(self):\n'
+            '        yield \'Index\'\n'
+        )
+    yield filename
+
