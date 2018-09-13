@@ -63,17 +63,50 @@ def test_json_form():
     class Root(Controller):
         @action
         def index(self):
+            form = context.form
             yield context.request_content_type
             yield ', '
             yield ', '.join(
-                f'{k}={v}' for k, v in sorted(context.form.items())
+                f'{k}={v}' for k, v in sorted(form.items())
             )
 
-    with Given(Root(), verb='POST', json={}):
+    with Given(Root(), verb='POST', json={}, configuration='debug: false'):
         assert status == 200
         assert response.text == ', '
 
         when(json=dict(a=1, b=2))
         assert status == 200
         assert response.text == 'application/json, a=1, b=2'
+
+        # No content length
+        when(body='{}', content_type='application/json')
+        assert status == 400
+        assert response.text == 'Content-Length required'
+
+        when(
+            body='malformed',
+            content_type='application/json',
+            headers={'Content-Length': '9'}
+        )
+        assert status == 400
+        assert response.text == 'Cannot parse the request'
+
+
+def test_invalid_form():
+    class Root(Controller):
+        @action
+        def index(self):
+            form = context.form
+            yield context.request_content_type
+            yield ', '
+            yield ', '.join(
+                f'{k}={v}' for k, v in sorted(form.items())
+            )
+
+    with Given(Root(), verb='POST', json={}):
+        assert status == 200
+        assert response.text == ', '
+
+        when(body='', content_type='multipart/form-data; boundary=')
+        assert status == '400 Cannot parse the request'
 

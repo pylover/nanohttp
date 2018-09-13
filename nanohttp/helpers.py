@@ -122,13 +122,15 @@ def get_cgi_field_value(field):
 
 
 def parse_any_form(environ, content_length=None, content_type=None):
+    if content_type == 'application/json':
+        if content_length is None:
+            raise exceptions.HTTPBadRequest('Content-Length required')
 
-    if content_length and content_type == 'application/json':
         fp = environ['wsgi.input']
         data = fp.read(content_length)
         try:
             return ujson.decode(data)
-        except ValueError:
+        except (ValueError, TypeError):
             raise exceptions.HTTPBadRequest('Cannot parse the request')
 
     try:
@@ -138,8 +140,8 @@ def parse_any_form(environ, content_length=None, content_type=None):
             strict_parsing=False,
             keep_blank_values=True
         )
-    except TypeError:
-        raise exceptions.HTTPBadRequest('Cannot parse the request.')
+    except (TypeError, ValueError):
+        raise exceptions.HTTPBadRequest('Cannot parse the request')
 
     result = {}
     if storage.list is None or not len(storage.list):
