@@ -77,7 +77,7 @@ class Application:
         if status[:3] in NO_CONTENT_STATUSES:
             return []
 
-        return [response_body]
+        return [response_body.encode()]
 
     def __call__(self, environ, start_response):
         """Method that
