@@ -14,4 +14,4 @@ from .configuration import settings, configure
 from .application import Application
 from .validation import validate, RequestValidator
 
-__version__ = '1.9.9'
+__version__ = '1.9.10'
