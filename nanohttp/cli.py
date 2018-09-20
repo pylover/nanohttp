@@ -119,6 +119,7 @@ def main(argv=None):
             port=int(port)
         )
     except KeyboardInterrupt:  # pragma: no cover
+        import pudb; pudb.set_trace()  # XXX BREAKPOINT
         print('CTRL+C detected.')
         return 1
     else:  # pragma: no cover

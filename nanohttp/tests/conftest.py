@@ -78,6 +78,7 @@ def free_port():
 def clitool(free_port):
     class Tool:
         subprocess = None
+        url = None
 
         def terminate_subprocess(self, sig, frame):  # pragma: no cover
             cleanup()
@@ -85,7 +86,8 @@ def clitool(free_port):
 
         def wrapper(self, args):
             signal.signal(signal.SIGTERM, self.terminate_subprocess)
-            sys.exit(main(args))
+            exitcode = main(args)
+            sys.exit(exitcode)
 
         def execute(self, *a):
             port = free_port
@@ -97,7 +99,7 @@ def clitool(free_port):
                 daemon=True
             )
             self.subprocess.start()
-            time.sleep(.5)
+            time.sleep(1)
             return f'http://localhost:{port}'
 
         def _wait_for(self):
@@ -106,9 +108,8 @@ def clitool(free_port):
             self.subprocess.join()
 
         def terminate(self):
-            if self.subprocess is not None:
-                self._wait_for()
-                self.subprocess = None
+            self._wait_for()
+            self.subprocess = None
 
         @property
         def exitstatus(self):
