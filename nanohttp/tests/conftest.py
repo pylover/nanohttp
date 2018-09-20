@@ -1,13 +1,15 @@
 import os
 import sys
 import time
-import tempfile
 import shutil
 import socket
+import signal
+import tempfile
 from os import path
 from multiprocessing import Process
 
 import pytest
+from pytest_cov.embed import cleanup
 
 from nanohttp import main, quickstart, settings
 
@@ -76,9 +78,13 @@ def free_port():
 def clitool(free_port):
     class Tool:
         subprocess = None
+
+        def terminate_subprocess(self, sig, frame):  # pragma: no cover
+            cleanup()
+            sys.exit(sig)
+
         def wrapper(self, args):
-            from pytest_cov.embed import cleanup_on_sigterm
-            cleanup_on_sigterm()
+            signal.signal(signal.SIGTERM, self.terminate_subprocess)
             sys.exit(main(args))
 
         def execute(self, *a):
@@ -97,10 +103,7 @@ def clitool(free_port):
         def _wait_for(self):
             if self.subprocess.is_alive():
                 self.subprocess.terminate()
-                while self.subprocess.exitcode is None:
-                    time.sleep(.1)
-                    self.subprocess.join(.3)
-
+            self.subprocess.join()
 
         def terminate(self):
             if self.subprocess is not None:
