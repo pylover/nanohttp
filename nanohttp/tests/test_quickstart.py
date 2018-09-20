@@ -27,3 +27,15 @@ def test_quickstart_with_application(run_quickstart):
     assert response.status_code == 200
     assert response.text == 'Index'
 
+
+def test_quickstart_with_controller(run_quickstart):
+    class Root(Controller):
+        @action
+        def index(self):
+            yield f'Index'
+
+    url = run_quickstart(Root())
+    response = requests.get(url)
+    assert response.status_code == 200
+    assert response.text == 'Index'
+
