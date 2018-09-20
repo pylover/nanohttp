@@ -1,6 +1,6 @@
 import sys
 from os import chdir
-from os.path import relpath
+from os.path import relpath, isdir, join
 from importlib.util import spec_from_file_location, module_from_spec
 
 import yaml
@@ -34,7 +34,7 @@ def load_controller_from_file(specifier):
             controller = getattr(module, class_name)()
 
         elif class_name == 'Static':
-            from .controllers import Static
+            from ..controllers import Static
             controller = Static()
         else:  # pragma: no cover
             controller = globals()[class_name]()
