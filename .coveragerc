@@ -2,6 +2,8 @@
 source=nanohttp
 parallel=True
 concurrency=multiprocessing
+omit = 
+    nanohttp/cli/*
 
 [tool:pytest]
 addopts= --cov=nanohttp nanohttp/tests

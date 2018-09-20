@@ -1,13 +1,11 @@
-
 import cgi
-import ujson
 import threading
-from os.path import isdir, join
 
 import pymlconf
+import ujson
 
-from .configuration import settings, configure
 from . import exceptions
+from .configuration import settings, configure
 
 
 class LazyAttribute:
@@ -41,38 +39,6 @@ class LazyAttribute:
         val = f(obj)
         setattr(obj, f.__name__, val)
         return val
-
-
-def load_controller_from_file(specifier):
-    from importlib.util import spec_from_file_location, module_from_spec
-    controller = None
-
-    if specifier:
-        module_name, class_name = specifier.split(':') \
-            if ':' in specifier else (specifier, 'Root')
-
-        if module_name:
-
-            if isdir(module_name):
-                location = join(module_name, '__init__.py')
-            elif module_name.endswith('.py'):
-                location = module_name
-                module_name = module_name[:-3]
-            else:
-                location = '%s.py' % module_name
-
-            spec = spec_from_file_location(module_name, location=location)
-            module = module_from_spec(spec)
-            spec.loader.exec_module(module)
-            controller = getattr(module, class_name)()
-
-        elif class_name == 'Static':
-            from .controllers import Static
-            controller = Static()
-        else:  # pragma: no cover
-            controller = globals()[class_name]()
-
-    return controller
 
 
 def quickstart(controller=None, application=None, host='localhost', port=8080,
