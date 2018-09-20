@@ -99,7 +99,7 @@ def clitool(free_port):
                 daemon=True
             )
             self.subprocess.start()
-            time.sleep(1)
+            time.sleep(5 if os.environ.get('TRAVIS') else .33)
             return f'http://localhost:{port}'
 
         def _wait_for(self):
