@@ -1,6 +1,6 @@
 from bddrest import status, response
 
-from nanohttp import Static
+from nanohttp import Static, Controller
 from nanohttp.tests.helpers import Given, when
 
 
@@ -39,4 +39,23 @@ def test_static_controller(make_temp_directory):
         static.default_document = None
         when('/')
         assert status == 404
+
+
+def test_nested_static_controller(make_temp_directory):
+    class Root(Controller):
+        static = Static(
+            make_temp_directory(a=dict(a1='A1', a2='A2'), b='B'),
+            default_document='b'
+        )
+
+    with Given(Root()):
+        assert status == 404
+
+        when('/static/b')
+        assert status == 200
+        assert response.text == 'B'
+
+        when('/static/a/a1')
+        assert status == 200
+        assert response.text == 'A1'
 

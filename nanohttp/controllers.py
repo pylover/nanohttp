@@ -131,7 +131,9 @@ class Static(Controller):
     __nanohttp__ = dict(
         verbs=['any'],
         encoding=None,
-        default_action='index'
+        default_action='index',
+        minimum_allowed_arguments=0,
+        maximum_allowed_arguments=UNLIMITED
     )
 
     __chunk_size__ = 0x4000
