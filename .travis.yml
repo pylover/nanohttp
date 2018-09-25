@@ -13,6 +13,7 @@ branches:
   - master
   - nightly
   - ci
+  - test/cli
   - /^(release\/)?v([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$/
 
 before_install:
@@ -20,7 +21,7 @@ before_install:
   - pip install -r requirements-ci.txt
 
 install: pip install -e .
-script: py.test -vv --cov=nanohttp nanohttp/tests
+script: py.test -vv -n 10 --max-worker-restart 10 --cov=nanohttp nanohttp/cli/tests/
 after_success: coveralls
 after_deploy: ./scripts/travis-gh-pages.sh
 deploy:
