@@ -13,7 +13,6 @@ branches:
   - master
   - nightly
   - ci
-  - test/cli
   - /^(release\/)?v([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$/
 
 before_install:
