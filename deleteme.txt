@@ -1,3 +1,0 @@
-Fixing cli testing
-
-try: #22.

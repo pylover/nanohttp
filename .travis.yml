@@ -21,7 +21,7 @@ before_install:
   - pip install -r requirements-ci.txt
 
 install: pip install -e .
-script: py.test -vv -n 10 --max-worker-restart 10 --cov=nanohttp nanohttp/cli/tests/
+script: py.test -vv -n 10 --max-worker-restart 3 --cov=nanohttp 
 after_success: coveralls
 after_deploy: ./scripts/travis-gh-pages.sh
 deploy:
