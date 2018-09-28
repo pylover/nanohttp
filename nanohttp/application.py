@@ -46,7 +46,7 @@ class Application:
 
     def _handle_exception(self, ex, start_response):
 
-        response_headers = [("content-type", "text/plain")],
+        response_headers = [("content-type", "text/plain")]
         if isinstance(ex, HTTPStatus):
             exc_info=None
             status = ex.status
