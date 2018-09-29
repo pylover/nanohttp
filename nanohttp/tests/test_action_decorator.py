@@ -16,7 +16,7 @@ def test_action_decorator_verbs():
         assert response.text == '1, 2'
 
         when(verb='put')
-        assert status  == 405
+        assert status == 405
 
 
 def test_action_decorator_content_type():
@@ -193,4 +193,3 @@ def test_binary_decorator():
         assert response.body == b'abc'
         assert response.content_type == 'application/octet'
         assert response.encoding is None
-

@@ -58,4 +58,3 @@ def test_nested_static_controller(make_temp_directory):
         when('/static/a/a1')
         assert status == 200
         assert response.text == 'A1'
-

@@ -1,6 +1,6 @@
 from bddrest import status, response
 
-from nanohttp import Controller, action, context, chunked
+from nanohttp import Controller, action, chunked
 from nanohttp.tests.helpers import Given, when
 
 

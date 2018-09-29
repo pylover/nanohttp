@@ -1,6 +1,5 @@
 import functools
 from inspect import signature, Parameter
-from typing import Union
 
 import ujson
 
@@ -165,4 +164,3 @@ binary = functools.partial(
     content_type='application/octet-stream',
     encoding=None
 )
-

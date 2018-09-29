@@ -108,4 +108,3 @@ def test_unhandled_exceptions_no_debug_mode():
 
     with pytest.raises(E):
         Given(Root(), configuration='debug: false')
-

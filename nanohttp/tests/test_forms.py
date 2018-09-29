@@ -47,7 +47,7 @@ def test_http_multipart_form():
             yield ', '
             yield ', '.join(
                 f'{k}='
-                f'{read_form_field(v)}' \
+                f'{read_form_field(v)}'
                 for k, v in sorted(context.form.items())
             )
 
@@ -115,4 +115,3 @@ def test_invalid_form():
 
         when(body='', content_type='multipart/form-data; boundary=')
         assert status == '400 Cannot parse the request'
-

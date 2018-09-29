@@ -48,7 +48,7 @@ class Application:
 
         response_headers = [("content-type", "text/plain")],
         if isinstance(ex, HTTPStatus):
-            exc_info=None
+            exc_info = None
             status = ex.status
             response_body = ex.render()
             if ex.headers:
@@ -58,7 +58,7 @@ class Application:
                 'Internal Server Error',
                 exc_info=True
             )
-            exc_info=sys.exc_info()
+            exc_info = sys.exc_info()
             status = '500 Internal Server Error'
             if settings.debug:
                 response_body = traceback.format_exc()
@@ -182,4 +182,3 @@ class Application:
 
     def shutdown(self):  # pragma: nocover
         pass
-

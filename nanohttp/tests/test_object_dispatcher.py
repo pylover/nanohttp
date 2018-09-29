@@ -73,4 +73,3 @@ def test_object_dispatcher():
 
         when('/bars/private')
         assert status == 404
-

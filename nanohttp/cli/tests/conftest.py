@@ -1,8 +1,6 @@
 import os
 import sys
 import time
-import shutil
-import socket
 import signal
 import tempfile
 from os import path
@@ -95,4 +93,3 @@ def controller_file(make_temp_directory):
             )
         return filename
     yield _create
-
