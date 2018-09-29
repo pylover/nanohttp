@@ -41,7 +41,7 @@ setup(
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'License :: Other/Proprietary License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.6',

@@ -30,4 +30,3 @@ production-related work are tracked with the release branches.
 With this new model, we can push out bug fixes more quickly and achieve 
 simpler maintenance.
 
-
