@@ -43,7 +43,6 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None,
             [], [], []
         action_signature = signature(func)
         positional_unlimited = False
-        optional_unlimited = False
 
         for name, parameter in action_signature.parameters.items():
             if name == 'self':
@@ -57,7 +56,8 @@ def action(*args, verbs='any', encoding='utf-8', content_type=None,
                 positional_unlimited = True
 
             elif parameter.kind == Parameter.VAR_KEYWORD:
-                optional_unlimited = True
+                # Do nothing for variable keyword arguments
+                pass
 
             elif parameter.default is Parameter.empty:
                 positional_arguments.append(parameter.name)
