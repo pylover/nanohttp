@@ -7,7 +7,6 @@ from .configuration import settings
 
 class HTTPStatus(Exception):
     status = None
-    headers = None
 
     def __init__(self, status=None):
         if status is not None:
