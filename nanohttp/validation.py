@@ -232,6 +232,7 @@ class RequestValidator:
 
         return form, query
 
+
 class CallableValidator(Criterion):
 
     def _validate(self, value, container, field):
@@ -315,4 +316,3 @@ def validate(**fields):
         return wrapper
 
     return decorator
-

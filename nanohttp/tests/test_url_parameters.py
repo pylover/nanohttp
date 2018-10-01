@@ -25,7 +25,7 @@ def test_fixed_positional_url_parameter():
 
         # Extra URL parameters
         when('/1/2/3')
-        assert status  == 404
+        assert status == 404
 
 
 def test_vary_positional_url_parameters():
@@ -180,5 +180,3 @@ def test_both_foxed_and_vary_positional_arguments():
 
         when('/a/b/c/d')
         assert status == 200
-
-

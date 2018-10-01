@@ -1,11 +1,9 @@
 from http import cookies
 
-
-import pytest
 from bddrest import status, response
 
 from nanohttp import Controller, action, context
-from nanohttp.tests.helpers import Given, when
+from nanohttp.tests.helpers import Given
 
 
 def test_basic_pipeline():
@@ -30,4 +28,3 @@ def test_basic_pipeline():
         assert counter['path'] == '/a'
         assert counter['domain'] == 'example.com'
         assert counter['max-age'] == '1'
-

@@ -62,7 +62,6 @@ def main(argv=None):
         for f in args.config_files:
             settings.load_file(f)
 
-
         try:
             for option in args.options:
                 key, value = option.split('=')
@@ -85,4 +84,3 @@ def main(argv=None):
         return 15
     else:  # pragma: no cover
         return 0
-

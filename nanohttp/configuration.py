@@ -29,5 +29,3 @@ def configure(*args, **kwargs):
     settings.initialize(BUILTIN_CONFIGURATION, **kwargs)
     for a in args:
         settings.merge(a)
-
-

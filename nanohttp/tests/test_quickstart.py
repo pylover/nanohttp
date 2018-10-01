@@ -38,4 +38,3 @@ def test_quickstart_with_controller(run_quickstart):
     response = requests.get(url)
     assert response.status_code == 200
     assert response.text == 'Index'
-

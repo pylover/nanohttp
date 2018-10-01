@@ -9,12 +9,12 @@ def test_regex_controller():
         def __init__(self):
             super().__init__((
                 (r'/foos/(?P<id>\d+)/bars',
-                self.bars),
+                 self.bars),
             ))
 
         @action
-        def bars(self, id: int):
-            return f'{id}'
+        def bars(self, id_: int):
+            return f'{id_}'
 
     with Given(Root(), '/foos/1/bars'):
         assert status == 200
@@ -31,4 +31,3 @@ def test_regex_controller():
 
         when('/foos/a/bars')
         assert status == 404
-

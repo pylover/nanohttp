@@ -6,7 +6,7 @@ from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus, \
     Controller, validate, action, context
 from bddrest import status, response
 
-from nanohttp.tests.helpers import Given, when
+from nanohttp.tests.helpers import Given
 
 
 def test_validation_decorator():
@@ -95,7 +95,7 @@ def test_validation_max():
     assert dict(a=None) == validator(dict(a=None))[0]
 
     with pytest.raises(HTTPBadRequest):
-         validator(dict(a='9'))
+        validator(dict(a='9'))
 
     # More than Expectation
     with pytest.raises(HTTPBadRequest):
@@ -116,7 +116,7 @@ def test_validation_min():
 
     assert dict(a=11) == validator(dict(a=11))[0]
     with pytest.raises(HTTPBadRequest):
-         validator(dict(a='11'))
+        validator(dict(a='11'))
 
     # Less than Expectation
     with pytest.raises(HTTPBadRequest):
@@ -285,4 +285,3 @@ def test_readonly_validator():
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a=None))
     assert '666 a is readonly' == str(ctx.value)
-

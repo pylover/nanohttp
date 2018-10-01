@@ -7,7 +7,6 @@ from typing import Union
 from urllib.parse import parse_qs
 from http.cookies import SimpleCookie
 
-from nanohttp import exceptions
 from .helpers import LazyAttribute, parse_any_form
 
 
@@ -56,12 +55,12 @@ class Context:
     def __stack__(self):
         """Nested contexts stack
         """
-        THREADLOCAL_STACK_ATTRIBUTE = 'nanohttp_context_stack'
-        if not hasattr(self.thread_local, THREADLOCAL_STACK_ATTRIBUTE):
+        threadlocal_stack_attribute = 'nanohttp_context_stack'
+        if not hasattr(self.thread_local, threadlocal_stack_attribute):
             setattr(
-                self.thread_local, THREADLOCAL_STACK_ATTRIBUTE, ContextStack()
+                self.thread_local, threadlocal_stack_attribute, ContextStack()
             )
-        return getattr(self.thread_local, THREADLOCAL_STACK_ATTRIBUTE)
+        return getattr(self.thread_local, threadlocal_stack_attribute)
 
     def __init__(self, environ, application=None):
         """

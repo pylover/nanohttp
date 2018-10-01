@@ -15,7 +15,6 @@ from .constants import HTTP_DATETIME_FORMAT, UNLIMITED
 logging.basicConfig(level=logging.INFO)
 
 
-
 class Controller(object):
     """Base Controller
     """
@@ -63,16 +62,16 @@ class Controller(object):
         prevent_empty_form = manifest.get('prevent_empty_form')
         if prevent_empty_form and len(context.form) <= 0:
             raise HTTPStatus(
-                prevent_empty_form \
-                if isinstance(prevent_empty_form, str) \
+                prevent_empty_form
+                if isinstance(prevent_empty_form, str)
                 else '400 Empty Form'
             )
 
         prevent_form = manifest.get('prevent_form')
         if prevent_form and len(context.form) > 0:
             raise HTTPStatus(
-                prevent_form \
-                if isinstance(prevent_form, str) \
+                prevent_form
+                if isinstance(prevent_form, str)
                 else '400 Form Not Allowed'
             )
 

@@ -71,4 +71,3 @@ def test_empty_response():
     with Given(Root()):
         assert status == 200
         assert response.text == ''
-

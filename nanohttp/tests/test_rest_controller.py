@@ -68,4 +68,3 @@ def test_nested_rest_controllers():
         when('/bars/a')
         assert status == 200
         assert response.text == 'Bars, a'
-

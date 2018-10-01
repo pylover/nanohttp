@@ -59,11 +59,8 @@ def parse_arguments(argv=None):
         metavar='key1.key2=value',
         dest='options',
         default=[],
-        help= \
-            'Configuration value to override. this option could be passed ' \
-            'multiple times.'
+        help='Configuration value to override. this option could be passed '
+             'multiple times.'
     )
 
     return parser.parse_args(argv[1:])
-
-
