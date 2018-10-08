@@ -85,7 +85,7 @@ def test_json_form():
         assert response.text == 'application/json, a=1, b=2'
 
         # No content length
-        when(body='{}', content_type='application/json')
+        when(body='', content_type='application/json')
         assert status == 400
         assert response.text == 'Content-Length required'
 

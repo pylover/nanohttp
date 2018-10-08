@@ -69,10 +69,9 @@ class Controller(object):
             )
 
         prevent_form = manifest.get('prevent_form')
-        if prevent_form and len(context.form) > 0:
-            raise HTTPStatus(
-                prevent_form \
-                if isinstance(prevent_form, str) \
+        if prevent_form:
+            context.prevent_form(
+                prevent_form if isinstance(prevent_form, str) \
                 else '400 Form Not Allowed'
             )
 

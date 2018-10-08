@@ -1,4 +1,4 @@
-
+import io
 import threading
 import wsgiref.util
 import wsgiref.headers
@@ -168,6 +168,12 @@ class Context:
             keep_blank_values=True,
             strict_parsing=False
         ).items()}
+
+    def prevent_form(self, message):
+        if self.request_content_length:
+            raise exceptions.HTTPStatus(message)
+
+        self.environ['wsgi.input'] = io.BytesIO()
 
     @LazyAttribute
     def form(self):

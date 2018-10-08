@@ -46,8 +46,8 @@ def test_action_decorator_prevent_form():
     with Given(Root(), verb='POST'):
         assert status == 200
 
-        when(form=dict(a=1))
-        assert status == 400
+        when(body='foo=1')
+        assert status == '400 Form Not Allowed'
 
         when('/custom_status', form=dict(a=1))
         assert status == 777
