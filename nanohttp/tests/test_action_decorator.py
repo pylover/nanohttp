@@ -1,7 +1,8 @@
 import pytest
 from bddrest import status, response, given
 
-from nanohttp import Controller, action, html, json, text, xml, binary
+from nanohttp import Controller, action, html, json, text, xml, binary, \
+    RestController
 from nanohttp.tests.helpers import Given, when
 
 
@@ -57,6 +58,17 @@ def test_action_decorator_prevent_form():
         # Trying custom verb #123
         when(verb='LIST')
         assert status == 200
+
+
+def test_action_decorator_prevent_form_rest_controller():
+    class Root(RestController):
+        @action(prevent_form=True)
+        def foo(self):
+            yield 'default'
+
+    with Given(Root(), verb='foo'):
+        assert status == 200
+
 
 
 def test_action_decorator_prevent_empty_form():
