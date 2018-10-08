@@ -54,6 +54,10 @@ def test_action_decorator_prevent_form():
         when('/custom_status')
         assert status == 200
 
+        # Trying custom verb #123
+        when(verb='LIST')
+        assert status == 200
+
 
 def test_action_decorator_prevent_empty_form():
     class Root(Controller):
