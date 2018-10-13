@@ -1,6 +1,6 @@
 from bddrest import status, response
 
-from nanohttp import Controller, action, context, chunked
+from nanohttp import Controller, action, chunked
 from nanohttp.tests.helpers import Given, when
 
 
@@ -38,3 +38,4 @@ def test_chunked_streaming():
         assert status == 200
         assert response.text == \
             '5\r\nfirst\r\n18\r\nerror in streaming0\r\n\r\n'
+
