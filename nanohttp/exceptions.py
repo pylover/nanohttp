@@ -134,3 +134,4 @@ class HTTPResetContent(HTTPSuccess):
 
 class HTTPPartialContent(HTTPSuccess):
     status = '206 Partial Content'
+

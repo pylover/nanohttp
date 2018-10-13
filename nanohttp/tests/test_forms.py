@@ -1,5 +1,5 @@
-import io
 import cgi
+import io
 
 from bddrest import status, response
 

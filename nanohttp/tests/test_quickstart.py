@@ -1,4 +1,3 @@
-
 import requests
 
 from nanohttp import Application, Controller, action
