@@ -1,8 +1,8 @@
-from bddrest import status, response, given
+from bddrest import status, response
 
-from nanohttp import Application, Controller, action, html, json, text, \
-    xml, binary, context
+from nanohttp import Application, Controller, action, context
 from nanohttp.tests.helpers import Given, when
+
 
 app_init_calls = 0
 begin_response_calls = 0
