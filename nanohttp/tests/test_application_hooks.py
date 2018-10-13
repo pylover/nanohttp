@@ -9,6 +9,7 @@ begin_response_calls = 0
 begin_request_calls = 0
 end_response_calls = 0
 
+
 def test_application_hooks():
     class Root(Controller):
         @action
