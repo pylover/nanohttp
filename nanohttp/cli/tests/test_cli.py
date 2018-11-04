@@ -80,6 +80,7 @@ def test_cli_with_given_filename_and_controller_name(clitool, controller_file):
     assert response.status_code == 200
     assert response.text == 'Index'
 
+
 def test_cli_with_given_package_and_controller_name(clitool, controller_file):
     directory, filename = path.split(controller_file('__init__.py'))
     url = clitool.execute(f'{directory}:Root')

@@ -181,4 +181,3 @@ def test_both_foxed_and_vary_positional_arguments():
         when('/a/b/c/d')
         assert status == 200
 
-

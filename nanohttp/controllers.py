@@ -15,7 +15,6 @@ from .constants import HTTP_DATETIME_FORMAT, UNLIMITED
 logging.basicConfig(level=logging.INFO)
 
 
-
 class Controller(object):
     """Base Controller
     """
@@ -220,3 +219,4 @@ class RegexRouteController(Controller):
             if match:
                 return handler, match.groups()
         raise HTTPNotFound()
+

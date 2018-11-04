@@ -39,7 +39,7 @@ def test_action_decorator_prevent_form():
         def index(self):
             yield 'default'
 
-        @action(prevent_form='777 Form Not Allowedi Here')
+        @action(prevent_form='777 Form Not Allowed Here')
         def custom_status(self):
             yield 'custom'
 

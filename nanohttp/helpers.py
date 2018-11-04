@@ -122,3 +122,4 @@ def parse_any_form(environ, content_length=None, content_type=None):
             result[k] = get_cgi_field_value(v)
 
     return result
+

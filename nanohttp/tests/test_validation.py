@@ -2,11 +2,11 @@ import re
 from decimal import Decimal
 
 import pytest
-from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus, \
-    Controller, validate, action, context
 from bddrest import status, response
 
-from nanohttp.tests.helpers import Given, when
+from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus, \
+    Controller, validate, action, context
+from nanohttp.tests.helpers import Given
 
 
 def test_validation_decorator():

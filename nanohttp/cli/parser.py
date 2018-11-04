@@ -66,4 +66,3 @@ def parse_arguments(argv=None):
 
     return parser.parse_args(argv[1:])
 
-
