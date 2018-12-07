@@ -131,8 +131,13 @@ def jsonify(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
+
+        if hasattr(context, 'jsonpatch'):
+            return result
+
         if hasattr(result, 'to_dict'):
             result = result.to_dict()
+
         elif not isinstance(result, (list, dict, int, str)):
             raise ValueError('Cannot encode to json: %s' % type(result))
 
