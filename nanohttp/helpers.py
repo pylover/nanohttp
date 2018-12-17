@@ -123,3 +123,11 @@ def parse_any_form(environ, content_length=None, content_type=None):
 
     return result
 
+
+def int_or_notfound(id):
+    try:
+        return int(id)
+
+    except (ValueError, TypeError):
+        raise exceptions.HTTPNotFound()
+
