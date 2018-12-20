@@ -2,7 +2,7 @@ import re
 from decimal import Decimal
 
 import pytest
-from bddrest import status, response, when
+from bddrest import status, response
 
 from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus, \
     Controller, validate, action, context
