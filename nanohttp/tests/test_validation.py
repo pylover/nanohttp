@@ -2,7 +2,7 @@ import re
 from decimal import Decimal
 
 import pytest
-from bddrest import status, response
+from bddrest import status, response, when
 
 from nanohttp import RequestValidator, HTTPBadRequest, HTTPStatus, \
     Controller, validate, action, context
@@ -30,7 +30,7 @@ def test_validation_decorator():
                 required=True,
                 type_=lambda v: v.encode(),
                 min_length=1
-            )
+            ),
         )
         @action
         def index(self):
@@ -52,7 +52,6 @@ def test_validation_decorator():
     ):
         assert status == 200
         assert response.text == 'int: 1, float: 2.3, int: 2, bytes: b\'ab\''
-
 
 def test_validation_required():
 
@@ -285,4 +284,30 @@ def test_readonly_validator():
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a=None))
     assert '666 a is readonly' == str(ctx.value)
+
+
+def test_priority_validation():
+
+    # This validator first checking the minimum and maximumi, then pattern
+    validator = RequestValidator(
+        fields=dict(
+            a=dict(
+                min_length=(2, '600 Greater than the minimum length'),
+                max_length=(5, '601 Greater than the maximum length'),
+                pattern=(r'^[A-Z]*$', '602 Invalid input format')
+            )
+        )
+    )
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(a='A'))
+    assert str(ctx.value) == '600 Greater than the minimum length'
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(a=(5 + 1) * 'A'))
+    assert str(ctx.value) == '601 Greater than the maximum length'
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(a='abc'))
+    assert str(ctx.value) == '602 Invalid input format'
 
