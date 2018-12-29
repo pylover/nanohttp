@@ -38,14 +38,14 @@ class Field:
         if maximum:
             self.criteria.append(MaximumValidator(maximum))
 
-        if pattern:
-            self.criteria.append(PatternValidator(pattern))
-
         if min_length:
             self.criteria.append(MinLengthValidator(min_length))
 
         if max_length:
             self.criteria.append(MaxLengthValidator(max_length))
+
+        if pattern:
+            self.criteria.append(PatternValidator(pattern))
 
         if callback:
             self.criteria.append(CallableValidator(callback))
