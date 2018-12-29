@@ -1,4 +1,4 @@
-bddrest >= 2.0.11
+bddrest >= 2.1.7
 coverage
 coveralls
 pytest >= 4.0.2
