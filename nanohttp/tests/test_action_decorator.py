@@ -153,6 +153,14 @@ def test_json_decorator():
             return A()
 
         @json
+        def non_object(self, value_type):
+            return {
+                'None': None,
+                'str': 'Yes',
+                'int': 123
+            }[value_type]
+
+        @json
         def badobject(self):
             class A:
                 pass
@@ -170,6 +178,18 @@ def test_json_decorator():
 
         with pytest.raises(ValueError):
             when('/badobject')
+
+        when('/non_object/None')
+        assert status == 200
+        assert response.json is None
+
+        when('/non_object/str')
+        assert status == 200
+        assert response.json == 'Yes'
+
+        when('/non_object/int')
+        assert status == 200
+        assert response.json == 123
 
 
 def test_text_decorator():

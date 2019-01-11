@@ -133,7 +133,10 @@ def jsonify(func):
         result = func(*args, **kwargs)
         if hasattr(result, 'to_dict'):
             result = result.to_dict()
-        elif not isinstance(result, (list, dict, int, str)):
+        elif (
+            result is not None and
+            not isinstance(result, (list, dict, int, str))
+        ):
             raise ValueError('Cannot encode to json: %s' % type(result))
 
         return ujson.dumps(result, indent=4)
