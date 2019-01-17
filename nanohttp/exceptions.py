@@ -127,6 +127,17 @@ class HTTPNonAuthoritativeInformation(HTTPSuccess):
 class HTTPNoContent(HTTPSuccess):
     status = '204 No Content'
 
+    def render(self):
+        return None
+
+    @property
+    def headers(self):
+        # It's actually `success` response, headers must keep
+        return list(map(
+            lambda x: (x, context.response_headers[x]),
+            context.response_headers.keys()
+        ))
+
 
 class HTTPResetContent(HTTPSuccess):
     status = '205 Reset Content'

@@ -1,8 +1,8 @@
 import pytest
 from bddrest import status, response
 
-from nanohttp import Controller, action, HTTPStatus, json, HTTPBadRequest, \
-    HTTPMovedPermanently, HTTPNotModified
+from nanohttp import Controller, action, json, context, HTTPStatus, \
+    HTTPBadRequest, HTTPMovedPermanently, HTTPNotModified, HTTPNoContent
 from nanohttp.tests.helpers import Given
 
 
@@ -109,3 +109,15 @@ def test_unhandled_exceptions_no_debug_mode():
     with pytest.raises(E):
         Given(Root(), configuration='debug: false')
 
+
+def test_http_no_content():
+    class Root(Controller):
+        @action
+        def index(self):
+            context.response_headers['x-app-extra'] = 'yep'
+            raise HTTPNoContent('Nothing to show')
+
+    with Given(Root()):
+        assert status == '204 Nothing to show'
+        assert response.body is None
+        assert response.headers['x-app-extra'] == 'yep'
