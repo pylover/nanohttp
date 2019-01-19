@@ -2,7 +2,9 @@ import pytest
 from bddrest import status, response
 
 from nanohttp import Controller, action, json, context, HTTPStatus, \
-    HTTPBadRequest, HTTPMovedPermanently, HTTPNotModified, HTTPNoContent
+    HTTPBadRequest, HTTPMovedPermanently, HTTPNotModified, HTTPNoContent, \
+    HTTPCreated, HTTPAccepted, HTTPNonAuthoritativeInformation, \
+    HTTPResetContent, HTTPPartialContent
 from nanohttp.tests.helpers import Given
 
 
@@ -114,10 +116,24 @@ def test_http_no_content():
     class Root(Controller):
         @action
         def index(self):
-            context.response_headers['x-app-extra'] = 'yep'
             raise HTTPNoContent('Nothing to show')
 
     with Given(Root()):
         assert status == '204 Nothing to show'
         assert response.body is None
+
+
+@pytest.mark.parametrize('http_success_exception', (
+    HTTPNoContent, HTTPCreated, HTTPAccepted, HTTPNonAuthoritativeInformation,
+    HTTPResetContent, HTTPPartialContent
+))
+def test_http_success_headers(http_success_exception):
+    class Root(Controller):
+        @action
+        def index(self):
+            context.response_headers['x-app-extra'] = 'yep'
+            raise http_success_exception
+
+    with Given(Root()):
+        assert status == http_success_exception.status
         assert response.headers['x-app-extra'] == 'yep'

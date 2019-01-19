@@ -111,6 +111,11 @@ class HTTPBadGatewayError(HTTPKnownStatus):
 class HTTPSuccess(HTTPKnownStatus):
     status = '200 OK'
 
+    @property
+    def headers(self):
+        # It's actually `success` response, headers must keep
+        return context.response_headers.items()
+
 
 class HTTPCreated(HTTPSuccess):
     status = '201 Created'
@@ -130,11 +135,6 @@ class HTTPNoContent(HTTPSuccess):
     def render(self):
         return None
 
-    @property
-    def headers(self):
-        # It's actually `success` response, headers must keep
-        return context.response_headers.items()
-
 
 class HTTPResetContent(HTTPSuccess):
     status = '205 Reset Content'
@@ -142,4 +142,3 @@ class HTTPResetContent(HTTPSuccess):
 
 class HTTPPartialContent(HTTPSuccess):
     status = '206 Partial Content'
-
