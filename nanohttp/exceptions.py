@@ -133,10 +133,7 @@ class HTTPNoContent(HTTPSuccess):
     @property
     def headers(self):
         # It's actually `success` response, headers must keep
-        return list(map(
-            lambda x: (x, context.response_headers[x]),
-            context.response_headers.keys()
-        ))
+        return context.response_headers.items()
 
 
 class HTTPResetContent(HTTPSuccess):
