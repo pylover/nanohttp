@@ -137,3 +137,4 @@ def test_http_success_headers(http_success_exception):
     with Given(Root()):
         assert status == http_success_exception.status
         assert response.headers['x-app-extra'] == 'yep'
+
