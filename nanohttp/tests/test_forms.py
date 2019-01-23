@@ -3,7 +3,7 @@ import io
 
 from bddrest import status, response
 
-from nanohttp import Controller, action, context
+from nanohttp import Controller, action, context, RestController
 from nanohttp.tests.helpers import Given, when
 
 
@@ -115,4 +115,15 @@ def test_invalid_form():
 
         when(body='', content_type='multipart/form-data; boundary=')
         assert status == '400 Cannot parse the request'
+
+
+def test_append_query_string():
+    class Root(RestController):
+        @action
+        def custom(self):
+            return context.form
+
+    with Given(Root(), verb='CUSTOM', query=dict(a=1)):
+        assert status == 200
+        assert response.text == 'a'
 
