@@ -29,4 +29,8 @@ def test_query_strign():
 
         when(query=dict(c='%2c'))
         assert status == 200
-        assert response.text == '1, 2, c=1,2'
+        assert response.text == '1, 2, c=,'
+
+        when(query={'%2c': 1})
+        assert status == 200
+        assert response.text == '1, 2, ,=1'

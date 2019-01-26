@@ -4,7 +4,7 @@ import wsgiref.util
 import wsgiref.headers
 
 from typing import Union
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, unquote
 from http.cookies import SimpleCookie
 
 from nanohttp import exceptions
@@ -163,11 +163,13 @@ class Context:
         if 'QUERY_STRING' not in self.environ:
             return {}
 
-        return {k: v[0] if len(v) == 1 else v for k, v in parse_qs(
-            self.environ['QUERY_STRING'],
-            keep_blank_values=True,
-            strict_parsing=False
-        ).items()}
+        return {
+            unquote(k): unquote(v[0]) if len(v) == 1 else v
+                for k, v in parse_qs(
+                    self.environ['QUERY_STRING'],
+                    keep_blank_values=True,
+                    strict_parsing=False
+                ).items()}
 
     def prevent_form(self, message):
         if self.request_content_length:
