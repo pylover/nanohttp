@@ -169,7 +169,8 @@ class Context:
                     self.environ['QUERY_STRING'],
                     keep_blank_values=True,
                     strict_parsing=False
-                ).items()}
+                ).items()
+        }
 
     def prevent_form(self, message):
         if self.request_content_length:
