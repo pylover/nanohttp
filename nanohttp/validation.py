@@ -60,11 +60,12 @@ class Field:
 class Criterion:
     def __init__(self, expression):
         if isinstance(expression, tuple):
-            error = expression[1]
-            self.expression = expression[0]
+            self.expression, error = expression
         else:
             self.expression = expression
             error = '400 Bad request'
+        if hasattr(error, 'status'):
+            error = error.status
 
         parsed_error = error.split(' ', 1)
 
