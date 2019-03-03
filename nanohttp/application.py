@@ -68,7 +68,7 @@ class Application:
         start_response(
             status,
             response_headers,
-            exc_info=exc_info
+            exc_info
         )
         self._hook('end_response')
         context.__exit__(*sys.exc_info())
