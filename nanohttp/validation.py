@@ -64,7 +64,7 @@ class Criterion:
         else:
             self.expression = expression
             error = '400 Bad request'
-        if hasattr(error, 'status') or isinstance(error, HTTPStatus):
+        if hasattr(error, 'status'):
             error = error.status
 
         parsed_error = error.split(' ', 1)
@@ -75,7 +75,6 @@ class Criterion:
             self.status_text = parsed_error[1]
         else:
             self.status_text = 'Bad request'
-
 
     def validate(self, field: Field, container: dict) -> None:
         value = container.get(field.title)

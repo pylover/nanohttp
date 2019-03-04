@@ -327,5 +327,5 @@ def test_httpstatus_as_validation_error():
 
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a='A'))
-    assert str(ctx.value) == MyStatus.status
+        assert str(ctx.value) == MyStatus.status
 
