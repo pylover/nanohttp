@@ -311,3 +311,21 @@ def test_priority_validation():
         validator(dict(a='abc'))
     assert str(ctx.value) == '602 Invalid input format'
 
+
+def test_httpstatus_as_validation_error():
+    class MyStatus(HTTPStatus):
+        status = '600 Greater than the minimum length'
+
+    validator = RequestValidator(
+        fields=dict(
+            a=dict(
+                min_length=(2, MyStatus),
+                pattern=(r'^[A-Z]*$', '602 Invalid input format')
+            )
+        )
+    )
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(a='A'))
+    assert str(ctx.value) == MyStatus.status
+

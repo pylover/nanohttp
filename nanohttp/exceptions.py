@@ -14,9 +14,6 @@ class HTTPStatus(Exception):
 
         super().__init__(self.status)
 
-    def __call__(self):
-        return self.status
-
     def render(self):
         stack_trace = traceback.format_exc()
         if context.response_content_type == 'application/json':
