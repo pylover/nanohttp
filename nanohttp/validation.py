@@ -118,6 +118,8 @@ class FlagCriterion(Criterion):
             error = '400 Bad request'
         elif isinstance(expression, str):
             error = expression
+        elif hasattr(expression, 'status'):
+            error = expression.status
         else:
             raise TypeError('Only bool and or string will be accepted.')
 
