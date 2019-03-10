@@ -46,7 +46,6 @@ def test_httpstatus_as_validation_error():
     class MyStatusPattern(HTTPStatus):
         status = '602 Invalid input format'
 
-
     validator = RequestValidator(
         fields=dict(
             a=dict(
