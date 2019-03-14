@@ -12,11 +12,11 @@ def test_not_null():
         status='666 a is readonly'
 
     validator = RequestValidator(
-        fields=dict(a=dict(not_none=Myclass))
+        fields=dict(foo=dict(not_none=Myclass))
     )
 
     with pytest.raises(HTTPStatus) as ctx:
-        validator(dict(a=None))
+        validator(dict(foo=None))
 
     assert Myclass.status == str(ctx.value)
 
@@ -26,13 +26,14 @@ def test_validation_required_as_httpstatus():
 
     validator = RequestValidator(
         fields=dict(
-            a=dict(required=Myclass)
+            foo=dict(required=Myclass)
         )
     )
 
     with pytest.raises(HTTPStatus(Myclass).__class__):
         validator(dict(another_param='value1'))
-        assert dict(a='value1') == validator(dict(a='value1'))[0]
+
+    assert dict(foo='value1') == validator(dict(foo='value1'))[0]
 
 def test_httpstatus_as_validation_error():
     class MyStatusMin(HTTPStatus):
@@ -46,7 +47,7 @@ def test_httpstatus_as_validation_error():
 
     validator = RequestValidator(
         fields=dict(
-            a=dict(
+           foo=dict(
                 min_length=(2, MyStatusMin),
                 max_length=(5, MyStatusMax),
                 pattern=(r'^[A-Z]*$', MyStatusPattern)
@@ -55,14 +56,17 @@ def test_httpstatus_as_validation_error():
     )
 
     with pytest.raises(HTTPStatus) as ctx:
-        validator(dict(a='A'))
-        assert str(ctx.value) == MyStatusMin.status
+        validator(dict(foo='A'))
+
+    assert str(ctx.value) == MyStatusMin.status
 
     with pytest.raises(HTTPStatus) as ctx:
-        validator(dict(a=(5 + 1) * 'A'))
-        assert str(ctx.value) == MyStatusMax.status
+        validator(dict(foo=(5 + 1) * 'A'))
+
+    assert str(ctx.value) == MyStatusMax.status
 
     with pytest.raises(HTTPStatus) as ctx:
-        validator(dict(a='abc'))
-        assert str(ctx.value) == MyStatusPattern.status
+        validator(dict(foo='abc'))
+
+    assert str(ctx.value) == MyStatusPattern.status
 
