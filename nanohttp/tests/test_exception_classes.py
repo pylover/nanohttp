@@ -11,10 +11,6 @@ def test_not_null():
     class Myclass(HTTPStatus):
         status='666 a is readonly'
 
-    validator = RequestValidator(fields=dict(a=dict(readonly=True)))
-    with pytest.raises(HTTPBadRequest):
-        validator(dict(a=None))
-
     validator = RequestValidator(
         fields=dict(a=dict(not_none=Myclass))
     )
@@ -22,7 +18,7 @@ def test_not_null():
         validator(dict(a=None))
     assert Myclass.status == str(ctx.value)
 
-def test_validation_required_as_HTTPstatus():
+def test_validation_required_as_httpstatus():
     class Myclass(HTTPStatus):
         status='600 Custom exception'
 
@@ -33,8 +29,7 @@ def test_validation_required_as_HTTPstatus():
     )
     with pytest.raises(HTTPStatus(Myclass).__class__):
         validator(dict(another_param='value1'))
-
-    assert dict(a='value1') == validator(dict(a='value1'))[0]
+        assert dict(a='value1') == validator(dict(a='value1'))[0]
 
 def test_httpstatus_as_validation_error():
     class MyStatusMin(HTTPStatus):
@@ -62,9 +57,9 @@ def test_httpstatus_as_validation_error():
 
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a=(5 + 1) * 'A'))
-    assert str(ctx.value) == MyStatusMax.status
+        assert str(ctx.value) == MyStatusMax.status
 
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a='abc'))
-    assert str(ctx.value) == MyStatusPattern.status
+        assert str(ctx.value) == MyStatusPattern.status
 
