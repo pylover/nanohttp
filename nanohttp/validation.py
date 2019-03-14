@@ -61,18 +61,20 @@ class Criterion:
     def __init__(self, expression):
         if isinstance(expression, tuple):
             self.expression, error = expression
+
         else:
             self.expression = expression
             error = '400 Bad request'
+
         if hasattr(error, 'status'):
             error = error.status
 
         parsed_error = error.split(' ', 1)
-
         self.status_code = int(parsed_error[0])
 
         if len(parsed_error) == 2:
             self.status_text = parsed_error[1]
+
         else:
             self.status_text = 'Bad request'
 

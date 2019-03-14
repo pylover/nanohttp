@@ -14,8 +14,10 @@ def test_not_null():
     validator = RequestValidator(
         fields=dict(a=dict(not_none=Myclass))
     )
+
     with pytest.raises(HTTPStatus) as ctx:
         validator(dict(a=None))
+
     assert Myclass.status == str(ctx.value)
 
 def test_validation_required_as_httpstatus():
@@ -27,6 +29,7 @@ def test_validation_required_as_httpstatus():
             a=dict(required=Myclass)
         )
     )
+
     with pytest.raises(HTTPStatus(Myclass).__class__):
         validator(dict(another_param='value1'))
         assert dict(a='value1') == validator(dict(a='value1'))[0]
