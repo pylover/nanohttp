@@ -60,18 +60,21 @@ class Field:
 class Criterion:
     def __init__(self, expression):
         if isinstance(expression, tuple):
-            error = expression[1]
-            self.expression = expression[0]
+            self.expression, error = expression
+
         else:
             self.expression = expression
             error = '400 Bad request'
 
-        parsed_error = error.split(' ', 1)
+        if hasattr(error, 'status'):
+            error = error.status
 
+        parsed_error = error.split(' ', 1)
         self.status_code = int(parsed_error[0])
 
         if len(parsed_error) == 2:
             self.status_text = parsed_error[1]
+
         else:
             self.status_text = 'Bad request'
 
@@ -117,6 +120,8 @@ class FlagCriterion(Criterion):
             error = '400 Bad request'
         elif isinstance(expression, str):
             error = expression
+        elif hasattr(expression, 'status'):
+            error = expression.status
         else:
             raise TypeError('Only bool and or string will be accepted.')
 
