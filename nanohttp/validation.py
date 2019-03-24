@@ -231,7 +231,6 @@ class RequestValidator:
                 field.validate(query)
 
             if field.form \
-                    and field.title is not None \
                     and (query is None or field.title not in query):
                 field.validate(form)
 
