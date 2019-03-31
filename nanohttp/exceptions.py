@@ -41,6 +41,13 @@ class HTTPKnownStatus(HTTPStatus):
         super().__init__(f'{code} {status_text or text}')
 
 
+class HTTPHeadersMixin:
+
+    @property
+    def headers(self):
+        return context.response_headers.items()
+
+
 class HTTPBadRequest(HTTPKnownStatus):
     status = '400 Bad Request'
 
@@ -108,13 +115,8 @@ class HTTPBadGatewayError(HTTPKnownStatus):
     status = '502 Bad Gateway'
 
 
-class HTTPSuccess(HTTPKnownStatus):
+class HTTPSuccess(HTTPHeadersMixin, HTTPKnownStatus):
     status = '200 OK'
-
-    @property
-    def headers(self):
-        # It's actually `success` response, headers must keep
-        return context.response_headers.items()
 
 
 class HTTPCreated(HTTPSuccess):
