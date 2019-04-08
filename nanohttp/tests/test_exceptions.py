@@ -112,17 +112,6 @@ def test_unhandled_exceptions_no_debug_mode():
         Given(Root(), configuration='debug: false')
 
 
-def test_http_no_content():
-    class Root(Controller):
-        @action
-        def index(self):
-            raise HTTPNoContent('Nothing to show')
-
-    with Given(Root()):
-        assert status == '204 Nothing to show'
-        assert response.body is None
-
-
 @pytest.mark.parametrize('http_success_exception', (
     HTTPNoContent, HTTPCreated, HTTPAccepted, HTTPNonAuthoritativeInformation,
     HTTPResetContent, HTTPPartialContent

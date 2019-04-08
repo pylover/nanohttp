@@ -134,9 +134,6 @@ class HTTPNonAuthoritativeInformation(HTTPSuccess):
 class HTTPNoContent(HTTPSuccess):
     status = '204 No Content'
 
-    def render(self):
-        return None
-
 
 class HTTPResetContent(HTTPSuccess):
     status = '205 Reset Content'
