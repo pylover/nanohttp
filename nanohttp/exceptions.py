@@ -41,7 +41,7 @@ class HTTPKnownStatus(HTTPStatus):
         super().__init__(f'{code} {status_text or text}')
 
 
-class HTTPHeadersMixin:
+class KeepResponseHeadersMixin:
 
     @property
     def headers(self):
@@ -115,7 +115,7 @@ class HTTPBadGatewayError(HTTPKnownStatus):
     status = '502 Bad Gateway'
 
 
-class HTTPSuccess(HTTPHeadersMixin, HTTPKnownStatus):
+class HTTPSuccess(KeepResponseHeadersMixin, HTTPKnownStatus):
     status = '200 OK'
 
 
