@@ -120,7 +120,7 @@ def test_unhandled_exceptions_no_debug_mode():
         HTTPAccepted,
         HTTPNonAuthoritativeInformation,
         HTTPResetContent,
-        HTTPPartialContent
+        HTTPPartialContent,
     )
 )
 def test_http_success_headers(http_success_exception):
