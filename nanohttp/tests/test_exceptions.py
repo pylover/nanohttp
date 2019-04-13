@@ -112,14 +112,17 @@ def test_unhandled_exceptions_no_debug_mode():
         Given(Root(), configuration='debug: false')
 
 
-@pytest.mark.parametrize('http_success_exception', (
-    HTTPNoContent,
-    HTTPCreated,
-    HTTPAccepted,
-    HTTPNonAuthoritativeInformation,
-    HTTPResetContent,
-    HTTPPartialContent
-))
+@pytest.mark.parametrize(
+    'http_success_exception',
+    (
+        HTTPNoContent,
+        HTTPCreated,
+        HTTPAccepted,
+        HTTPNonAuthoritativeInformation,
+        HTTPResetContent,
+        HTTPPartialContent
+    )
+)
 def test_http_success_headers(http_success_exception):
     class Root(Controller):
         @action
