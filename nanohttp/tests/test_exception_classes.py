@@ -70,3 +70,16 @@ def test_httpstatus_as_validation_error():
 
     assert str(ctx.value) == MyStatusPattern.status
 
+def test_localization():
+    class Myclass(HTTPStatus):
+        status='605 لورم ایپسوم'
+
+    validator = RequestValidator(
+        fields=dict(foo=dict(not_none=Myclass))
+    )
+
+    with pytest.raises(HTTPStatus) as ctx:
+        validator(dict(foo=None))
+
+    assert Myclass.status == str(ctx.value)
+
