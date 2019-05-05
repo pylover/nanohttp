@@ -10,7 +10,7 @@ def test_cli_without_arguments(clitool):
     assert len(response.text) > 1
 
 
-# Erorred because of the travis buf about change ditectory:
+# Erorred because of the travis bug about change ditectory:
 # https://github.com/pytest-dev/pytest/issues/2686
 def test_cli_with_change_directory_flag(clitool):
     url = clitool.execute('-C', '/tmp')
