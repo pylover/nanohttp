@@ -31,7 +31,9 @@ class Application:
 
         :param root: The root controller
         """
-        self.__root__ = root
+        if root is not None:
+            self.__root__ = root
+
         self._hook('app_init')
 
     def _hook(self, name, *args, **kwargs):
