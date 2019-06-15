@@ -3,7 +3,7 @@ import sys
 import types
 import logging
 import traceback
-from collections import Iterable
+from collections.abc import Iterable
 
 from nanohttp.contexts import Context, context
 from nanohttp.exceptions import HTTPStatus

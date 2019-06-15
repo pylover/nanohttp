@@ -19,6 +19,8 @@ class Controller(object):
     """Base Controller
     """
 
+    __translation__ = {}
+
     __nanohttp__ = dict(
         verbs=['any'],
         encoding='utf8',
@@ -35,12 +37,17 @@ class Controller(object):
 
         return handler, remaining_paths
 
+    def _lookup_handler(self, name):
+        name = self.__translation__.get(name, name)
+        return getattr(self, name, None)
+
     def _find_handler(self, remaining_paths):
         if not remaining_paths or not hasattr(self, remaining_paths[0]):
             # Handler is not found, trying default handler
             return self._get_default_handler(remaining_paths)
 
-        return getattr(self, remaining_paths[0], None), remaining_paths[1:]
+        return self._lookup_handler(remaining_paths[0]), remaining_paths[1:]
+
 
     def _validate_handler(self, handler, remaining_paths):
         if not callable(handler) or not hasattr(handler, '__nanohttp__'):
@@ -120,7 +127,7 @@ class RestController(Controller):
         if not hasattr(self, context.method):
             raise HTTPMethodNotAllowed()
 
-        return getattr(self, context.method), remaining_paths
+        return self._lookup_handler(context.method), remaining_paths
 
 
 class Static(Controller):

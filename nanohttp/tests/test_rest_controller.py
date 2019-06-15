@@ -5,7 +5,9 @@ from nanohttp.tests.helpers import Given, when
 
 
 def test_rest_controller():
+
     class Root(RestController):
+        __translation__ = dict(bar='baz')
 
         @action
         def index(self):  # pragma: no cover
@@ -17,6 +19,11 @@ def test_rest_controller():
 
         def private(self):  # pragma: no cover
             raise Exception()
+
+        @action
+        def baz(self):
+            yield 'Bar'
+
 
     with Given(Root(), verb='foo'):
         assert status == 200
@@ -33,6 +40,10 @@ def test_rest_controller():
         when('/a/b', verb='FOO')
         assert status == 200
         assert response.text == 'Foo, a, b'
+
+        when('/baz', verb='bar')
+        assert status == 200
+        assert response.text == 'Bar'
 
         when(verb='GET')
         assert status == 405
