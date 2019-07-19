@@ -1,6 +1,6 @@
 bddrest >= 2.1.7
 coverage
 coveralls
-pytest >= 4.0.2
+pytest >= 4.4.0
 pytest-cov
 pytest-xdist
