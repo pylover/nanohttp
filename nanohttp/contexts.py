@@ -201,11 +201,14 @@ class Context:
         """Encode response buffer with encoding definition on current
         context
         """
+        if isinstance(buff, bytes):
+            return buff
+
         try:
             if self.response_encoding:
                 return buff.encode(self.response_encoding)
-            else:
-                return buff
+
+            return buff
         except AttributeError:
             raise TypeError(
                 'The returned response should has the `encode` attribute, '
