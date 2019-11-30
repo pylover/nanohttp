@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.validation &mdash; nanohttp Documentation</title>
@@ -30,22 +19,25 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -53,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -74,7 +65,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -171,10 +162,10 @@
   <h1>Source code for nanohttp.validation</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">functools</span>
-<span class="kn">from</span> <span class="nn">_decimal</span> <span class="k">import</span> <span class="n">InvalidOperation</span>
+<span class="kn">from</span> <span class="nn">_decimal</span> <span class="kn">import</span> <span class="n">InvalidOperation</span>
 
-<span class="kn">from</span> <span class="nn">nanohttp</span> <span class="k">import</span> <span class="n">context</span>
-<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">HTTPBadRequest</span>
+<span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="kn">import</span> <span class="n">HTTPStatus</span><span class="p">,</span> <span class="n">HTTPBadRequest</span>
 
 
 <span class="n">NO_EMPTY_FORM</span> <span class="o">=</span> <span class="s1">&#39;NO_EMPTY_FORM&#39;</span>
@@ -182,7 +173,7 @@
 
 
 <div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">type_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minimum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">min_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">not_none</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -209,14 +200,14 @@
         <span class="k">if</span> <span class="n">maximum</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MaximumValidator</span><span class="p">(</span><span class="n">maximum</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternValidator</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
-
         <span class="k">if</span> <span class="n">min_length</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MinLengthValidator</span><span class="p">(</span><span class="n">min_length</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">max_length</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MaxLengthValidator</span><span class="p">(</span><span class="n">max_length</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">pattern</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PatternValidator</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">criteria</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CallableValidator</span><span class="p">(</span><span class="n">callback</span><span class="p">))</span>
@@ -229,20 +220,23 @@
 
 
 <div class="viewcode-block" id="Criterion"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.Criterion">[docs]</a><span class="k">class</span> <span class="nc">Criterion</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="n">expression</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">expression</span> <span class="o">=</span> <span class="n">expression</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">expression</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">expression</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">expression</span> <span class="o">=</span> <span class="n">expression</span>
             <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;400 Bad request&#39;</span>
 
-        <span class="n">parsed_error</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">status</span>
 
+        <span class="n">parsed_error</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parsed_error</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_error</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span> <span class="o">=</span> <span class="n">parsed_error</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status_text</span> <span class="o">=</span> <span class="s1">&#39;Bad request&#39;</span>
 
@@ -278,16 +272,18 @@
             <span class="k">return</span> <span class="n">HTTPBadRequest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_text</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">HTTPStatus</span><span class="p">(</span>
-            <span class="n">status</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{self.status_code}</span><span class="s1"> </span><span class="si">{self.status_text}</span><span class="s1">&#39;</span>
+            <span class="n">status</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{self.status_code}</span><span class="s1"> </span><span class="si">{self.status_text}</span><span class="s1">&#39;</span>
         <span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">FlagCriterion</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
             <span class="n">error</span> <span class="o">=</span> <span class="s1">&#39;400 Bad request&#39;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">error</span> <span class="o">=</span> <span class="n">expression</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">):</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">status</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Only bool and or string will be accepted.&#39;</span><span class="p">)</span>
 
@@ -380,7 +376,7 @@
 
 
 <div class="viewcode-block" id="RequestValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.RequestValidator">[docs]</a><span class="k">class</span> <span class="nc">RequestValidator</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">empty_form</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">empty_form</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Merging default specification</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">empty_form</span> <span class="o">=</span> <span class="n">empty_form</span>
@@ -390,18 +386,17 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
             <span class="k">if</span> <span class="n">query</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
                 <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">form</span> \
-                    <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
-                    <span class="ow">and</span> <span class="p">(</span><span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">query</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">form</span> <span class="ow">and</span> <span class="p">(</span><span class="n">query</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">query</span><span class="p">):</span>
                 <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">form</span><span class="p">,</span> <span class="n">query</span></div>
+
 
 <div class="viewcode-block" id="CallableValidator"><a class="viewcode-back" href="../../api/index.html#nanohttp.validation.CallableValidator">[docs]</a><span class="k">class</span> <span class="nc">CallableValidator</span><span class="p">(</span><span class="n">Criterion</span><span class="p">):</span>
 
@@ -499,7 +494,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -516,35 +511,19 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.configuration &mdash; nanohttp Documentation</title>
@@ -30,22 +19,25 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -53,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -74,7 +65,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -170,7 +161,7 @@
             
   <h1>Source code for nanohttp.configuration</h1><div class="highlight"><pre>
 <span></span>
-<span class="kn">from</span> <span class="nn">pymlconf</span> <span class="k">import</span> <span class="n">DeferredRoot</span>
+<span class="kn">from</span> <span class="nn">pymlconf</span> <span class="kn">import</span> <span class="n">DeferredRoot</span>
 
 
 <span class="n">settings</span> <span class="o">=</span> <span class="n">DeferredRoot</span><span class="p">()</span>
@@ -197,7 +188,10 @@
 <span class="sd">                   ``pymlconf.DeferredRoot.load``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">settings</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">BUILTIN_CONFIGURATION</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="n">settings</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">BUILTIN_CONFIGURATION</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
+
 
 </pre></div>
 
@@ -211,7 +205,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -228,35 +222,19 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

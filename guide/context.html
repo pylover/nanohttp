@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Context &mdash; nanohttp Documentation</title>
@@ -30,13 +19,20 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -45,21 +41,16 @@
     <link rel="prev" title="Serving Static files" href="static.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -76,7 +67,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -192,8 +183,8 @@
 Each request will pass into a global object called as <code class="docutils literal notranslate"><span class="pre">context</span></code> and response
 will be generated from that.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The <code class="docutils literal notranslate"><span class="pre">context</span></code> object is a proxy to an instance of
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">context</span></code> object is a proxy to an instance of
 <code class="docutils literal notranslate"><span class="pre">nanohttp.Context</span></code> which is <code class="docutils literal notranslate"><span class="pre">unique</span> <span class="pre">per</span> <span class="pre">request</span></code>.</p>
 </div>
 </div>
@@ -209,7 +200,7 @@ will be generated from that.</p>
         <a href="forms.html" class="btn btn-neutral float-right" title="Accessing Request Payload" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="static.html" class="btn btn-neutral" title="Serving Static files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="static.html" class="btn btn-neutral float-left" title="Serving Static files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -218,7 +209,7 @@ will be generated from that.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -235,35 +226,19 @@ will be generated from that.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

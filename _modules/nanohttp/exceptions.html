@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.exceptions &mdash; nanohttp Documentation</title>
@@ -30,22 +19,25 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -53,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -74,7 +65,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -172,14 +163,14 @@
 <span></span><span class="kn">import</span> <span class="nn">ujson</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
 
-<span class="kn">from</span> <span class="nn">.contexts</span> <span class="k">import</span> <span class="n">context</span>
-<span class="kn">from</span> <span class="nn">.configuration</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">.contexts</span> <span class="kn">import</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">.configuration</span> <span class="kn">import</span> <span class="n">settings</span>
 
 
 <div class="viewcode-block" id="HTTPStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPStatus">[docs]</a><span class="k">class</span> <span class="nc">HTTPStatus</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
 
@@ -189,19 +180,34 @@
         <span class="n">stack_trace</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">==</span> <span class="s1">&#39;application/json&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ujson</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-                <span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">stackTrace</span><span class="o">=</span><span class="n">stack_trace</span><span class="p">)</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="nb">dict</span><span class="p">(</span><span class="n">stackTrace</span><span class="o">=</span><span class="n">stack_trace</span><span class="p">)</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">response_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">=</span> <span class="s1">&#39;text/plain&#39;</span>
+        <span class="k">return</span> <span class="n">stack_trace</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> \
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">==</span> <span class="s1">&#39;application/json&#39;</span><span class="p">:</span>
+            <span class="n">contenttype</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">response_encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
-            <span class="n">context</span><span class="o">.</span><span class="n">response_content_type</span> <span class="o">=</span> <span class="s1">&#39;text/plain&#39;</span>
-            <span class="k">return</span> <span class="n">stack_trace</span> <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span></div>
+            <span class="n">contenttype</span> <span class="o">=</span> <span class="s1">&#39;text/plain;charset=utf-8&#39;</span>
+
+        <span class="k">return</span> <span class="p">[(</span><span class="s1">&#39;ContentType&#39;</span><span class="p">,</span> <span class="n">contenttype</span><span class="p">)]</span></div>
 
 
 <div class="viewcode-block" id="HTTPKnownStatus"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPKnownStatus">[docs]</a><span class="k">class</span> <span class="nc">HTTPKnownStatus</span><span class="p">(</span><span class="n">HTTPStatus</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_text</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">code</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{code}</span><span class="s1"> {status_text or text}&#39;</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{code}</span><span class="s1"> {status_text or text}&#39;</span><span class="p">)</span></div>
+
+
+<span class="k">class</span> <span class="nc">KeepResponseHeadersMixin</span><span class="p">:</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="HTTPBadRequest"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPBadRequest">[docs]</a><span class="k">class</span> <span class="nc">HTTPBadRequest</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
@@ -241,9 +247,14 @@
 <span class="sd">    This is an abstract class for all redirects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
-        <span class="n">context</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="n">location</span><span class="p">)]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">headers</span>
+        <span class="k">return</span> <span class="n">headers</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headers</span></div>
 
 
 <div class="viewcode-block" id="HTTPMovedPermanently"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPMovedPermanently">[docs]</a><span class="k">class</span> <span class="nc">HTTPMovedPermanently</span><span class="p">(</span><span class="n">HTTPRedirect</span><span class="p">):</span>
@@ -266,7 +277,7 @@
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;502 Bad Gateway&#39;</span></div>
 
 
-<div class="viewcode-block" id="HTTPSuccess"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPSuccess">[docs]</a><span class="k">class</span> <span class="nc">HTTPSuccess</span><span class="p">(</span><span class="n">HTTPKnownStatus</span><span class="p">):</span>
+<div class="viewcode-block" id="HTTPSuccess"><a class="viewcode-back" href="../../api/index.html#nanohttp.exceptions.HTTPSuccess">[docs]</a><span class="k">class</span> <span class="nc">HTTPSuccess</span><span class="p">(</span><span class="n">KeepResponseHeadersMixin</span><span class="p">,</span> <span class="n">HTTPKnownStatus</span><span class="p">):</span>
     <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span></div>
 
 
@@ -304,7 +315,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -321,35 +332,19 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

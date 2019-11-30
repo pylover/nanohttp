@@ -34,6 +34,6 @@ If you want to be a contributor or run nanohttp tests, should to install through
    pip install -r requirements-dev.txt
 
 .. note:: Also you can find `CI configuration 
-          <https://github.com/Carrene/nanohttp/blob/master/.travis.yml>`_
+          <https://github.com/pylover/nanohttp/blob/master/.travis.yml>`_
           on repository to more environment details.
 

@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.application &mdash; nanohttp Documentation</title>
@@ -30,22 +19,25 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -53,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -74,7 +65,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -173,12 +164,13 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
-<span class="kn">from</span> <span class="nn">nanohttp.contexts</span> <span class="k">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">context</span>
-<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="k">import</span> <span class="n">HTTPStatus</span>
-<span class="kn">from</span> <span class="nn">nanohttp.configuration</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">nanohttp.constants</span> <span class="k">import</span> <span class="n">NO_CONTENT_STATUSES</span>
+<span class="kn">from</span> <span class="nn">nanohttp.contexts</span> <span class="kn">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">context</span>
+<span class="kn">from</span> <span class="nn">nanohttp.exceptions</span> <span class="kn">import</span> <span class="n">HTTPStatus</span>
+<span class="kn">from</span> <span class="nn">nanohttp.configuration</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">nanohttp.constants</span> <span class="kn">import</span> <span class="n">NO_CONTENT_STATUSES</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;nanohttp&#39;</span><span class="p">)</span>
@@ -194,14 +186,16 @@
     <span class="c1">#: The root controller</span>
     <span class="n">__root__</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="Application.__init__"><a class="viewcode-back" href="../../api/index.html#nanohttp.application.Application.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Application.__init__"><a class="viewcode-back" href="../../api/index.html#nanohttp.application.Application.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize application and calling ``app_init`` hook.</span>
 
 <span class="sd">        .. note:: ``__root__`` attribute will set by ``root`` parameter.</span>
 
 <span class="sd">        :param root: The root controller</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__root__</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__root__</span> <span class="o">=</span> <span class="n">root</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;app_init&#39;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_hook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -214,22 +208,42 @@
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_handle_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;This method should return a tuple of (status, resp_generator) and or</span>
-<span class="sd">         raise the exception.</span>
+    <span class="k">def</span> <span class="nf">_handle_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
 
-<span class="sd">        :param ex: The exception to examine</span>
-<span class="sd">        :return: status, resp_generator</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response_headers</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">)]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">HTTPStatus</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">ex</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">ex</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+            <span class="n">exc_info</span><span class="o">=</span><span class="kc">None</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">status</span>
+            <span class="n">response_body</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ex</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
+                <span class="n">response_headers</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="n">headers</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                <span class="s1">&#39;Internal Server Error&#39;</span><span class="p">,</span>
+                <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">exc_info</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;500 Internal Server Error&#39;</span>
+            <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">response_body</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">response_body</span> <span class="o">=</span> <span class="n">status</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Internal Server Error&#39;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">start_response</span><span class="p">(</span>
+            <span class="n">status</span><span class="p">,</span>
+            <span class="n">response_headers</span><span class="p">,</span>
+            <span class="n">exc_info</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;end_response&#39;</span><span class="p">)</span>
         <span class="n">context</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
-        <span class="k">raise</span> <span class="n">ex</span>
 
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+        <span class="c1"># Sometimes don&#39;t need to transfer any body, for example the 304 case.</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NO_CONTENT_STATUSES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">response_body</span><span class="o">.</span><span class="n">encode</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Method that</span>
 <span class="sd">        `WSGI &lt;https://www.python.org/dev/peps/pep-0333/#id15&gt;`_ server calls</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -265,7 +279,7 @@
                     <span class="c1"># Mocking the body inside an iterable to prevent</span>
                     <span class="c1"># the iteration over the str character by character</span>
                     <span class="c1"># For more info check the pull-request</span>
-                    <span class="c1"># #34, https://github.com/Carrene/nanohttp/pull/34</span>
+                    <span class="c1"># #34, https://github.com/pylover/nanohttp/pull/34</span>
                     <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
 
                 <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">):</span>
@@ -286,16 +300,9 @@
                         <span class="s1">&#39;Controller</span><span class="se">\&#39;</span><span class="s1">s action/handler response must be &#39;</span>
                         <span class="s1">&#39;generator and or iterable&#39;</span>
                     <span class="p">)</span>
-                    <span class="c1"># Assuming the body is an iterable.</span>
-                    <span class="n">response_iterable</span> <span class="o">=</span> <span class="n">response_body</span>
 
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-            <span class="c1"># the self._handle_exception may raise the error again, if the</span>
-            <span class="c1"># error is not subclass of the HTTPStatusOtherwise,</span>
-            <span class="c1"># a tuple of the status code and response body will be returned.</span>
-            <span class="n">status</span><span class="p">,</span> <span class="n">response_body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_exception</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
-            <span class="n">buffer</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">response_iterable</span> <span class="o">=</span> <span class="p">(</span><span class="n">response_body</span><span class="p">,</span> <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_exception</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_hook</span><span class="p">(</span><span class="s1">&#39;begin_response&#39;</span><span class="p">)</span>
 
@@ -305,16 +312,10 @@
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cookie</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="p">):</span>
                 <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">add_header</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
-        <span class="c1"># Sometimes don&#39;t need to transfer any body, for example the 304 case.</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NO_CONTENT_STATUSES</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="p">[</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">]</span>
-            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-            <span class="c1"># This is only header, and body should not be transferred.</span>
-            <span class="c1"># So the context is also should be destroyed</span>
-            <span class="n">context</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span>
-            <span class="k">return</span> <span class="p">[]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">start_response</span><span class="p">(</span>
+            <span class="n">status</span><span class="p">,</span>
+            <span class="n">context_</span><span class="o">.</span><span class="n">response_headers</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span>
+        <span class="p">)</span>
 
         <span class="c1"># It seems we have to transfer a body, so this function should yield</span>
         <span class="c1"># a generator of the body chunks.</span>
@@ -329,7 +330,7 @@
                         <span class="k">yield</span> <span class="n">context_</span><span class="o">.</span><span class="n">encode_response</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex_</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex_</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__logger__</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
                     <span class="s1">&#39;Exception while serving the response.&#39;</span>
                 <span class="p">)</span>
@@ -358,7 +359,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -375,35 +376,19 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

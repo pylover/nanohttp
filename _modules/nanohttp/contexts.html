@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp.contexts &mdash; nanohttp Documentation</title>
@@ -30,22 +19,25 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link href="../../_static/css/style.css" rel="stylesheet" type="text/css">
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -53,11 +45,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -74,7 +65,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -169,17 +160,17 @@
            <div itemprop="articleBody">
             
   <h1>Source code for nanohttp.contexts</h1><div class="highlight"><pre>
-<span></span>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">wsgiref.util</span>
 <span class="kn">import</span> <span class="nn">wsgiref.headers</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">parse_qs</span>
-<span class="kn">from</span> <span class="nn">http.cookies</span> <span class="k">import</span> <span class="n">SimpleCookie</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">parse_qs</span>
+<span class="kn">from</span> <span class="nn">http.cookies</span> <span class="kn">import</span> <span class="n">SimpleCookie</span>
 
-<span class="kn">from</span> <span class="nn">nanohttp</span> <span class="k">import</span> <span class="n">exceptions</span>
-<span class="kn">from</span> <span class="nn">.helpers</span> <span class="k">import</span> <span class="n">LazyAttribute</span><span class="p">,</span> <span class="n">parse_any_form</span>
+<span class="kn">from</span> <span class="nn">nanohttp</span> <span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">.helpers</span> <span class="kn">import</span> <span class="n">LazyAttribute</span><span class="p">,</span> <span class="n">parse_any_form</span>
 
 
 <span class="k">class</span> <span class="nc">ContextIsNotInitializedError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -234,7 +225,7 @@
             <span class="p">)</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="n">THREADLOCAL_STACK_ATTRIBUTE</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">application</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param environ: WSGI environ dictionary</span>
 <span class="sd">        :param application: :class:`.Application` instance</span>
@@ -243,7 +234,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">application</span> <span class="o">=</span> <span class="n">application</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">response_headers</span> <span class="o">=</span> <span class="n">wsgiref</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">Headers</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Backing up the current context</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="p">,</span> <span class="s1">&#39;nanohttp_context&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span><span class="p">)</span>
@@ -251,7 +242,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">thread_local</span><span class="o">.</span><span class="n">nanohttp_context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack__</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
@@ -340,6 +331,12 @@
             <span class="n">strict_parsing</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
 
+    <span class="k">def</span> <span class="nf">prevent_form</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_content_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPStatus</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;wsgi.input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+
 <div class="viewcode-block" id="Context.form"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.form">[docs]</a>    <span class="nd">@LazyAttribute</span>
     <span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request form values</span>
@@ -362,16 +359,19 @@
             <span class="n">result</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HTTP_COOKIE&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="Context.encode_response"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.encode_response">[docs]</a>    <span class="k">def</span> <span class="nf">encode_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">):</span>
+<div class="viewcode-block" id="Context.encode_response"><a class="viewcode-back" href="../../api/index.html#nanohttp.contexts.Context.encode_response">[docs]</a>    <span class="k">def</span> <span class="nf">encode_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buff</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Encode response buffer with encoding definition on current</span>
 <span class="sd">        context</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">buff</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">buffer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">buffer</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+                <span class="k">return</span> <span class="n">buff</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response_encoding</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">buff</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
                 <span class="s1">&#39;The returned response should has the `encode` attribute, &#39;</span>
                 <span class="s1">&#39;such as `str`.&#39;</span>
@@ -381,7 +381,7 @@
 <span class="k">class</span> <span class="nc">ContextProxy</span><span class="p">(</span><span class="n">Context</span><span class="p">):</span>
 
     <span class="c1"># noinspection PyInitNewSignature</span>
-    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Context</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Context</span><span class="p">:</span>
         <span class="n">type_proxy</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;ContextProxy&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="p">),</span> <span class="p">{</span>
             <span class="s1">&#39;__getattr__&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">,</span>
             <span class="s1">&#39;__setattr__&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">,</span>
@@ -390,17 +390,18 @@
         <span class="c1"># noinspection PyTypeChecker</span>
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">type_proxy</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Context</span><span class="o">.</span><span class="n">get_current</span><span class="p">(),</span> <span class="n">key</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">Context</span><span class="o">.</span><span class="n">get_current</span><span class="p">(),</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__delattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="nb">delattr</span><span class="p">(</span><span class="n">Context</span><span class="o">.</span><span class="n">get_current</span><span class="p">(),</span> <span class="n">key</span><span class="p">)</span>
 
 
 <span class="n">context</span> <span class="o">=</span> <span class="n">ContextProxy</span><span class="p">()</span>
+
 </pre></div>
 
            </div>
@@ -413,7 +414,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -430,35 +431,19 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>nanohttp &mdash; nanohttp Documentation</title>
@@ -30,13 +19,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -44,21 +40,16 @@
     <link rel="next" title="Quickstart" href="quickstart.html" />
     <link href="_static/css/style.css" rel="stylesheet" type="text/css">
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -75,7 +66,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -170,28 +161,28 @@
            <div itemprop="articleBody">
             
   <a class="reference external image-reference" href="https://pypi.python.org/pypi/nanohttp"><img alt="http://img.shields.io/pypi/v/nanohttp.svg" src="http://img.shields.io/pypi/v/nanohttp.svg" /></a>
-<a class="reference external image-reference" href="https://travis-ci.org/Carrene/nanohttp"><img alt="https://travis-ci.org/Carrene/nanohttp.svg?branch=master" src="https://travis-ci.org/Carrene/nanohttp.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://coveralls.io/github/Carrene/nanohttp?branch=master"><img alt="https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master" src="https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://gitter.im/Carrene/nanohttp"><img alt="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" src="https://img.shields.io/gitter/room/Carrene/nanohttp.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/Carrene/nanohttp/fork"><img alt="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" src="https://img.shields.io/github/forks/Carrene/nanohttp.svg?style=social&amp;label=Fork" /></a>
-<a class="reference external image-reference" href="https://github.com/Carrene/nanohttp"><img alt="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" src="https://img.shields.io/github/stars/Carrene/nanohttp.svg?style=social&amp;label=Star" /></a>
+<a class="reference external image-reference" href="https://travis-ci.org/pylover/nanohttp"><img alt="https://travis-ci.org/pylover/nanohttp.svg?branch=master" src="https://travis-ci.org/pylover/nanohttp.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://coveralls.io/github/pylover/nanohttp?branch=master"><img alt="https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master" src="https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://gitter.im/pylover/nanohttp"><img alt="https://img.shields.io/gitter/room/pylover/nanohttp.svg" src="https://img.shields.io/gitter/room/pylover/nanohttp.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/pylover/nanohttp/fork"><img alt="https://img.shields.io/github/forks/pylover/nanohttp.svg?style=social&amp;label=Fork" src="https://img.shields.io/github/forks/pylover/nanohttp.svg?style=social&amp;label=Fork" /></a>
+<a class="reference external image-reference" href="https://github.com/pylover/nanohttp"><img alt="https://img.shields.io/github/stars/pylover/nanohttp.svg?style=social&amp;label=Star" src="https://img.shields.io/github/stars/pylover/nanohttp.svg?style=social&amp;label=Star" /></a>
 <div class="section" id="nanohttp">
 <h1>nanohttp<a class="headerlink" href="#nanohttp" title="Permalink to this headline">¶</a></h1>
 <p>A very micro HTTP framework.</p>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Very simple, less-code &amp; fast</li>
-<li>Object/Attribute URL dispatcher</li>
-<li>Regex route dispatcher</li>
-<li>HTTP Method(Verb) dispatcher</li>
-<li>Url-Encoded, Multipart and JSON form parsing</li>
-<li>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available,
-everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code></li>
-<li>A very flexible configuration system:
-<a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></li>
-<li>Use Python’s <a class="reference external" href="https://www.python.org/dev/peps/pep-3102/">keywordonly</a>
-arguments for query strings (&gt;= 0.24.0)</li>
+<li><p>Very simple, less-code &amp; fast</p></li>
+<li><p>Object/Attribute URL dispatcher</p></li>
+<li><p>Regex route dispatcher</p></li>
+<li><p>HTTP Method(Verb) dispatcher</p></li>
+<li><p>Url-Encoded, Multipart and JSON form parsing</p></li>
+<li><p>No <code class="docutils literal notranslate"><span class="pre">request</span></code> and or <code class="docutils literal notranslate"><span class="pre">response</span></code> objects is available,
+everything is combined in <code class="docutils literal notranslate"><span class="pre">nanohttp.context</span></code></p></li>
+<li><p>A very flexible configuration system:
+<a class="reference external" href="https://github.com/pylover/pymlconf">pymlconf</a></p></li>
+<li><p>Use Python’s <a class="reference external" href="https://www.python.org/dev/peps/pep-3102/">keywordonly</a>
+arguments for query strings (&gt;= 0.24.0)</p></li>
 </ul>
 </div>
 <div class="section" id="roadmap">
@@ -253,9 +244,9 @@ template engine and or ORM will be included.</p>
 <div class="section" id="indices-and-tables">
 <h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -279,7 +270,7 @@ template engine and or ORM will be included.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -296,35 +287,19 @@ template engine and or ORM will be included.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

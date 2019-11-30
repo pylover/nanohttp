@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Exceptions &mdash; nanohttp Documentation</title>
@@ -30,13 +19,20 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
@@ -45,21 +41,16 @@
     <link rel="prev" title="WSGI" href="wsgi.html" />
     <link href="../_static/css/style.css" rel="stylesheet" type="text/css">
 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -76,7 +67,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -191,73 +182,73 @@
 <p>In general, an exception breaks the normal flow of
 execution and executes a pre-registered exception handler.</p>
 <p>The details of how this is done depends on how the exception is implemented.
-<a class="footnote-reference" href="#f1" id="id1">[1]</a></p>
+<a class="footnote-reference brackets" href="#f1" id="id1">1</a></p>
 <p>There is some exceptions based on
 <a class="reference external" href="https://tools.ietf.org/html/rfc7231">RFC7231</a> and supported in nanohttp:</p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col style="width: 14%" />
+<col style="width: 86%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Code</th>
-<th class="head">Exception Name</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Exception Name</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>201</td>
-<td>HTTPCreated</td>
+<tbody>
+<tr class="row-even"><td><p>201</p></td>
+<td><p>HTTPCreated</p></td>
 </tr>
-<tr class="row-odd"><td>202</td>
-<td>HTTPAccepted</td>
+<tr class="row-odd"><td><p>202</p></td>
+<td><p>HTTPAccepted</p></td>
 </tr>
-<tr class="row-even"><td>203</td>
-<td>HTTPNonAuthoritativeInformation</td>
+<tr class="row-even"><td><p>203</p></td>
+<td><p>HTTPNonAuthoritativeInformation</p></td>
 </tr>
-<tr class="row-odd"><td>204</td>
-<td>HTTPNoContent</td>
+<tr class="row-odd"><td><p>204</p></td>
+<td><p>HTTPNoContent</p></td>
 </tr>
-<tr class="row-even"><td>205</td>
-<td>HTTPResetContent</td>
+<tr class="row-even"><td><p>205</p></td>
+<td><p>HTTPResetContent</p></td>
 </tr>
-<tr class="row-odd"><td>206</td>
-<td>HTTPPartialContent</td>
+<tr class="row-odd"><td><p>206</p></td>
+<td><p>HTTPPartialContent</p></td>
 </tr>
-<tr class="row-even"><td>301</td>
-<td>HTTPMovedPermanently</td>
+<tr class="row-even"><td><p>301</p></td>
+<td><p>HTTPMovedPermanently</p></td>
 </tr>
-<tr class="row-odd"><td>302</td>
-<td>HTTPFound</td>
+<tr class="row-odd"><td><p>302</p></td>
+<td><p>HTTPFound</p></td>
 </tr>
-<tr class="row-even"><td>304</td>
-<td>HTTPNotModified</td>
+<tr class="row-even"><td><p>304</p></td>
+<td><p>HTTPNotModified</p></td>
 </tr>
-<tr class="row-odd"><td>400</td>
-<td>HTTPBadRequest</td>
+<tr class="row-odd"><td><p>400</p></td>
+<td><p>HTTPBadRequest</p></td>
 </tr>
-<tr class="row-even"><td>401</td>
-<td>HTTPUnauthorized</td>
+<tr class="row-even"><td><p>401</p></td>
+<td><p>HTTPUnauthorized</p></td>
 </tr>
-<tr class="row-odd"><td>403</td>
-<td>HTTPForbidden</td>
+<tr class="row-odd"><td><p>403</p></td>
+<td><p>HTTPForbidden</p></td>
 </tr>
-<tr class="row-even"><td>404</td>
-<td>HTTPNotFound</td>
+<tr class="row-even"><td><p>404</p></td>
+<td><p>HTTPNotFound</p></td>
 </tr>
-<tr class="row-odd"><td>405</td>
-<td>HTTPMethodNotAllowed</td>
+<tr class="row-odd"><td><p>405</p></td>
+<td><p>HTTPMethodNotAllowed</p></td>
 </tr>
-<tr class="row-even"><td>409</td>
-<td>HTTPConflict</td>
+<tr class="row-even"><td><p>409</p></td>
+<td><p>HTTPConflict</p></td>
 </tr>
-<tr class="row-odd"><td>410</td>
-<td>HTTPGone</td>
+<tr class="row-odd"><td><p>410</p></td>
+<td><p>HTTPGone</p></td>
 </tr>
-<tr class="row-even"><td>412</td>
-<td>HTTPPreconditionFailed</td>
+<tr class="row-even"><td><p>412</p></td>
+<td><p>HTTPPreconditionFailed</p></td>
 </tr>
-<tr class="row-odd"><td>500</td>
-<td>HTTPInternalServerError</td>
+<tr class="row-odd"><td><p>500</p></td>
+<td><p>HTTPInternalServerError</p></td>
 </tr>
 </tbody>
 </table>
@@ -277,12 +268,11 @@ execution and executes a pre-registered exception handler.</p>
 <p>Also you can define your own HTTP exception by using
 <code class="docutils literal notranslate"><span class="pre">nanohttp.exceptions.HttpStatus</span></code>.</p>
 <p class="rubric">—</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Exception_handling">wikipedia</a> with some modification.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Exception_handling">wikipedia</a> with some modification.</p>
+</dd>
+</dl>
 </div>
 
 
@@ -296,7 +286,7 @@ execution and executes a pre-registered exception handler.</p>
         <a href="templates.html" class="btn btn-neutral float-right" title="Templates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="wsgi.html" class="btn btn-neutral" title="WSGI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="wsgi.html" class="btn btn-neutral float-left" title="WSGI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -305,7 +295,7 @@ execution and executes a pre-registered exception handler.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -322,35 +312,19 @@ execution and executes a pre-registered exception handler.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 

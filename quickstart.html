@@ -5,18 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-121464081-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Quickstart &mdash; nanohttp Documentation</title>
@@ -30,13 +19,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -45,21 +41,16 @@
     <link rel="prev" title="nanohttp" href="index.html" />
     <link href="_static/css/style.css" rel="stylesheet" type="text/css">
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -76,7 +67,7 @@
             
             
               <div class="version">
-                1.8
+                1.11
               </div>
             
           
@@ -185,17 +176,17 @@
 
 <span class="k">class</span> <span class="nc">TipsControllers</span><span class="p">(</span><span class="n">RestController</span><span class="p">):</span>
     <span class="nd">@json</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tip_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">tip_id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tip_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tip_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">tips</span>
 
         <span class="k">for</span> <span class="n">tip</span> <span class="ow">in</span> <span class="n">tips</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">tip</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">tip_id</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">tip</span>
 
-        <span class="k">raise</span> <span class="n">HTTPNotFound</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Tip: {tip_id} is not found&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPNotFound</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Tip: </span><span class="si">{tip_id}</span><span class="s1"> is not found&#39;</span><span class="p">)</span>
 
-    <span class="nd">@json</span><span class="p">(</span><span class="n">prevent_empty_form</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="nd">@json</span><span class="p">(</span><span class="n">prevent_empty_form</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">tip_title</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
         <span class="c1"># Updating the tips global variable</span>
@@ -243,13 +234,13 @@
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">nanohttp</span></code> CLI command and <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> automatically will set
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">nanohttp</span></code> CLI command and <code class="docutils literal notranslate"><span class="pre">quickstart</span></code> automatically will set
 your root controller to <span class="xref std std-doc">application</span>.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">If your application is ready to production, read more about
+<p class="admonition-title">See also</p>
+<p>If your application is ready to production, read more about
 <span class="xref std std-doc">wsgi</span> and <a class="reference internal" href="more/deploy.html"><span class="doc">Deploy</span></a>.</p>
 </div>
 </div>
@@ -265,7 +256,7 @@ your root controller to <span class="xref std std-doc">application</span>.</p>
         <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="nanohttp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="nanohttp" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -274,7 +265,7 @@ your root controller to <span class="xref std std-doc">application</span>.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Vahid Mardani.
+        &copy; Copyright 2017, Vahid Mardani
 
     </p>
   </div>
@@ -291,35 +282,19 @@ your root controller to <span class="xref std std-doc">application</span>.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'1.8.0',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
+  
     <span id="forkongithub">
-      <a class="desktop" href="https://github.com/Carrene/nanohttp">Fork me on GitHub</a>
-      <a class="mobile" href="https://github.com/Carrene/nanohttp">Source</a>
+      <a class="desktop" href="https://github.com/pylover/nanohttp">Fork me on GitHub</a>
+      <a class="mobile" href="https://github.com/pylover/nanohttp">Source</a>
     </span>
 
 
