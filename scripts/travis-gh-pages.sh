@@ -2,7 +2,7 @@
 set -e # Exit with nonzero exit code if anything fails
 
 # Save some useful information
-REPO="git@github.com:Carrene/nanohttp.git"
+REPO="git@github.com:pylover/nanohttp.git"
 SHA=`git rev-parse --verify HEAD`
 DOC="project-gh-pages"
 

@@ -3,9 +3,9 @@
 A very micro HTTP framework. [documentation](http://nanohttp.org)
 
 [![PyPI](http://img.shields.io/pypi/v/nanohttp.svg)](https://pypi.python.org/pypi/nanohttp)
-[![Gitter](https://badges.gitter.im/Carrene/nanohttp.svg)](https://gitter.im/Carrene/nanohttp)
-[![Build Status](https://travis-ci.org/Carrene/nanohttp.svg?branch=master)](https://travis-ci.org/Carrene/nanohttp)
-[![Coverage Status](https://coveralls.io/repos/github/Carrene/nanohttp/badge.svg?branch=master)](https://coveralls.io/github/Carrene/nanohttp?branch=master)
+[![Gitter](https://badges.gitter.im//nanohttp.svg)](https://gitter.im/pylover/nanohttp)
+[![Build Status](https://travis-ci.org/pylover/nanohttp.svg?branch=master)](https://travis-ci.org/pylover/nanohttp)
+[![Coverage Status](https://coveralls.io/repos/github/pylover/nanohttp/badge.svg?branch=master)](https://coveralls.io/github/pylover/nanohttp?branch=master)
 
 
 ## Contribution

@@ -6,6 +6,6 @@ to have a sweet experience together.
 
 Links:
 
-- `Main repository <https://github.com/Carrene/nanohttp>`_
-- `Issues <https://github.com/Carrene/nanohttp/issues>`_
-- `Chat <https://gitter.im/Carrene/nanohttp>`_
+- `Main repository <https://github.com/pylover/nanohttp>`_
+- `Issues <https://github.com/pylover/nanohttp/issues>`_
+- `Chat <https://gitter.im/pylover/nanohttp>`_

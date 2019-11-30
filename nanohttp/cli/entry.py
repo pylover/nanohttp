@@ -60,7 +60,7 @@ def main(argv=None):
         configure(force=True)
 
         for f in args.config_files:
-            settings.load_file(f)
+            settings.loadfile(f)
 
 
         try:

@@ -33,5 +33,5 @@ deploy:
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: Carrene/nanohttp
+    repo: pylover/nanohttp
     condition: $TRAVIS_PYTHON_VERSION = 3.6
