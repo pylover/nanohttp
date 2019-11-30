@@ -1,7 +1,7 @@
 Command Line Interface
 ======================
 
-.. code-block:: bash
+.. code-block:: sh
 
    usage: nanohttp [-h] [-c CONFIG_FILE] [-d CONFIG_DIRECTORY] [-b {HOST:}PORT]
                    [-C DIRECTORY] [-V]
