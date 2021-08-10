@@ -1,7 +1,6 @@
 # nanohttp
 
-A very micro HTTP framework. [documentation](http://nanohttp.org)
-
+A very micro HTTP framework. [documentation](https://pylover.github.io/nanohttp)
 [![PyPI](http://img.shields.io/pypi/v/nanohttp.svg)](https://pypi.python.org/pypi/nanohttp)
 [![Gitter](https://badges.gitter.im//nanohttp.svg)](https://gitter.im/pylover/nanohttp)
 [![Build Status](https://travis-ci.org/pylover/nanohttp.svg?branch=master)](https://travis-ci.org/pylover/nanohttp)
