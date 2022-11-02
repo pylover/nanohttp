@@ -1,7 +1,6 @@
 
 from os.path import dirname, abspath
-from nanohttp import Controller, html, context, Static, HttpFound, settings, \
-    action
+from nanohttp import Controller, html, context, Static, HttpFound, settings, action
 
 
 logo = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10' \
